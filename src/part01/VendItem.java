@@ -63,7 +63,7 @@ public class VendItem implements Vendible {
     }
 
     public String getDetails() {
-        String res = "Item ID: " + itemId + "\n";
+        String res = "\nItem ID: " + itemId + "\n";
         res += "Item Name: " + name + "\n";
         res += "Quantity Available: " + qtyAvailable + "\n";
         res += String.format("Price: £%.2f", unitPrice) + "\n";

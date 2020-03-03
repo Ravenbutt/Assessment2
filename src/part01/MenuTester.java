@@ -26,7 +26,6 @@ public class MenuTester {
 
         //Max of 50 coins can be input by user
         //Change to variable adjustable by engineer
-        coinsInput = new double[50];
 
         //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
         //*Then check if those are still the values and if so produce an error
@@ -49,12 +48,11 @@ public class MenuTester {
         int choice = -1;
         do {
             String extraDetails = "";
-            vendingMachine.checkStock();
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
                 extraDetails += vendingMachine.getVmStatus().getStatus();
                 extraDetails += " - PURCHASING DISABLED\n";
             }
-            extraDetails += String.format("Current funds inserted: £%.2f", vendingMachine.getUserMoney());
+            extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
             vendMenu.setExtraDetails(extraDetails);
             choice = vendMenu.getChoice();
             processChoice(choice);
@@ -86,13 +84,9 @@ public class MenuTester {
         }
     }
 
-
     public static void listAll() {
-        VendItem allItems[] = vendingMachine.getStock();
-        for (VendItem vendItem : allItems) {
-            if(vendItem != null) {
-                System.out.println(vendItem.getItemId() + ". " + "Item: " + vendItem.getName() + " Quantity Remaining: " + vendItem.getQty() + "");
-            }
+        for (String item : vendingMachine.listItems()) {
+            System.out.println(item);
         }
     }
 

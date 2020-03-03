@@ -1,7 +1,7 @@
 package part01;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
+import java.util.Arrays;
 
 public class VendingMachine {
     private String owner; 
@@ -11,7 +11,7 @@ public class VendingMachine {
     private double userMoney;
     private Status vmStatus;
     private VendItem[] stock;
-    private int totalStockCount;
+    private static ArrayList<Integer> acceptedCoins;
 
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
@@ -50,6 +50,12 @@ public class VendingMachine {
             if(itemToPurchase.decrement()) {
                 userMoney -= itemToPurchase.getPrice();
                 itemToPurchase.deliver();
+                this.setStatus(Status.SERVICE_MODE);
+                for (VendItem vendItem : stock) {
+                    if(vendItem != null && vendItem.getQty() > 0) {
+                        this.setStatus(Status.VENDING_MODE);
+                    }
+                }
                 return "Item purchased. Now dispensing.";
             }
             else {
@@ -59,28 +65,17 @@ public class VendingMachine {
         return "Not enough funds to purchase this item.";
     }
 
-    public void checkStock() {
-        int totalStock = 0;
-        for (VendItem item : stock) {
-            if(item != null && item.getQty() != 0) {
-                totalStock += item.getQty();
-            }
-        }
-        if(totalStock == 0) {
-            this.setStatus(Status.SERVICE_MODE);
-        }
-    }
-
     public Status getVmStatus() {
         return this.vmStatus;
     }
 
     public boolean insertCoin(int amount) {
         double dAmount = amount;
+        acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
         if(this.vmStatus == Status.SERVICE_MODE) {
             return false;
         }
-        if(dAmount == 1 || dAmount == 2 || dAmount == 5 || dAmount == 10 || dAmount == 20 || dAmount == 50) {
+        if(acceptedCoins.contains(amount)) {
             if(dAmount > 2) {
                 dAmount /= 100;
             }
@@ -95,7 +90,7 @@ public class VendingMachine {
         //Maybe only allow adding item when in service mode?
         if(newItem != null) {
             for (int index = 0; index < stock.length; index++) {
-                if(stock[index] == newItem) {
+                if(stock[index] == newItem || stock[index] != null && stock[index].getName().equalsIgnoreCase(newItem.getName())) {
                     return false;
                 }
             }
@@ -111,10 +106,14 @@ public class VendingMachine {
     }
 
     public String[] listItems() {
-        String nameArray[] = new String[stock.length];
-        for (int index = 0; index < stock.length; index++) {
-            System.out.println(stock[index]);
-            // nameArray[index] = stock[index].getName();
+        String nameArray[] = new String[itemCount];
+        for (int index = 0; index < itemCount; index++) {
+            if(stock[index] != null) {
+                String currentItem = stock[index].getItemId() + ". " 
+                + stock[index].getName() + " - Quantity Remaining: " + stock[index].getQty();
+                nameArray[index] = currentItem;
+            }
+            
         }
         return nameArray;
     }

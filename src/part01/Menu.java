@@ -57,7 +57,7 @@ public class Menu {
 				System.out.print("+");
 			}
 			System.out.println("\n");
-			System.out.print(extraDetails + "\n");
+			System.out.print(extraDetails);
 			// display the menu options
 			// prefix each with an int starting at 1
 			int count = 1;

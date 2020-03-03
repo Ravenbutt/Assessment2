@@ -13,7 +13,7 @@ public class EmployeeMenu extends MenuTester {
     }
 
     private void initEmpMenu() {
-        String menuOptions[] = {"View All Items", "View an Item", "Add an Item", "Restock an Item", "View Vending Machine Details", "Set Status", "Quit"};
+        String menuOptions[] = {"View All Items", "View an Item", "Add an Item", "Restock an Item", "View Vending Machine Details", "Set Status", "Back"};
         Menu vendMenu = new Menu("VendOS v1.0 - EMPLOYEE MENU", menuOptions);
 
         //Condition to check if user has chose to quit and ensure last option is Quit
@@ -36,11 +36,11 @@ public class EmployeeMenu extends MenuTester {
     private void processChoice(int choice) {
         switch (choice) {
             case 1:
-                listAll();
+                super.listAll();
                 break;
         
             case 2:
-                super.listAll();
+                viewItem();
                 break;
         
             case 3:
@@ -76,9 +76,15 @@ public class EmployeeMenu extends MenuTester {
                 double newPrice = input.nextDouble();
                 input.nextLine();
                 VendItem newItem = new VendItem(newName, newPrice);
-                vendingMachine.addNewItem(newItem);
-                System.out.printf("Item named %s at price: £%.2f has been added.\n", newName, newPrice);
-                break;
+                if(vendingMachine.addNewItem(newItem)) {
+                    System.out.printf("Item named %s at price: £%.2f has been added.\n", newName, newPrice);
+                    break;
+                }
+                else {
+                    System.out.println("Adding item failed.");
+                    break;
+                }
+                
             } catch (InputMismatchException e) {
                 System.err.println("Please enter a valid value.\n");
                 input.next();
@@ -89,6 +95,19 @@ public class EmployeeMenu extends MenuTester {
     }
 
     private void viewItem() {
+        super.listAll();
+        System.out.print("Please enter the number of the item you wish to view: ");
+        while(true) {
+            try {
+                int choice = input.nextInt();
+                System.out.println(vendingMachine.findItem(choice).getDetails());
+                break;
+            } catch (InputMismatchException e) {
+                System.err.println("Please enter a valid number.");
+                input.next();
+                continue;
+            }
+        }
 
     }
 
@@ -101,7 +120,7 @@ public class EmployeeMenu extends MenuTester {
     }
 
     private void restockItem() {
-        
+
     }
 
 }
