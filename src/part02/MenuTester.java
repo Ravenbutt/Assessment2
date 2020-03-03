@@ -1,4 +1,4 @@
-package part01;
+package part02;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -7,6 +7,7 @@ public class MenuTester {
 
     protected static VendingMachine vendingMachine;
     static Scanner input;
+    static double coinsInput[];
     static double total = 0;
     
 
@@ -39,6 +40,7 @@ public class MenuTester {
     }
 
     private static void initMenu() {
+        //set this to options and title as param for initMenu, then allow employeeMenu to just call this init menu
         String menuOptions[] = {"View All Items", "Insert Coins", "Select Item", "Quit"};
         Menu vendMenu = new Menu("VendOS v1.0", menuOptions);
 
@@ -50,6 +52,18 @@ public class MenuTester {
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
                 extraDetails += vendingMachine.getVmStatus().getStatus();
                 extraDetails += " - PURCHASING DISABLED\n";
+            }
+            if(vendingMachine.getInputCoins().size() > 0) {
+                extraDetails += "Currently inserted coins: ";
+                for (int coin : vendingMachine.getInputCoins()) {
+                    if(coin < 5) {
+                        extraDetails += "£" + coin + ", ";
+                    }
+                    else if(coin > 2) {
+                        extraDetails += coin + "p, "; //TODO remove the , if it's the only one; cleans it up
+                    }
+                }
+                extraDetails += "\n";
             }
             extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
             vendMenu.setExtraDetails(extraDetails);
@@ -72,6 +86,10 @@ public class MenuTester {
 
             case 3:
                 selectItem();
+                break;
+
+            case 5:
+                EmployeeMenu empMenu = new EmployeeMenu();
                 break;
 
             default:
