@@ -40,7 +40,7 @@ public class EmployeeMenu extends MenuTester {
                 break;
         
             case 2:
-                viewItem();
+                viewItemDetails();
                 break;
         
             case 3:
@@ -94,21 +94,29 @@ public class EmployeeMenu extends MenuTester {
 
     }
 
-    private void viewItem() {
-        super.listAll();
-        System.out.print("Please enter the number of the item you wish to view: ");
+    private VendItem selectItem() {
         while(true) {
+            super.listAll();
+            System.out.print("\nPlease enter the number of the item you wish to select: ");
             try {
                 int choice = input.nextInt();
-                System.out.println(vendingMachine.findItem(choice).getDetails());
-                break;
+                return vendingMachine.findItem(choice);
             } catch (InputMismatchException e) {
                 System.err.println("Please enter a valid number.");
                 input.next();
                 continue;
             }
+            catch (NullPointerException e) {
+                System.err.println("Please enter the ID of one the items displayed only.\n");
+                continue;
+            }
         }
+        
+    }
 
+    private void viewItemDetails() {
+        VendItem chosenItem = selectItem();
+        System.out.println(chosenItem.getDetails());
     }
 
     private static void getDetails() {
@@ -126,12 +134,12 @@ public class EmployeeMenu extends MenuTester {
                 choice = input.nextInt();
                 if(choice-1 == 0) {
                     vendingMachine.setStatus(Status.VENDING_MODE);
-                    System.out.println("Machine set to " + vendingMachine.getVmStatus().getStatus());
+                    System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
                     break;   
                 }
                 else if(choice-1 == 1) {
                     vendingMachine.setStatus(Status.SERVICE_MODE);
-                    System.out.println("Machine set to " + vendingMachine.getVmStatus().getStatus());
+                    System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
                     break;
                 }
                 else if(choice != 0){
@@ -148,6 +156,26 @@ public class EmployeeMenu extends MenuTester {
     }
 
     private void restockItem() {
+        System.out.println("Restocking Item");
+        VendItem chosenItem = selectItem();
+        
+        while(true) {
+            System.out.print("\nPlease enter the new stock number: ");
+            try {
+                int restockAmount = input.nextInt();
+                if(chosenItem.restock(restockAmount)) {
+                    System.out.println("\nItem " + chosenItem.getName() + " restocked with quantity: " + chosenItem.getQty());
+                    break;
+                }
+                else {
+                    System.out.println("\nItem restock failed.");
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("\nPlease enter a valid number.");
+                input.next();
+                continue;
+            }
+        }
 
     }
 
