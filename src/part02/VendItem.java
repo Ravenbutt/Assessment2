@@ -84,5 +84,9 @@ public class VendItem implements Vendible {
         return "Thanks for purchasing " + this.getName() + "\n";
     }
 
+    public static loadFromArray() {
+        
+    }
+
 
 }

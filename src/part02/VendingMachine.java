@@ -1,7 +1,12 @@
 package part02;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import java.util.Scanner;
 
 public class VendingMachine {
     private String owner; 
@@ -164,6 +169,46 @@ public class VendingMachine {
 
     public ArrayList<Integer> getInputCoins() {
         return inputCoins;
+    }
+
+    @Override
+    public String toString() {
+        String res = owner + "," + maxItems + "," + itemCount + "," + totalMoney + "," + userMoney + "," + vmStatus + ",";
+        for (VendItem vendItem : stock) {
+            if(vendItem != null) {
+                res += vendItem + ",";
+            }
+            
+        }
+        return res;
+    }
+
+
+    protected void saveState() throws FileNotFoundException {
+        try {
+            String stateDir = "vendingState.txt";
+            PrintWriter savePw = new PrintWriter(stateDir);
+            savePw.println(this.toString());
+            savePw.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getStackTrace());
+            
+        }
+    }
+
+    protected static VendingMachine loadState() {
+
+        try {
+            File stateDir = new File("vendingState.txt");
+            Scanner mySc = new Scanner(stateDir);
+
+            while (mySc.hasNextLine()) {
+                System.out.println(mySc.nextLine());
+            }
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        return null;
     }
 
 }

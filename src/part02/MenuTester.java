@@ -24,7 +24,7 @@ public class MenuTester {
 
     private static void initVendMachine() {
 
-        //Max of 50 coins can be input by user
+        //Max of 50 coins can be input by user5
         //Change to variable adjustable by engineer
 
         //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
@@ -41,7 +41,7 @@ public class MenuTester {
 
     private static void initMenu() {
         //set this to options and title as param for initMenu, then allow employeeMenu to just call this init menu
-        String menuOptions[] = {"View All Items", "Insert Coins", "Select Item", "Quit"};
+        String menuOptions[] = {"View All Items", "Insert Coins", "Purchase an Item", "Quit"};
         Menu vendMenu = new Menu("VendOS v1.0", menuOptions);
 
         //Condition to check if user has chose to quit and ensure last option is Quit
@@ -85,7 +85,7 @@ public class MenuTester {
                 break;
 
             case 3:
-                selectItem();
+                purchaseItem();
                 break;
 
             case 5:
@@ -135,19 +135,22 @@ public class MenuTester {
     }
 
 
-    private static void selectItem() {
+    public static VendItem selectItem() {
         
         int chosenId = -1;
         VendItem chosenItem = null;
         
         while(chosenItem == null) {
             listAll();
-            System.out.print("\nEnter the number of the item you wish to select: ");
+            System.out.print("\nEnter the number of the item you wish to select, enter 0 to cancel: ");
             try {
                 chosenId = input.nextInt();
                 input.nextLine();
+                if(chosenId == 0) {
+                    return null;
+                }
                 chosenItem = vendingMachine.findItem(chosenId);
-                break;
+                return chosenItem;
             } catch (InputMismatchException e) {
                 System.err.println("Please enter a valid number.");
                 input.next();
@@ -158,27 +161,26 @@ public class MenuTester {
                 continue;
             }
         }
-
-        if(chosenItem.getQty() == 0) {
-            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
-            System.out.println("THIS ITEM IS OUT OF STOCK.");
-        }
-        else {
-            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
-            purchaseItem(chosenId);
-        }
-        
-        
+        return null;
         
     }
 
-    private static void purchaseItem(int chosenId) {
+    private static void purchaseItem() {
+        VendItem chosenItem = selectItem();
+        if(chosenItem.getQty() == 0) {
+            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
+            System.out.println("THIS ITEM IS OUT OF STOCK.");
+            return;
+        }
+        else {
+            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
+        }
         System.out.println("\nWould you like to purchase this item? Y/N: ");
 
         while (true) {
             char choice = input.nextLine().charAt(0);
             if(Character.toUpperCase(choice) == 'Y') {
-                System.out.println(vendingMachine.purchaseItem(chosenId));
+                System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
                 break;
             }
             else if(Character.toUpperCase(choice) == 'N') {
@@ -191,6 +193,8 @@ public class MenuTester {
             }
         }
     }
+
+
 }
 
 //Add refund method?
