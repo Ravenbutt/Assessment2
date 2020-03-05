@@ -14,5 +14,15 @@ public enum Status {
     public String getStatus() {
         return statString[statIntVal];
     }
+
+    public static Status fromString(String strStat) {
+        if(strStat == "VENDING_MODE") {
+            return VENDING_MODE;
+        }
+        else if(strStat == "SERVICE_MODE") {
+            return SERVICE_MODE;
+        }
+        return null;
+    }
     
 }

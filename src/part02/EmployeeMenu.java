@@ -100,7 +100,7 @@ public class EmployeeMenu extends MenuTester {
 
             case 8:
                 try {
-                    vendingMachine.loadState();
+                    vendingMachine = VendingMachineRead.loadData();
                 } catch (Exception e) {
                     //TODO: handle exception
                 }

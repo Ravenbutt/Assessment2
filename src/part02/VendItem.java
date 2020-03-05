@@ -1,5 +1,7 @@
 package part02;
 
+import java.util.ArrayList;
+
 public class VendItem implements Vendible {
     private int itemId;
     private static int nextId = 1;
@@ -84,9 +86,51 @@ public class VendItem implements Vendible {
         return "Thanks for purchasing " + this.getName() + "\n";
     }
 
-    public static loadFromArray() {
-        
+    public ArrayList<String> getData() {
+        ArrayList<String> itemData = new ArrayList<String>();
+        itemData.add(Integer.toString(itemId));
+        itemData.add(name);
+        itemData.add(Double.toString(unitPrice));
+        itemData.add(Integer.toString(qtyAvailable));
+        return itemData;
     }
 
+    public String getData2() {
+        String res = Integer.toString(itemId);
+        res += name;
+        res += Double.toString(unitPrice);
+        res += Integer.toString(qtyAvailable);
+        return res;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public int getQtyAvailable() {
+        return qtyAvailable;
+    }
+
+    public void setQtyAvailable(int qtyAvailable) {
+        this.qtyAvailable = qtyAvailable;
+    }
+
+    public static VendItem loadState(int itemId, String itemName, double itemCost, int qtyAvailable) {
+        VendItem loadedItem = new VendItem(itemName, itemCost, qtyAvailable);
+        loadedItem.setItemId(itemId);
+        return loadedItem;
+    }
 
 }

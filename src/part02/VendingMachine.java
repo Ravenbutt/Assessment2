@@ -196,20 +196,112 @@ public class VendingMachine {
         }
     }
 
-    protected static VendingMachine loadState() {
+    // protected static VendingMachine loadState() {
 
-        try {
-            File stateDir = new File("vendingState.txt");
-            Scanner mySc = new Scanner(stateDir);
+    //     try {
+    //         File stateDir = new File("vendingState.txt");
+    //         Scanner mySc = new Scanner(stateDir);
 
-            while (mySc.hasNextLine()) {
-                System.out.println(mySc.nextLine());
-            }
-        } catch (Exception e) {
-            //TODO: handle exception
-        }
-        return null;
+    //         while (mySc.hasNextLine()) {
+    //             System.out.println(mySc.nextLine());
+    //         }
+    //     } catch (Exception e) {
+    //         //TODO: handle exception
+    //     }
+    //     return null;
+    // }
+
+    public String getOwner() {
+        return owner;
     }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public int getMaxItems() {
+        return maxItems;
+    }
+
+    public void setMaxItems(int maxItems) {
+        if(maxItems > 0) {
+            this.maxItems = maxItems;
+        }
+        else {
+            this.maxItems = 0;
+        }
+        
+    }
+
+    public int getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(int itemCount) {
+        if(itemCount < maxItems && itemCount >= 0) {
+            this.itemCount = itemCount;
+        }
+        else {
+            this.itemCount = 0;
+        }
+    }
+
+    public double getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(double totalMoney) {
+        if(totalMoney > 0.0) {
+            this.totalMoney = totalMoney;
+        }
+        else {
+            this.totalMoney = 0.0;
+        }
+    }
+
+    public void setUserMoney(double userMoney) {
+        if(userMoney > 0.0) {
+            this.userMoney = userMoney;
+        }
+        else {
+            this.userMoney = 0.0;
+        }
+
+    }
+
+    public void setVmStatus(Status vmStatus) {
+        this.vmStatus = vmStatus;
+    }
+
+    public void setStock(VendItem[] stock) {
+        this.stock = stock;
+    }
+
+    public ArrayList<Integer> getAcceptedCoins() {
+        return acceptedCoins;
+    }
+
+    public String getDetails() {
+        String res = owner + "," + maxItems + "," + itemCount + "," + totalMoney + "," + userMoney + "," + vmStatus + ",";
+        for (VendItem vendItem : stock) {
+            
+            if(vendItem != null) {
+                res += vendItem.getData() + ",";
+            }
+            
+        }
+        return res;
+    }
+
+    // protected void loadState(String owner, int maxItems, int itemCount, double totalMoney, double userMoney, Status vmStatus, VendItem[] stock) {
+    //     setOwner(owner);
+    //     setMaxItems(maxItems);
+    //     setItemCount(itemCount);
+    //     setTotalMoney(totalMoney);
+    //     setUserMoney(userMoney);
+    //     setVmStatus(vmStatus);
+    //     setStock(stock);
+    // }
 
 }
 
