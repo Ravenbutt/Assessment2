@@ -86,7 +86,7 @@ public class VendItem implements Vendible {
         return "Thanks for purchasing " + this.getName() + "\n";
     }
 
-    public ArrayList<String> getData() {
+    public ArrayList<String> getData2() {
         ArrayList<String> itemData = new ArrayList<String>();
         itemData.add(Integer.toString(itemId));
         itemData.add(name);
@@ -95,11 +95,8 @@ public class VendItem implements Vendible {
         return itemData;
     }
 
-    public String getData2() {
-        String res = Integer.toString(itemId);
-        res += name;
-        res += Double.toString(unitPrice);
-        res += Integer.toString(qtyAvailable);
+    public String getData() {
+        String res = String.format("%d,%s,%f,%d", itemId, name, unitPrice, qtyAvailable);
         return res;
     }
 

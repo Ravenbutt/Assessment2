@@ -196,21 +196,6 @@ public class VendingMachine {
         }
     }
 
-    // protected static VendingMachine loadState() {
-
-    //     try {
-    //         File stateDir = new File("vendingState.txt");
-    //         Scanner mySc = new Scanner(stateDir);
-
-    //         while (mySc.hasNextLine()) {
-    //             System.out.println(mySc.nextLine());
-    //         }
-    //     } catch (Exception e) {
-    //         //TODO: handle exception
-    //     }
-    //     return null;
-    // }
-
     public String getOwner() {
         return owner;
     }
@@ -282,7 +267,7 @@ public class VendingMachine {
     }
 
     public String getDetails() {
-        String res = owner + "," + maxItems + "," + itemCount + "," + totalMoney + "," + userMoney + "," + vmStatus + ",";
+        String res = String.format("%s,%d,%d,%f,%f,%s,", owner, maxItems, itemCount, totalMoney, userMoney, vmStatus);
         for (VendItem vendItem : stock) {
             
             if(vendItem != null) {

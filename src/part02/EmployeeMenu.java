@@ -90,21 +90,11 @@ public class EmployeeMenu extends MenuTester {
                 break;
 
             case 7:
-                try {
-                    vendingMachine.saveState();
-                } catch (Exception e) {
-                    //TODO: handle exception
-                }
-                
+                VendingMachineRead.saveState(vendingMachine);
                 break;
 
             case 8:
-                try {
-                    vendingMachine = VendingMachineRead.loadData();
-                } catch (Exception e) {
-                    //TODO: handle exception
-                }
-                
+                vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
                 break;
 
             default:

@@ -37,6 +37,7 @@ public class MenuTester {
         vendingMachine.addNewItem(cocaCola);
         vendingMachine.addNewItem(fanta);
         vendingMachine.addNewItem(taytoCheese);
+        System.out.println(vendingMachine.getDetails());
     }
 
     private static void initMenu() {
@@ -198,3 +199,4 @@ public class MenuTester {
 }
 
 //Add refund method?
+// TODO Add change etc for customer
