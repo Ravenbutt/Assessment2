@@ -63,7 +63,9 @@ public class VendingMachine {
                         this.setStatus(Status.VENDING_MODE);
                     }
                 }
-                return "Item purchased. Now dispensing.";
+                userMoney = 0.0;
+                String res = String.format("Item purchased. Your change is £%.2f. \nNow dispensing.", userMoney);
+                return res;
             }
             else {
                 return "None of " + itemToPurchase.getName() + " left. Please choose another item.";
