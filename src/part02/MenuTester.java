@@ -29,7 +29,7 @@ public class MenuTester {
 
         //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
         //*Then check if those are still the values and if so produce an error
-        vendingMachine = new VendingMachine("Coca Cola", 10);
+        vendingMachine = new VendingMachine("Coca Cola", 4);
         VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35);
         VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35);
         VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 2);
@@ -37,7 +37,6 @@ public class MenuTester {
         vendingMachine.addNewItem(cocaCola);
         vendingMachine.addNewItem(fanta);
         vendingMachine.addNewItem(taytoCheese);
-        System.out.println(vendingMachine.getDetails());
     }
 
     private static void initMenu() {
@@ -49,30 +48,14 @@ public class MenuTester {
         //Maybe set it instead that if menuOptions[option-1].equals("Quit") for more robust?
         int choice = -1;
         do {
-            String extraDetails = "";
-            if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += vendingMachine.getVmStatus().getStatus();
-                extraDetails += " - PURCHASING DISABLED\n";
-            }
-            if(vendingMachine.getInputCoins().size() > 0) {
-                extraDetails += "Currently inserted coins: ";
-                for (int coin : vendingMachine.getInputCoins()) {
-                    if(coin < 5) {
-                        extraDetails += "£" + coin + ", ";
-                    }
-                    else if(coin > 2) {
-                        extraDetails += coin + "p, "; //TODO remove the , if it's the only one; cleans it up
-                    }
-                }
-                extraDetails += "\n";
-            }
-            extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
-            vendMenu.setExtraDetails(extraDetails);
+            vendMenu.setExtraDetails(getExtraDetails());
             choice = vendMenu.getChoice();
             processChoice(choice);
         } while (choice != menuOptions.length);
 
     }
+
+    
 
     private static void processChoice(int choice) {
 
@@ -114,6 +97,9 @@ public class MenuTester {
 
         while(inputCoin != 0) {
             System.out.printf("Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
+            if(vendingMachine.getInputCoins().size() > 0) {
+                System.out.printf("Currently inserted coins: " + vendingMachine.getInputCoins() + "\n");
+            }
             System.out.print("Please enter coin, enter 0 to finish: ");
             try {
                 inputCoin = input.nextInt();
@@ -127,6 +113,10 @@ public class MenuTester {
                     }
                     System.out.println("Please enter only the denominations listed.");
                 }
+                else {
+
+                }
+                //inputCoins = {}
             } catch (InputMismatchException e) {
                 System.err.println("Please insert a valid coin.");
                 input.next();
@@ -168,6 +158,9 @@ public class MenuTester {
 
     private static void purchaseItem() {
         VendItem chosenItem = selectItem();
+        if(chosenItem == null) {
+            return;
+        }
         if(chosenItem.getQty() == 0) {
             System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
             System.out.println("THIS ITEM IS OUT OF STOCK.");
@@ -193,6 +186,28 @@ public class MenuTester {
                 continue;
             }
         }
+    }
+
+    private static String getExtraDetails() {
+        String extraDetails = "";
+            if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
+                extraDetails += vendingMachine.getVmStatus().getStatus();
+                extraDetails += " - PURCHASING DISABLED\n";
+            }
+            if(vendingMachine.getInputCoins().size() > 0) {
+                extraDetails += "Currently inserted coins: ";
+                for (int coin : vendingMachine.getInputCoins()) {
+                    if(coin < 5) {
+                        extraDetails += "£" + coin + ", ";
+                    }
+                    else if(coin > 2) {
+                        extraDetails += coin + "p, "; //TODO remove the , if it's the only one; cleans it up
+                    }
+                }
+                extraDetails += "\n";
+            }
+            extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
+        return extraDetails;
     }
 
 
