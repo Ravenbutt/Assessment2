@@ -48,6 +48,10 @@ public class VendItem implements Vendible {
     }
 
     public boolean restock(int amount) {
+        // TC1: restock(0)
+        // TC2: restock(15)
+        // TC3: restock(-1)
+        // TC4 restock("hi")
         //*Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
@@ -57,6 +61,8 @@ public class VendItem implements Vendible {
     }
 
     public boolean decrement() {
+        // TC5 qty > 0, decrement
+        // TC6 qty = 0, decrement
         if(this.getQty() > 0) {
             this.qtyAvailable--;
             return true;
@@ -86,6 +92,7 @@ public class VendItem implements Vendible {
         return "Thanks for purchasing " + this.getName() + "\n";
     }
 
+    //Remove this
     public ArrayList<String> getData2() {
         ArrayList<String> itemData = new ArrayList<String>();
         itemData.add(Integer.toString(itemId));
