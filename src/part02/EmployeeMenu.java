@@ -1,10 +1,5 @@
 package part02;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -103,8 +98,13 @@ public class EmployeeMenu extends MenuTester {
     }
 
     private void addItem() {
+        if(vendingMachine.getItemCount() == vendingMachine.getMaxItems()) {
+            System.out.println("No more items can be added.");
+            return;
+        }
         System.out.println("Adding item");
         System.out.println("+++++++++++\n");
+        
         System.out.print("Enter item name: ");
         String newName = input.nextLine();
 
@@ -133,6 +133,9 @@ public class EmployeeMenu extends MenuTester {
 
     private void viewItemDetails() {
         VendItem chosenItem = super.selectItem();
+        if(chosenItem == null) {
+            return;
+        }
         System.out.println(chosenItem.getDetails());
     }
 
