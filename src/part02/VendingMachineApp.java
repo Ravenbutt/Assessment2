@@ -1,9 +1,10 @@
 package part02;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class MenuTester {
+public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
     static Scanner input;
@@ -90,17 +91,20 @@ public class MenuTester {
     private static void insertCoins() {
         System.out.println("Insert a Coin");
         System.out.println("+++++++++++\n");
-        System.out.println("NOTE: This vending machine only accepts 5p, 10p, 20p, 50p, £1 and £2 denominations");;
+        System.out.println("NOTE: This vending machine only accepts 5p, 10p, 20p, 50p, £1 and £2 denominations.");;
 
         int inputCoin = -1;
 
-
         while(inputCoin != 0) {
             System.out.printf("Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
+            //TODO Maybe add a method called outputFormattedCoins(int coin) that formats the coin as it should be
             if(vendingMachine.getInputCoins().size() > 0) {
-                System.out.printf("Currently inserted coins: " + vendingMachine.getInputCoins() + "\n");
+                System.out.println("Currently inserted coins: " + formatCoins());
             }
-            System.out.print("Please enter coin, enter 0 to finish: ");
+            // if(formatCoins().trim() != "") {
+            //     System.out.println("Currently inserted coins: " + formatCoins());
+            // }
+            System.out.print("\nPlease enter coin, enter 0 to finish: ");
             try {
                 inputCoin = input.nextInt();
                 if(inputCoin == 0) {
@@ -113,9 +117,8 @@ public class MenuTester {
                     }
                     System.out.println("Please enter only the denominations listed.");
                 }
-                else {
+                //!Don't need this else?
 
-                }
                 //inputCoins = {}
             } catch (InputMismatchException e) {
                 System.err.println("Please insert a valid coin.");
@@ -161,14 +164,14 @@ public class MenuTester {
         if(chosenItem == null) {
             return;
         }
+        System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
         if(chosenItem.getQty() == 0) {
-            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
             System.out.println("THIS ITEM IS OUT OF STOCK.");
             return;
         }
-        else {
-            System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
-        }
+        // else {
+        //     System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
+        // }
         System.out.println("\nWould you like to purchase this item? Y/N: ");
 
         while (true) {
@@ -194,20 +197,31 @@ public class MenuTester {
                 extraDetails += vendingMachine.getVmStatus().getStatus();
                 extraDetails += " - PURCHASING DISABLED\n";
             }
-            if(vendingMachine.getInputCoins().size() > 0) {
-                extraDetails += "Currently inserted coins: ";
-                for (int coin : vendingMachine.getInputCoins()) {
-                    if(coin < 5) {
-                        extraDetails += "£" + coin + ", ";
-                    }
-                    else if(coin > 2) {
-                        extraDetails += coin + "p, "; //TODO remove the , if it's the only one; cleans it up
-                    }
-                }
-                extraDetails += "\n";
-            }
+
             extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
+            if(formatCoins() != null) {
+                extraDetails += formatCoins() + "\n";
+            }
         return extraDetails;
+    }
+
+    private static String formatCoins() {
+        ArrayList<String> inputCoinsStr = new ArrayList<String>();
+        if(vendingMachine.getInputCoins().size() > 0) {
+
+            for(int coin : vendingMachine.getInputCoins()) {
+                String coinStr = "";
+                if(coin < 5) {
+                    coinStr = String.format("£%d", coin);
+                }
+                else if(coin > 2) {
+                    coinStr = String.format("%dp", coin); 
+                }
+                inputCoinsStr.add(coinStr);
+            }
+            
+        }
+        return inputCoinsStr.toString().replace("[", "").replace("]", "");
     }
 
 

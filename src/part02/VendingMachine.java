@@ -1,12 +1,10 @@
 package part02;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import java.util.Scanner;
 
 public class VendingMachine {
     private String owner; 
@@ -116,16 +114,19 @@ public class VendingMachine {
     }
 
     public String[] listItems() {
-        String nameArray[] = new String[itemCount];
+        String items[] = new String[itemCount];
         for (int index = 0; index < itemCount; index++) {
+            VendItem currentItem = stock[index];
             if(stock[index] != null) {
-                String currentItem = stock[index].getItemId() + ". " 
-                + stock[index].getName() + " - Quantity Remaining: " + stock[index].getQty();
-                nameArray[index] = currentItem;
+                String currentItemString = String.format("%d. %s  \n   Price: £%.2f \n   Quantity Remaining: %d\n", currentItem.getItemId(), currentItem.getName(), currentItem.getPrice(), currentItem.getQty());
+                items[index] = currentItemString;
+                // String currentItem = stock[index].getItemId() + ". " 
+                // + stock[index].getName() + " - Quantity Remaining: " + stock[index].getQty();
+                // nameArray[index] = currentItem;
             }
             
         }
-        return nameArray;
+        return items;
     }
 
     //Used in menu to get all stock
@@ -186,17 +187,17 @@ public class VendingMachine {
     }
 
 
-    protected void saveState() throws FileNotFoundException {
-        try {
-            String stateDir = "vendingState.txt";
-            PrintWriter savePw = new PrintWriter(stateDir);
-            savePw.println(this.toString());
-            savePw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getStackTrace());
+    // protected void saveState() throws FileNotFoundException {
+    //     try {
+    //         String stateDir = "vendingState.txt";
+    //         PrintWriter savePw = new PrintWriter(stateDir);
+    //         savePw.println(this.toString());
+    //         savePw.close();
+    //     } catch (FileNotFoundException e) {
+    //         System.out.println(e.getStackTrace());
             
-        }
-    }
+    //     }
+    // }
 
     public String getOwner() {
         return owner;
@@ -293,3 +294,5 @@ public class VendingMachine {
 }
 
 //Composition relationship as this class as parent
+
+//Add check to see if item is already there or not when adding vendItem

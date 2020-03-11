@@ -3,8 +3,8 @@ package part02;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class EmployeeMenu extends MenuTester {
-    static Scanner input;
+public class EmployeeMenu extends VendingMachineApp {
+    //static Scanner input;
 
     public EmployeeMenu() {
         input = new Scanner(System.in);
