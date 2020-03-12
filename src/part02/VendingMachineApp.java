@@ -34,10 +34,12 @@ public class VendingMachineApp {
         VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35);
         VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35);
         VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 2);
-        vendingMachine.setStatus(Status.VENDING_MODE);
+        
         vendingMachine.addNewItem(cocaCola);
         vendingMachine.addNewItem(fanta);
         vendingMachine.addNewItem(taytoCheese);
+        //!This is causing problems for some reason
+        vendingMachine.setVmStatus(Status.VENDING_MODE);
     }
 
     private static void initMenu() {
@@ -56,10 +58,11 @@ public class VendingMachineApp {
 
     }
 
-    
-
     private static void processChoice(int choice) {
-
+        if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4) {
+            System.out.println("Vending machine is in service mode. \nAll customer operations are disabled.\n");
+            return;
+        }
         switch (choice) {
             case 1:
                 listAll();
@@ -97,13 +100,11 @@ public class VendingMachineApp {
 
         while(inputCoin != 0) {
             System.out.printf("Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
-            //TODO Maybe add a method called outputFormattedCoins(int coin) that formats the coin as it should be
+
             if(vendingMachine.getInputCoins().size() > 0) {
                 System.out.println("Currently inserted coins: " + formatCoins());
             }
-            // if(formatCoins().trim() != "") {
-            //     System.out.println("Currently inserted coins: " + formatCoins());
-            // }
+
             System.out.print("\nPlease enter coin, enter 0 to finish: ");
             try {
                 inputCoin = input.nextInt();
@@ -117,9 +118,7 @@ public class VendingMachineApp {
                     }
                     System.out.println("Please enter only the denominations listed.");
                 }
-                //!Don't need this else?
 
-                //inputCoins = {}
             } catch (InputMismatchException e) {
                 System.err.println("Please insert a valid coin.");
                 input.next();
@@ -194,8 +193,8 @@ public class VendingMachineApp {
     private static String getExtraDetails() {
         String extraDetails = "";
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += vendingMachine.getVmStatus().getStatus();
-                extraDetails += " - PURCHASING DISABLED\n";
+                extraDetails += "> " + vendingMachine.getVmStatus().getStatus();
+                extraDetails += " - CUSTOMER OPERATIONS DISABLED < \n\n";
             }
 
             extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());

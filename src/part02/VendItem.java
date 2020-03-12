@@ -84,23 +84,22 @@ public class VendItem implements Vendible {
                 + unitPrice + "]";
     }
 
-    @Override
     public String deliver() {
         if(this.getQty() == 0) {
             return null;
         }
-        return "Thanks for purchasing " + this.getName() + "\n";
+        return "Thanks for purchasing " + this.getName() + ".\n";
     }
 
-    //Remove this
-    public ArrayList<String> getData2() {
-        ArrayList<String> itemData = new ArrayList<String>();
-        itemData.add(Integer.toString(itemId));
-        itemData.add(name);
-        itemData.add(Double.toString(unitPrice));
-        itemData.add(Integer.toString(qtyAvailable));
-        return itemData;
-    }
+    // //Remove this
+    // public ArrayList<String> getData2() {
+    //     ArrayList<String> itemData = new ArrayList<String>();
+    //     itemData.add(Integer.toString(itemId));
+    //     itemData.add(name);
+    //     itemData.add(Double.toString(unitPrice));
+    //     itemData.add(Integer.toString(qtyAvailable));
+    //     return itemData;
+    // }
 
     public String getData() {
         String res = String.format("%d,%s,%f,%d", itemId, name, unitPrice, qtyAvailable);
@@ -115,21 +114,21 @@ public class VendItem implements Vendible {
         this.name = name;
     }
 
-    public double getUnitPrice() {
-        return unitPrice;
-    }
+    // public double getUnitPrice() {
+    //     return unitPrice;
+    // }
 
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
+    // public void setUnitPrice(double unitPrice) {
+    //     this.unitPrice = unitPrice;
+    // }
 
-    public int getQtyAvailable() {
-        return qtyAvailable;
-    }
+    // public int getQtyAvailable() {
+    //     return qtyAvailable;
+    // }
 
-    public void setQtyAvailable(int qtyAvailable) {
-        this.qtyAvailable = qtyAvailable;
-    }
+    // public void setQtyAvailable(int qtyAvailable) {
+    //     this.qtyAvailable = qtyAvailable;
+    // }
 
     public static VendItem loadState(int itemId, String itemName, double itemCost, int qtyAvailable) {
         VendItem loadedItem = new VendItem(itemName, itemCost, qtyAvailable);

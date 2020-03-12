@@ -145,6 +145,10 @@ public class EmployeeMenu extends VendingMachineApp {
 
     private void setStatus() {
         int choice = -1;
+        if(!vendingMachine.setVmStatus(Status.VENDING_MODE)) {
+            System.out.println("\n> Machine status cannot be changed from service mode while it contains no stock to vend. <");
+            return;
+        }
         while (choice != 0) {
             System.out.println("1. Vending Mode.");
             System.out.println("2. Service Mode.");
@@ -153,11 +157,16 @@ public class EmployeeMenu extends VendingMachineApp {
             try {
                 choice = input.nextInt();
                 if (choice - 1 == 0) {
-                    vendingMachine.setStatus(Status.VENDING_MODE);
-                    System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
+                    // if() {
+                    //     System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
+                    //     break;
+                    // }
+                    vendingMachine.setVmStatus(Status.VENDING_MODE);
+                    System.out.println("\n> Machine set to " + vendingMachine.getVmStatus().getStatus() + " <");
+                    //System.out.println("\n> To change to vending mode, the machine must contain stock to vend. <");
                     break;
                 } else if (choice - 1 == 1) {
-                    vendingMachine.setStatus(Status.SERVICE_MODE);
+                    vendingMachine.setVmStatus(Status.SERVICE_MODE);
                     System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
                     break;
                 } else if (choice != 0) {

@@ -16,6 +16,7 @@ public class VendingMachine {
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
     private ArrayList<Integer> inputCoins;
+    //private int totalStockCount;
 
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
@@ -40,7 +41,7 @@ public class VendingMachine {
         stock = new VendItem[maxItems];
         totalMoney = 0.0;
         userMoney = 0.0;
-        setStatus(Status.SERVICE_MODE);
+        setVmStatus(Status.SERVICE_MODE);
     }
 
     public String purchaseItem(int choiceId) {
@@ -51,18 +52,29 @@ public class VendingMachine {
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "This machine is in service mode.";
         }
+
+        if(this.getAllStockQty() == 0) {
+            this.setVmStatus(Status.SERVICE_MODE);
+        }
+
         if(userMoney >= itemToPurchase.getPrice()) {
+            String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
                 userMoney -= itemToPurchase.getPrice();
-                itemToPurchase.deliver();
-                this.setStatus(Status.SERVICE_MODE);
-                for (VendItem vendItem : stock) {
-                    if(vendItem != null && vendItem.getQty() > 0) {
-                        this.setStatus(Status.VENDING_MODE);
-                    }
-                }
+                //totalStockCount--;
+                //this.setVmStatus(Status.SERVICE_MODE);
+                // for (VendItem vendItem : stock) {
+                //     if(vendItem != null && vendItem.getQty() > 0) {
+                //         this.setVmStatus(Status.VENDING_MODE);
+                //     }
+                // }
+                String res = String.format("%s\nYour change is £%.2f. \nNow dispensing.", deliver, userMoney);
                 userMoney = 0.0;
-                String res = String.format("Item purchased. Your change is £%.2f. \nNow dispensing.", userMoney);
+                inputCoins.clear();
+                if(this.getAllStockQty() == 0) {
+                    this.setVmStatus(Status.SERVICE_MODE);
+                    res += "\nMachine is out of stock. Switching to service mode.";
+                }
                 return res;
             }
             else {
@@ -106,6 +118,7 @@ public class VendingMachine {
                 if(stock[j] == null) {
                     stock[j] = newItem;
                     itemCount += 1;
+                    //totalStockCount += newItem.getQty();
                     return true;
                 }
             }
@@ -120,9 +133,6 @@ public class VendingMachine {
             if(stock[index] != null) {
                 String currentItemString = String.format("%d. %s  \n   Price: £%.2f \n   Quantity Remaining: %d\n", currentItem.getItemId(), currentItem.getName(), currentItem.getPrice(), currentItem.getQty());
                 items[index] = currentItemString;
-                // String currentItem = stock[index].getItemId() + ". " 
-                // + stock[index].getName() + " - Quantity Remaining: " + stock[index].getQty();
-                // nameArray[index] = currentItem;
             }
             
         }
@@ -134,8 +144,24 @@ public class VendingMachine {
         return stock;
     }
 
-    public void setStatus(Status vStatus) {
+    public boolean setVmStatus(Status vStatus) {
+        int totalQty = getAllStockQty();
+        if(totalQty == 0 && vStatus == Status.VENDING_MODE) {
+            this.vmStatus = Status.SERVICE_MODE;
+            return false;
+        }
         this.vmStatus = vStatus;
+        return true;
+    }
+
+    private int getAllStockQty() {
+        int totalQty = 0;
+        for (VendItem item : stock) {
+            if(item != null) {
+                totalQty += item.getQty();
+            }
+        }
+        return totalQty;
     }
 
 
@@ -257,9 +283,9 @@ public class VendingMachine {
 
     }
 
-    public void setVmStatus(Status vmStatus) {
-        this.vmStatus = vmStatus;
-    }
+    // public void setVmStatus(Status vmStatus) {
+    //     this.vmStatus = vmStatus;
+    // }
 
     public void setStock(VendItem[] stock) {
         this.stock = stock;
@@ -280,6 +306,11 @@ public class VendingMachine {
         }
         return res;
     }
+
+    // public int getTotalStockCount() {
+    //     return totalStockCount;
+    // }
+
 
     // protected void loadState(String owner, int maxItems, int itemCount, double totalMoney, double userMoney, Status vmStatus, VendItem[] stock) {
     //     setOwner(owner);
