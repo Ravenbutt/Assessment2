@@ -16,6 +16,7 @@ public class VendingMachine {
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
     private ArrayList<Integer> inputCoins;
+    private ArrayList<Integer> returnedCoins;
     //private int totalStockCount;
 
     public VendingMachine(String owner, int maxItems) {
@@ -24,6 +25,7 @@ public class VendingMachine {
         this.vmStatus = Status.SERVICE_MODE;
         stock = new VendItem[maxItems];
         inputCoins = new ArrayList<Integer>();
+        returnedCoins = new ArrayList<Integer>();
     }
 
     public String getSystemInfo() {
@@ -68,8 +70,41 @@ public class VendingMachine {
                 //         this.setVmStatus(Status.VENDING_MODE);
                 //     }
                 // }
-                String res = String.format("%s\nYour change is £%.2f. \nNow dispensing.", deliver, userMoney);
+                String res = String.format("%s\nYour change is £%.2f . \nNow dispensing.", deliver, userMoney);
+                for (Integer coin : returnedCoins) {
+                    //TODO Need to format the coins here
+                    res += String.format(l, format, args)
+                }
+                System.out.println(userMoney);
+                totalMoney -= userMoney;
+                if(userMoney >= 2.0) {
+                    returnedCoins.add(2);
+                    userMoney-=2.0;
+                }
+                if(userMoney >= 1.0) {
+                    returnedCoins.add(1);
+                    userMoney-=1.0;
+                }
+                if(userMoney >= 0.5) {
+                    returnedCoins.add(50);
+                    userMoney-=0.5;
+                }
+                if(userMoney >= 0.2) {
+                    returnedCoins.add(20);
+                    userMoney-=0.2;
+                }
+                if(userMoney >= 0.1) {
+                    returnedCoins.add(10);
+                    userMoney-=0.1;
+                }
+                if(userMoney >= 0.05) {
+                    returnedCoins.add(5);
+                    userMoney-=0.05;
+                }
+                
+                
                 userMoney = 0.0;
+                
                 inputCoins.clear();
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
