@@ -12,6 +12,7 @@ public class VendingMachine {
     private int itemCount; //amount of items (VendItems) currently for sale
     private double totalMoney;
     private double userMoney;
+    private int userMoneyInt;
     private Status vmStatus;
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
@@ -60,6 +61,7 @@ public class VendingMachine {
         }
 
         if(userMoney >= itemToPurchase.getPrice()) {
+            
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
                 userMoney -= itemToPurchase.getPrice();
@@ -70,11 +72,10 @@ public class VendingMachine {
                 //         this.setVmStatus(Status.VENDING_MODE);
                 //     }
                 // }
-                String res = String.format("%s\nYour change is £%.2f . \nNow dispensing.", deliver, userMoney);
-                for (Integer coin : returnedCoins) {
+                String res = String.format("%s\nYour change is £%.2f.\n", deliver, userMoney);
                     //TODO Need to format the coins here
-                    res += String.format(l, format, args)
-                }
+                    //return inputCoinsStr.toString().replace("[", "").replace("]", "");
+                
                 System.out.println(userMoney);
                 totalMoney -= userMoney;
                 if(userMoney >= 2.0) {
@@ -93,7 +94,8 @@ public class VendingMachine {
                     returnedCoins.add(20);
                     userMoney-=0.2;
                 }
-                if(userMoney >= 0.1) {
+                System.out.println(userMoney);
+                if(userMoney >= 0.10) {
                     returnedCoins.add(10);
                     userMoney-=0.1;
                 }
@@ -104,8 +106,28 @@ public class VendingMachine {
                 
                 
                 userMoney = 0.0;
+                System.out.println(returnedCoins);
+                if(this.returnedCoins.size() > 0) {
+
+                    for(int coin : this.returnedCoins) {
+                        String coinStr = "";
+                        if(coin < 5) {
+                            coinStr = String.format("£%d", coin);
+                        }
+                        else if(coin > 2) {
+                            coinStr = String.format("%dp", coin); 
+                        }
+                        res += coinStr;
+                        if(returnedCoins.indexOf(coin) != returnedCoins.size()-1) {
+                            res += ", ";
+                        }
+                    }
+                    
+                }
+                res += "\nNow dispensing.";
                 
                 inputCoins.clear();
+                returnedCoins.clear();
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
                     res += "\nMachine is out of stock. Switching to service mode.";
@@ -119,6 +141,7 @@ public class VendingMachine {
         return "Not enough funds to purchase this item.";
     }
 
+
     public Status getVmStatus() {
         return this.vmStatus;
     }
@@ -130,12 +153,19 @@ public class VendingMachine {
             return false;
         }
         if(acceptedCoins.contains(amount)) {
-            if(dAmount > 2) {
-                dAmount /= 100;
+            if(amount <= 2) {
+                amount *= 100;
             }
+            // if(dAmount > 2) {
+            //     dAmount /= 100;
+            // }
             userMoney += dAmount;
+            userMoneyInt += amount;
             totalMoney += dAmount;
             inputCoins.add(amount);
+            System.out.println("User money: " + (int)userMoney*100);
+            System.out.println("Total money: " + (int)totalMoney*100);
+            System.out.println("User money int: " + userMoneyInt);
             return true;
         }
         return false;
