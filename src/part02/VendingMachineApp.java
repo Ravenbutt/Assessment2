@@ -86,6 +86,8 @@ public class VendingMachineApp {
     }
 
     public static void listAll() {
+        System.out.println("Item List");
+        System.out.println("+++++++++++\n");
         for (String item : vendingMachine.listItems()) {
             System.out.println(item);
         }
@@ -198,6 +200,7 @@ public class VendingMachineApp {
             }
 
             extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
+            
             if(formatCoins() != null) {
                 extraDetails += formatCoins() + "\n";
             }
