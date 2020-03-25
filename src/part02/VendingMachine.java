@@ -51,7 +51,15 @@ public class VendingMachine {
         //should use decrement() method
         //also if qtyRemaining = 0 then fail state
 
-        VendItem itemToPurchase = findItem(choiceId);
+        userMoneyInt = (int)(userMoney*100);
+        VendItem itemToPurchase;
+
+        try {
+            itemToPurchase = findItem(choiceId);
+        } catch (NullPointerException e) {
+            return "This item does not exist.";
+        }
+
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "This machine is in service mode.";
         }
@@ -64,7 +72,8 @@ public class VendingMachine {
             
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
-                userMoney -= itemToPurchase.getPrice();
+                userMoneyInt -= (int)(itemToPurchase.getPrice()*100);
+                userMoney = (double)userMoneyInt/100;
                 //totalStockCount--;
                 //this.setVmStatus(Status.SERVICE_MODE);
                 // for (VendItem vendItem : stock) {
@@ -72,41 +81,40 @@ public class VendingMachine {
                 //         this.setVmStatus(Status.VENDING_MODE);
                 //     }
                 // }
-                String res = String.format("%s\nYour change is £%.2f.\n", deliver, userMoney);
+                String res = String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
                     //TODO Need to format the coins here
                     //return inputCoinsStr.toString().replace("[", "").replace("]", "");
                 
-                System.out.println(userMoney);
+
                 totalMoney -= userMoney;
-                if(userMoney >= 2.0) {
+                if(userMoneyInt >= 200) {
                     returnedCoins.add(2);
-                    userMoney-=2.0;
+                    userMoneyInt-=200;
                 }
-                if(userMoney >= 1.0) {
+                if(userMoneyInt >= 100) {
                     returnedCoins.add(1);
-                    userMoney-=1.0;
+                    userMoneyInt-=100;
                 }
-                if(userMoney >= 0.5) {
+                if(userMoneyInt >= 50) {
                     returnedCoins.add(50);
-                    userMoney-=0.5;
+                    userMoneyInt-=50;
                 }
-                if(userMoney >= 0.2) {
+                if(userMoneyInt >= 20) {
                     returnedCoins.add(20);
-                    userMoney-=0.2;
+                    userMoneyInt-=20;
                 }
-                System.out.println(userMoney);
-                if(userMoney >= 0.10) {
+                if(userMoneyInt >= 10) {
                     returnedCoins.add(10);
-                    userMoney-=0.1;
+                    userMoneyInt-=10;
                 }
-                if(userMoney >= 0.05) {
+                if(userMoneyInt >= 5) {
                     returnedCoins.add(5);
-                    userMoney-=0.05;
+                    userMoneyInt-=5;
                 }
                 
                 
                 userMoney = 0.0;
-                System.out.println(returnedCoins);
+                //System.out.println(returnedCoins);
                 if(this.returnedCoins.size() > 0) {
 
                     for(int coin : this.returnedCoins) {
@@ -120,6 +128,11 @@ public class VendingMachine {
                         res += coinStr;
                         if(returnedCoins.indexOf(coin) != returnedCoins.size()-1) {
                             res += ", ";
+                        }
+                        //!Maybe change this to just else?
+                        //!Also maybe just add coin to string instead of breaking up res var
+                        else if(returnedCoins.indexOf(coin) == returnedCoins.size()-1) {
+                            res += "\n";
                         }
                     }
                     
@@ -153,19 +166,12 @@ public class VendingMachine {
             return false;
         }
         if(acceptedCoins.contains(amount)) {
-            if(amount <= 2) {
-                amount *= 100;
+            if(dAmount > 2) {
+                dAmount /= 100;
             }
-            // if(dAmount > 2) {
-            //     dAmount /= 100;
-            // }
             userMoney += dAmount;
-            userMoneyInt += amount;
             totalMoney += dAmount;
             inputCoins.add(amount);
-            System.out.println("User money: " + (int)userMoney*100);
-            System.out.println("Total money: " + (int)totalMoney*100);
-            System.out.println("User money int: " + userMoneyInt);
             return true;
         }
         return false;
@@ -301,7 +307,7 @@ public class VendingMachine {
     public int getMaxItems() {
         return maxItems;
     }
-
+    //TODO make private - Maybe not cause it's setter?
     public void setMaxItems(int maxItems) {
         if(maxItems > 0) {
             this.maxItems = maxItems;
@@ -316,6 +322,7 @@ public class VendingMachine {
         return itemCount;
     }
 
+    //TODO make private - Maybe not cause it's setter?
     public void setItemCount(int itemCount) {
         if(itemCount < maxItems && itemCount >= 0) {
             this.itemCount = itemCount;
@@ -329,6 +336,7 @@ public class VendingMachine {
         return totalMoney;
     }
 
+    //TODO make private - Maybe not cause it's setter?
     public void setTotalMoney(double totalMoney) {
         if(totalMoney > 0.0) {
             this.totalMoney = totalMoney;
@@ -338,6 +346,7 @@ public class VendingMachine {
         }
     }
 
+    //TODO make private - Maybe not cause it's setter?
     public void setUserMoney(double userMoney) {
         if(userMoney > 0.0) {
             this.userMoney = userMoney;
@@ -352,6 +361,7 @@ public class VendingMachine {
     //     this.vmStatus = vmStatus;
     // }
 
+    //TODO make private - Maybe not cause it's setter?
     public void setStock(VendItem[] stock) {
         this.stock = stock;
     }
