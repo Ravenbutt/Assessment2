@@ -110,10 +110,17 @@ public class EmployeeMenu extends VendingMachineApp {
 
         while (true) {
             System.out.print("Enter item price: £");
-            try {
-                double newPrice = input.nextDouble();
-                input.nextLine();
-                VendItem newItem = new VendItem(newName, newPrice);
+            double newPrice = GetInput.checkDoubleInput();
+            if(newPrice == 0.0) {
+                System.out.println("Price must be greater than 0.0.");
+                continue;
+            }
+            else if(newPrice == -1.0) {
+                System.err.println("Please enter a valid value.\n");
+                continue;
+            }
+
+            VendItem newItem = new VendItem(newName, newPrice);
                 if (vendingMachine.addNewItem(newItem)) {
                     System.out.printf("Item named %s at price: £%.2f has been added.\n", newName, newPrice);
                     break;
@@ -121,12 +128,7 @@ public class EmployeeMenu extends VendingMachineApp {
                     System.out.println("Adding item failed.");
                     break;
                 }
-
-            } catch (InputMismatchException e) {
-                System.err.println("Please enter a valid value.\n");
-                input.next();
-                continue;
-            }
+            
         }
 
     }
@@ -154,31 +156,32 @@ public class EmployeeMenu extends VendingMachineApp {
             System.out.println("2. Service Mode.");
             System.out.print("Please select the vending machine status, enter 0 to cancel: ");
 
-            try {
-                choice = input.nextInt();
-                if (choice - 1 == 0) {
-                    // if() {
-                    //     System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
-                    //     break;
-                    // }
-                    vendingMachine.setVmStatus(Status.VENDING_MODE);
-                    System.out.println("\n> Machine set to " + vendingMachine.getVmStatus().getStatus() + " <");
-                    //System.out.println("\n> To change to vending mode, the machine must contain stock to vend. <");
-                    break;
-                } else if (choice - 1 == 1) {
-                    vendingMachine.setVmStatus(Status.SERVICE_MODE);
-                    System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
-                    break;
-                } else if (choice != 0) {
-                    System.out.println("\nPlease choose either 1, 2 or 0 to cancel.");
-                    input.next();
-                    continue;
-                }
-            } catch (InputMismatchException e) {
+            choice = GetInput.checkIntInput();
+
+            if(choice == -1) {
                 System.err.println("\nPlease choose a valid number.");
                 input.next();
                 continue;
             }
+
+            if(choice-1 == 0) {
+                vendingMachine.setVmStatus(Status.VENDING_MODE);
+                System.out.println("\n> Machine set to " + vendingMachine.getVmStatus().getStatus() + " <");
+                break;
+            }
+            else if(choice-1 == 1) {
+                vendingMachine.setVmStatus(Status.SERVICE_MODE);
+                System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
+                break;
+            }
+            else if(choice == 0) {
+                break;
+            }
+            else {
+                System.out.println("\nPlease choose either 1, 2 or 0 to cancel.");
+                continue;
+            }
+            
         }
     }
 
@@ -188,20 +191,20 @@ public class EmployeeMenu extends VendingMachineApp {
 
         while (true && chosenItem != null) {
             System.out.print("\nPlease enter the new stock number: ");
-            try {
-                int restockAmount = input.nextInt();
-                if (chosenItem.restock(restockAmount)) {
-                    System.out.println(
-                            "\nItem " + chosenItem.getName() + " restocked with quantity: " + chosenItem.getQty());
-                    break;
-                } else {
-                    System.out.println("\nItem restock failed.");
-                }
-            } catch (InputMismatchException e) {
+            int restockAmount = GetInput.checkIntInput();
+            if(restockAmount == -1) {
                 System.err.println("\nPlease enter a valid number.");
-                input.next();
                 continue;
             }
+            if(chosenItem.restock(restockAmount)) {
+                System.out.println(
+                            "\nItem " + chosenItem.getName() + " restocked with quantity: " + chosenItem.getQty());
+                    break;
+            }
+            else {
+                System.out.println("\nPlease enter a quantity from 1 to 10.");
+            }
+
         }
 
     }

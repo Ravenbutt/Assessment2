@@ -1,7 +1,5 @@
 package part02;
 
-import java.util.ArrayList;
-
 public class VendItem implements Vendible {
     private int itemId;
     private static int nextId = 1;
@@ -18,6 +16,9 @@ public class VendItem implements Vendible {
     public VendItem(String name, double unitPrice, int qtyAvailable) {
         this(name,unitPrice);
         if(qtyAvailable < 0) {
+            qtyAvailable = 0;
+        }
+        if(qtyAvailable > 10) {
             qtyAvailable = 0;
         }
         this.qtyAvailable = qtyAvailable;

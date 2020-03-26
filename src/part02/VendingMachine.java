@@ -17,6 +17,7 @@ public class VendingMachine {
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
     private ArrayList<Integer> inputCoins;
+    private ArrayList<Integer> totalCoins;
     private ArrayList<Integer> returnedCoins;
     //private int totalStockCount;
 
@@ -27,6 +28,9 @@ public class VendingMachine {
         stock = new VendItem[maxItems];
         inputCoins = new ArrayList<Integer>();
         returnedCoins = new ArrayList<Integer>();
+        totalCoins = new ArrayList<Integer>();
+        acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
+        totalCoins.add(1);
     }
 
     public String getSystemInfo() {
@@ -53,6 +57,12 @@ public class VendingMachine {
 
         userMoneyInt = (int)(userMoney*100);
         VendItem itemToPurchase;
+        System.out.println(totalCoins.containsAll(acceptedCoins));
+
+        if(!totalCoins.containsAll(acceptedCoins)) {
+            this.setVmStatus(Status.SERVICE_MODE);
+            return "Machine does not have enough coins to give operate.\nSwitching to SERVICE MODE.";
+        }
 
         try {
             itemToPurchase = findItem(choiceId);
@@ -84,40 +94,93 @@ public class VendingMachine {
                 String res = String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
                     //TODO Need to format the coins here
                     //return inputCoinsStr.toString().replace("[", "").replace("]", "");
-                
 
+                
                 totalMoney -= userMoney;
-                if(userMoneyInt >= 200) {
-                    returnedCoins.add(2);
-                    userMoneyInt-=200;
+                while(userMoneyInt>0) {
+                    
+                    while(userMoneyInt >= 200) {
+                        if(totalCoins.contains(2)) {
+                            returnedCoins.add(2);
+                            totalCoins.remove(2);
+                            userMoneyInt-=200;
+                        }
+                        else {
+                            System.out.println("Cannot give 2");
+                            userMoneyInt-=200;
+                            break;
+                        }
+                    }
+                    while(userMoneyInt >= 100) {
+                        if(totalCoins.contains(1)) {
+                            returnedCoins.add(1);
+                            totalCoins.remove(1);
+                            userMoneyInt-=100;
+                        }
+                        else {
+                            System.out.println("Cannot give 1");
+                            userMoneyInt-=100;
+                            break;
+                        }
+                    }
+                    while(userMoneyInt >= 50) {
+                        if(totalCoins.contains(50)) {
+                            returnedCoins.add(50);
+                            totalCoins.remove(50);
+                            userMoneyInt-=50;
+                        }
+                        else {
+                            System.out.println("Cannot give 50");
+                            userMoneyInt-=50;
+                            break;
+                        }
+                    }
+                    while(userMoneyInt >= 20) {
+                        if(totalCoins.contains(20)) {
+                            returnedCoins.add(20);
+                            totalCoins.remove(20);
+                            userMoneyInt-=20;
+                        }
+                        else {
+                            System.out.println("Cannot give 20");
+                            userMoneyInt-=20;
+                            break;
+                        }
+                    }
+                    while(userMoneyInt >= 10) {
+                        if(totalCoins.contains(10)) {
+                            returnedCoins.add(10);
+                            totalCoins.remove(10);
+                            userMoneyInt-=10;
+                        }
+                        else {
+                            System.out.println("Cannot give 10");
+                            userMoneyInt-=10;
+                            break;
+                        }
+                    }
+                    while(userMoneyInt >= 5) {
+                        if(totalCoins.contains(5)) {
+                            returnedCoins.add(5);
+                            totalCoins.remove(5);
+                            userMoneyInt-=5;
+                        }
+                        else {
+                            System.out.println("Cannot give 5");
+                            userMoneyInt-=5;
+                            break;
+                        }
+                    }
+                    
                 }
-                if(userMoneyInt >= 100) {
-                    returnedCoins.add(1);
-                    userMoneyInt-=100;
-                }
-                if(userMoneyInt >= 50) {
-                    returnedCoins.add(50);
-                    userMoneyInt-=50;
-                }
-                if(userMoneyInt >= 20) {
-                    returnedCoins.add(20);
-                    userMoneyInt-=20;
-                }
-                if(userMoneyInt >= 10) {
-                    returnedCoins.add(10);
-                    userMoneyInt-=10;
-                }
-                if(userMoneyInt >= 5) {
-                    returnedCoins.add(5);
-                    userMoneyInt-=5;
-                }
-                
-                
+
+
                 userMoney = 0.0;
                 //System.out.println(returnedCoins);
                 if(this.returnedCoins.size() > 0) {
 
-                    for(int coin : this.returnedCoins) {
+                    for(int index=0; index<=this.returnedCoins.size()-1; index++) {
+                        int coin = this.returnedCoins.get(index);
                         String coinStr = "";
                         if(coin < 5) {
                             coinStr = String.format("£%d", coin);
@@ -126,7 +189,8 @@ public class VendingMachine {
                             coinStr = String.format("%dp", coin); 
                         }
                         res += coinStr;
-                        if(returnedCoins.indexOf(coin) != returnedCoins.size()-1) {
+                        System.out.println(returnedCoins.indexOf(coin));
+                        if(index != returnedCoins.size()-1) {
                             res += ", ";
                         }
                         //!Maybe change this to just else?
@@ -161,7 +225,6 @@ public class VendingMachine {
 
     public boolean insertCoin(int amount) {
         double dAmount = amount;
-        acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
         if(this.vmStatus == Status.SERVICE_MODE) {
             return false;
         }
@@ -172,6 +235,8 @@ public class VendingMachine {
             userMoney += dAmount;
             totalMoney += dAmount;
             inputCoins.add(amount);
+            totalCoins.add(amount);
+            System.out.println(totalCoins);
             return true;
         }
         return false;
@@ -366,10 +431,6 @@ public class VendingMachine {
         this.stock = stock;
     }
 
-    public ArrayList<Integer> getAcceptedCoins() {
-        return acceptedCoins;
-    }
-
     public String getDetails() {
         String res = String.format("%s,%d,%d,%f,%f,%s,", owner, maxItems, itemCount, totalMoney, userMoney, vmStatus);
         for (VendItem vendItem : stock) {
@@ -381,6 +442,15 @@ public class VendingMachine {
         }
         return res;
     }
+
+    public ArrayList<Integer> getTotalCoins() {
+        return totalCoins;
+    }
+
+    public ArrayList<Integer> getAcceptedCoins() {
+        return acceptedCoins;
+    }
+
 
     // public int getTotalStockCount() {
     //     return totalStockCount;

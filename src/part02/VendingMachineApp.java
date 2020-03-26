@@ -59,8 +59,8 @@ public class VendingMachineApp {
     }
 
     private static void processChoice(int choice) {
-        if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4) {
-            System.out.println("Vending machine is in service mode. \nAll customer operations are disabled.\n");
+        if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4 && choice != 1) {
+            System.out.println("Vending machine is in service mode. \nOnly item viewing permitted.\n");
             return;
         }
         switch (choice) {
@@ -108,51 +108,73 @@ public class VendingMachineApp {
             }
 
             System.out.print("\nPlease enter coin, enter 0 to finish: ");
-            try {
-                inputCoin = input.nextInt();
-                if(inputCoin == 0) {
-                    break;
-                }
-                if(vendingMachine.insertCoin(inputCoin) == false) {
-                    if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                        System.out.println("Machine is in service mode.");
-                        break;
-                    }
-                    System.out.println("Please enter only the denominations listed.");
-                }
-
-            } catch (InputMismatchException e) {
-                System.err.println("Please insert a valid coin.");
-                input.next();
+            
+            inputCoin = GetInput.checkIntInput();
+            if(inputCoin == -1) {
+                System.out.println("Please insert a valid coin\n");
                 continue;
             }
+            if(inputCoin == 0) {
+                break;
+            }
+            if(!vendingMachine.insertCoin(inputCoin)) {
+                if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
+                    System.out.println("Machine is in service mode.\nCoin insertion is disabled.\n");
+                    break;
+                }
+                System.out.println("Please enter only the denominations listed.");
+                continue;
+            }
+            
         }
     }
 
 
     public static VendItem selectItem() {
         
-        int chosenId = -1;
+        //int chosenId = -1;
         VendItem chosenItem = null;
         
         while(chosenItem == null) {
             listAll();
-            System.out.print("\nEnter the number of the item you wish to select, enter 0 to cancel: ");
-            try {
-                chosenId = input.nextInt();
-                input.nextLine();
-                if(chosenId == 0) {
-                    return null;
+
+            if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins())) {
+                System.out.println("                        !WARNING!\n" 
+                + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
+                + "Are you sure you wish to continue? Y/N: ");
+                while (true) {
+                    char choice = input.nextLine().charAt(0);
+                    if(Character.toUpperCase(choice) == 'Y') {
+                        break;
+                    }
+                    else if(Character.toUpperCase(choice) == 'N') {
+                        System.out.println("Item not purchased.");
+                        return null;
+                    }
+                    else {
+                        System.out.println("Please enter Y for yes or N for no.");
+                        continue;
+                    }
                 }
-                chosenItem = vendingMachine.findItem(chosenId);
-                return chosenItem;
-            } catch (InputMismatchException e) {
-                System.err.println("Please enter a valid number.");
-                input.next();
+            }
+
+            System.out.print("\nEnter the number of the item you wish to select, enter 0 to cancel: ");
+            int chosenId = GetInput.checkIntInput();
+            if(chosenId == 0) {
+                break;
+            }
+            if(chosenId == -1) {
+                System.err.println("Please enter a valid number.\n");
+                //input.next();
                 continue;
             }
-            catch (NullPointerException e) {
-                System.err.println("Item not found.");
+
+            try {
+                chosenItem = vendingMachine.findItem(chosenId);
+                return chosenItem;
+            } catch (NullPointerException e) {
+                System.err.println("Item not found.\n");
+                //input.next();
                 continue;
             }
         }
