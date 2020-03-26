@@ -136,7 +136,6 @@ public class VendingMachineApp {
         VendItem chosenItem = null;
         
         while(chosenItem == null) {
-            listAll();
 
             if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins())) {
                 System.out.println("                        !WARNING!\n" 
@@ -157,6 +156,9 @@ public class VendingMachineApp {
                     }
                 }
             }
+
+
+            listAll();
 
             System.out.print("\nEnter the number of the item you wish to select, enter 0 to cancel: ");
             int chosenId = GetInput.checkIntInput();
