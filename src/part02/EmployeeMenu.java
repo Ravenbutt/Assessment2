@@ -10,6 +10,7 @@ public class EmployeeMenu extends VendingMachineApp {
         input = new Scanner(System.in);
         initEmpMenu();
         System.out.println("Going back to customer menu.");
+        engineerMode = false;
     }
 
     private void initEmpMenu() {
@@ -17,11 +18,13 @@ public class EmployeeMenu extends VendingMachineApp {
                 "View Vending Machine Details", "Set Status", "Save State", "Load State", "Back" };
         Menu vendMenu = new Menu("VendOS v1.0 - ENGINEER MENU", menuOptions);
 
-        if (!authenticate()) {
+        if (authenticate()) {
+            System.out.println("\nLogin successful.");
+            engineerMode = true;
+
+        } else {
             System.out.println("\nLogin failed.");
             return;
-        } else {
-            System.out.println("\nLogin successful.");
         }
 
         // Condition to check if user has chose to quit and ensure last option is Quit
@@ -56,7 +59,6 @@ public class EmployeeMenu extends VendingMachineApp {
             }
         }
         return false;
-
     }
 
     private void processChoice(int choice) {
@@ -120,7 +122,10 @@ public class EmployeeMenu extends VendingMachineApp {
                 continue;
             }
 
-            VendItem newItem = new VendItem(newName, newPrice);
+            System.out.printf("Item named '%s' at £%.2f. Is this correct?: ");
+            boolean choice = GetInput.checkYesNo();
+            if(choice) {
+                VendItem newItem = new VendItem(newName, newPrice);
                 if (vendingMachine.addNewItem(newItem)) {
                     System.out.printf("Item named %s at price: £%.2f has been added.\n", newName, newPrice);
                     break;
@@ -128,6 +133,12 @@ public class EmployeeMenu extends VendingMachineApp {
                     System.out.println("Adding item failed.");
                     break;
                 }
+            }
+            else {
+                addItem();
+            }
+
+            
             
         }
 
@@ -190,7 +201,7 @@ public class EmployeeMenu extends VendingMachineApp {
         VendItem chosenItem = super.selectItem();
 
         while (true && chosenItem != null) {
-            System.out.print("\nPlease enter the new stock number: ");
+            System.out.print("\nPlease enter the new stock amount: ");
             int restockAmount = GetInput.checkIntInput();
             if(restockAmount == -1) {
                 System.err.println("\nPlease enter a valid number.");
