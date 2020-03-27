@@ -21,6 +21,8 @@ public class VendingMachine {
     private ArrayList<Integer> returnedCoins;
     //private int totalStockCount;
 
+    //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
+    //TODO otherwise say no change required
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
         this.maxItems = maxItems;
@@ -33,12 +35,17 @@ public class VendingMachine {
     }
 
     public String getSystemInfo() {
-        String res = "Owner: " + owner + "\n";
+        String res = "\nOwner: " + owner + "\n";
         res += "Max items: " + maxItems + "\n";
         res += "Current item count: " + itemCount + "\n";
         res += String.format("Current total funds: £%.2f\n", totalMoney);
         res += String.format("Current user funds: £%.2f\n", userMoney);
         res += this.getVmStatus().getStatus();
+        res += "\n\n       ITEM LIST\n";
+        res += "       +++++++++\n";
+        for (String itemDetail : this.listItems()) {
+            res += itemDetail + "\n";
+        }
         return res;
     }
 
@@ -157,7 +164,7 @@ public class VendingMachine {
             
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
-                double change = userMoney-itemToPurchase.getPrice();
+                //double change = userMoney-itemToPurchase.getPrice();
                 userMoneyInt -= (int)(itemToPurchase.getPrice()*100);
                 userMoney = (double)userMoneyInt/100;
                 //totalStockCount--;
@@ -175,79 +182,12 @@ public class VendingMachine {
                 totalMoney -= userMoney;
                 while(userMoneyInt>0) {
                     chooseReturnCoins();
-                    // System.out.println(totalCoins);
-                    // if(totalCoins.contains(2)) {
-                    //     int twoPoundCount = Math.round((int)userMoneyInt/200);
-                    //     userMoneyInt%=200;
-                    //     addReturnedCoin(2, twoPoundCount);
-                    // }
-                    // else {
-                    //     System.out.println("No £2");
-                    // }
-                    // System.out.println(totalCoins);
-                    // if(totalCoins.contains(1)) {
-                    //     int onePoundCount = Math.round((int)userMoneyInt/100);
-                    //     userMoneyInt%=100;
-                    //     addReturnedCoin(1, onePoundCount);
-                    // }
-                    // else {
-                    //     System.out.println("No £1");
-                    // }
-
-                    // System.out.println(totalCoins);
-                    // if(totalCoins.contains(50)) {
-                    //     int fiftyPenceCount = Math.round((int)userMoneyInt/50);
-                    //     userMoneyInt%=50;
-                    //     addReturnedCoin(50, fiftyPenceCount);
-                    // }
-                    // else {
-                    //     System.out.println("No 50p");
-                    // }
-
-                    // System.out.println(totalCoins);
-                    // if(totalCoins.contains(20)) {
-                    //     int twentyPenceCount = Math.round((int)userMoneyInt/20);
-                    //     userMoneyInt%=20;
-                    //     addReturnedCoin(20, twentyPenceCount);
-                    // }
-                    // else {
-                    //     System.out.println("No 20p");
-                    // }
-                    // System.out.println(totalCoins);
-                    // if(totalCoins.contains(10)) {
-                    //     int tenPenceCount = Math.round((int)userMoneyInt/10);
-                    //     userMoneyInt%=10;
-                    //     addReturnedCoin(10, tenPenceCount);
-                    // }
-                    // else {
-                    //     System.out.println("No 10p");
-                    // }
-                    // System.out.println(totalCoins);
-                    // int fivePenceCount = Math.round((int)userMoneyInt/5);
-                    // if(totalCoins.contains(5)) {
-                    //     addReturnedCoin(5, fivePenceCount);
-                    // }
-                    // else {
-                    //     System.out.println("No 5p");
-                    // }
-                    // System.out.println(totalCoins);
-                    // System.out.printf("£2: %d, £1: %d, 50p: %d, 20p: %d, 10p: %d, 5p:%d\n", twoPoundCount,onePoundCount,fiftyPenceCount,twentyPenceCount,tenPenceCount,fivePenceCount);
-                    
-                    
-                    //!Start of old ver
-                    // System.out.println(returnedCoins);
-                    // System.out.println(userMoneyInt);
-                    // System.out.println(userMoney);
-
-
-                    
                 }
-
 
                 userMoney = 0.0;
                 //System.out.println(returnedCoins);
-                //TODO put this in function
-                res += formatCoins();
+
+                res += formatCoins(this.returnedCoins);
                 res += "\nNow dispensing.";
                 
                 inputCoins.clear();
@@ -265,27 +205,26 @@ public class VendingMachine {
         return "Not enough funds to purchase this item.";
     }
 
-    private String formatCoins() {
-        String res = "";
-        if(this.returnedCoins.size() > 0) {
 
-            for(int index=0; index<=this.returnedCoins.size()-1; index++) {
-                int coin = this.returnedCoins.get(index);
-                String coinStr = "";
+    public static String formatCoins(ArrayList<Integer> coinList) {
+        String res = "";
+        if(coinList.size() > 0) {
+
+            for(int index=0; index<=coinList.size()-1; index++) {
+                int coin = coinList.get(index);
                 if(coin < 5) {
-                    coinStr = String.format("£%d", coin);
+                    res += String.format("£%d", coin);
                 }
                 else if(coin > 2) {
-                    coinStr = String.format("%dp", coin); 
+                    res += String.format("%dp", coin); 
                 }
-                res += coinStr;
                 //System.out.println(returnedCoins.indexOf(coin));
-                if(index != returnedCoins.size()-1) {
+                if(index != coinList.size()-1) {
                     res += ", ";
                 }
                 //!Maybe change this to just else?
                 //!Also maybe just add coin to string instead of breaking up res var
-                else if(returnedCoins.indexOf(coin) == returnedCoins.size()-1) {
+                else if(coinList.indexOf(coin) == coinList.size()-1) {
                     res += "\n";
                 }
             }
