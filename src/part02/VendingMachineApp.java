@@ -142,7 +142,7 @@ public class VendingMachineApp {
                 System.out.println("                        !WARNING!\n" 
                 + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
                 + "Are you sure you wish to continue? Y/N: ");
-                boolean choice = GetInput.checkYesNo();
+                boolean choice = GetInput.getYesNo();
                 if(!choice) {
                     System.out.println("Item not purchased.");
                     return null;
@@ -191,7 +191,7 @@ public class VendingMachineApp {
         // }
         System.out.println("\nWould you like to purchase this item? Y/N: ");
 
-        boolean choice = GetInput.checkYesNo();
+        boolean choice = GetInput.getYesNo();
         if(choice) {
             System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
             return;

@@ -123,7 +123,7 @@ public class EmployeeMenu extends VendingMachineApp {
             }
 
             System.out.printf("Item named '%s' at £%.2f. Is this correct?: ");
-            boolean choice = GetInput.checkYesNo();
+            boolean choice = GetInput.getYesNo();
             if(choice) {
                 VendItem newItem = new VendItem(newName, newPrice);
                 if (vendingMachine.addNewItem(newItem)) {
