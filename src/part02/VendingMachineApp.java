@@ -7,10 +7,10 @@ import java.util.Scanner;
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
-    static Scanner input;
-    static double coinsInput[];
-    static double total = 0;
-    
+    protected static Scanner input;
+    protected static double coinsInput[];
+    protected static double total = 0;
+    protected static boolean engineerMode = false;
 
     public static void main(String[] args) {
         //*Was thinking of doing extends VendingMachine so it could change what is printed by menu?
@@ -104,7 +104,8 @@ public class VendingMachineApp {
             System.out.printf("Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
 
             if(vendingMachine.getInputCoins().size() > 0) {
-                System.out.println("Currently inserted coins: " + formatCoins());
+                //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
+                System.out.println("Currently inserted coins: " + VendingMachine.formatCoins(vendingMachine.getInputCoins()));
             }
 
             System.out.print("\nPlease enter coin, enter 0 to finish: ");
@@ -137,23 +138,14 @@ public class VendingMachineApp {
         
         while(chosenItem == null) {
 
-            if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins())) {
+            if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins()) && !engineerMode) {
                 System.out.println("                        !WARNING!\n" 
                 + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
                 + "Are you sure you wish to continue? Y/N: ");
-                while (true) {
-                    char choice = input.nextLine().charAt(0);
-                    if(Character.toUpperCase(choice) == 'Y') {
-                        break;
-                    }
-                    else if(Character.toUpperCase(choice) == 'N') {
-                        System.out.println("Item not purchased.");
-                        return null;
-                    }
-                    else {
-                        System.out.println("Please enter Y for yes or N for no.");
-                        continue;
-                    }
+                boolean choice = GetInput.checkYesNo();
+                if(!choice) {
+                    System.out.println("Item not purchased.");
+                    return null;
                 }
             }
 
@@ -199,21 +191,30 @@ public class VendingMachineApp {
         // }
         System.out.println("\nWould you like to purchase this item? Y/N: ");
 
-        while (true) {
-            char choice = input.nextLine().charAt(0);
-            if(Character.toUpperCase(choice) == 'Y') {
-                System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
-                break;
-            }
-            else if(Character.toUpperCase(choice) == 'N') {
-                System.out.println("Item not purchased.");
-                break;
-            }
-            else {
-                System.out.println("Please enter Y for yes or N for no.");
-                continue;
-            }
+        boolean choice = GetInput.checkYesNo();
+        if(choice) {
+            System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
+            return;
         }
+        else if(!choice) {
+            System.out.println("Item not purchased.");
+            return;
+        }
+        // while (true) {
+        //     char choice = input.nextLine().charAt(0);
+        //     if(Character.toUpperCase(choice) == 'Y') {
+        //         System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
+        //         break;
+        //     }
+        //     else if(Character.toUpperCase(choice) == 'N') {
+        //         System.out.println("Item not purchased.");
+        //         break;
+        //     }
+        //     else {
+        //         System.out.println("Please enter Y for yes or N for no.");
+        //         continue;
+        //     }
+        // }
     }
 
     private static String getExtraDetails() {
@@ -225,30 +226,30 @@ public class VendingMachineApp {
 
             extraDetails += String.format("Current funds inserted: £%.2f\n", vendingMachine.getUserMoney());
             
-            if(formatCoins() != null) {
-                extraDetails += formatCoins() + "\n";
+            if(VendingMachine.formatCoins(vendingMachine.getInputCoins()) != null) {
+                extraDetails += VendingMachine.formatCoins(vendingMachine.getInputCoins()) + "\n";
             }
         return extraDetails;
     }
 
-    private static String formatCoins() {
-        ArrayList<String> inputCoinsStr = new ArrayList<String>();
-        if(vendingMachine.getInputCoins().size() > 0) {
+    // private static String formatCoins() {
+    //     ArrayList<String> inputCoinsStr = new ArrayList<String>();
+    //     if(vendingMachine.getInputCoins().size() > 0) {
 
-            for(int coin : vendingMachine.getInputCoins()) {
-                String coinStr = "";
-                if(coin < 5) {
-                    coinStr = String.format("£%d", coin);
-                }
-                else if(coin > 2) {
-                    coinStr = String.format("%dp", coin); 
-                }
-                inputCoinsStr.add(coinStr);
-            }
+    //         for(int coin : vendingMachine.getInputCoins()) {
+    //             String coinStr = "";
+    //             if(coin < 5) {
+    //                 coinStr = String.format("£%d", coin);
+    //             }
+    //             else if(coin > 2) {
+    //                 coinStr = String.format("%dp", coin); 
+    //             }
+    //             inputCoinsStr.add(coinStr);
+    //         }
             
-        }
-        return inputCoinsStr.toString().replace("[", "").replace("]", "");
-    }
+    //     }
+    //     return inputCoinsStr.toString().replace("[", "").replace("]", "");
+    // }
 
 
 }
