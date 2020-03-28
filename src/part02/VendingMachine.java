@@ -183,7 +183,7 @@ public class VendingMachine {
                 while(userMoneyInt>0) {
                     chooseReturnCoins();
                 }
-
+                
                 userMoney = 0.0;
                 //System.out.println(returnedCoins);
 

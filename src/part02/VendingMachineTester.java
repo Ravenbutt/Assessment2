@@ -1,6 +1,61 @@
 package part02;
 
 public class VendingMachineTester {
+
+    private static void testCase1() {
+
+    }
+
+    private static void testCase2() {
+
+    }
+
+    private static void testCase3() {
+
+    }
+
+    private static void testCase4() {
+
+    }
+
+    private static void testCase5() {
+
+    }
+
+    private static void testCase6() {
+
+    }
+
+    private static void testCase7() {
+
+    }
+
+    private static void testCase8() {
+
+    }
+
+    private static void testCase9() {
+
+    }
+
+    private static void testCase10() {
+
+    }
+
+    private static void testCase11() {
+
+    }
+
+    private static void testCase12() {
+
+    }
+
+    private static void testCase13() {
+
+    }
+
+    
+
     public static void main(String[] args) {
         VendingMachine testingMachine = new VendingMachine("Testing Machine", 10);
 

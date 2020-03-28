@@ -31,7 +31,7 @@ public class Menu {
 	 */
 	public int getChoice() {
 		display();
-		System.out.print("Enter choice: ");
+		System.out.print("> Enter choice: ");
 		int choice;
 		try {
 			choice = input.nextInt();
