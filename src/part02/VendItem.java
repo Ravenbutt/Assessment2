@@ -1,5 +1,6 @@
 package part02;
 
+//TODO must update some empty name cannot be put
 public class VendItem implements Vendible {
     private int itemId;
     private static int nextId = 1;

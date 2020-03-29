@@ -19,6 +19,7 @@ public class VendingMachine {
     private ArrayList<Integer> inputCoins;
     private ArrayList<Integer> totalCoins;
     private ArrayList<Integer> returnedCoins;
+    private ArrayList<Integer> missingCoins;
     //private int totalStockCount;
 
     //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
@@ -32,6 +33,7 @@ public class VendingMachine {
         returnedCoins = new ArrayList<Integer>();
         totalCoins = new ArrayList<Integer>();
         acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
+        missingCoins = new ArrayList<Integer>();
     }
 
     public String getSystemInfo() {
@@ -65,7 +67,7 @@ public class VendingMachine {
                 userMoneyInt-=200;
             }
             else {
-                System.out.println("Cannot give 2");
+                missingCoins.add(2);
                 userMoneyInt-=200;
                 break;
             }
@@ -77,7 +79,7 @@ public class VendingMachine {
                 userMoneyInt-=100;
             }
             else {
-                System.out.println("Cannot give 1");
+                missingCoins.add(1);
                 userMoneyInt-=100;
                 break;
             }
@@ -89,7 +91,7 @@ public class VendingMachine {
                 userMoneyInt-=50;
             }
             else {
-                System.out.println("Cannot give 50");
+                missingCoins.add(50);
                 userMoneyInt-=50;
                 break;
             }
@@ -101,7 +103,7 @@ public class VendingMachine {
                 userMoneyInt-=20;
             }
             else {
-                System.out.println("Cannot give 20");
+                missingCoins.add(20);
                 userMoneyInt-=20;
                 break;
             }
@@ -113,7 +115,7 @@ public class VendingMachine {
                 userMoneyInt-=10;
             }
             else {
-                System.out.println("Cannot give 10");
+                missingCoins.add(10);
                 userMoneyInt-=10;
                 break;
             }
@@ -125,7 +127,7 @@ public class VendingMachine {
                 userMoneyInt-=5;
             }
             else {
-                System.out.println("Cannot give 5");
+                missingCoins.add(5);
                 userMoneyInt-=5;
                 break;
             }
@@ -139,7 +141,8 @@ public class VendingMachine {
 
         userMoneyInt = (int)(userMoney*100);
         VendItem itemToPurchase;
-        System.out.println(totalCoins.containsAll(acceptedCoins));
+        //TODO REMOVE FROM PART01
+        //System.out.println(totalCoins.containsAll(acceptedCoins));
 
         // if(!totalCoins.containsAll(acceptedCoins)) {
         //     this.setVmStatus(Status.SERVICE_MODE);
@@ -187,14 +190,17 @@ public class VendingMachine {
                 userMoney = 0.0;
                 //System.out.println(returnedCoins);
 
-                res += formatCoins(this.returnedCoins);
+                res += formatCoins(this.returnedCoins) + "\n";
+                res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
                 res += "\nNow dispensing.";
+
                 
                 inputCoins.clear();
                 returnedCoins.clear();
+                missingCoins.clear();
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
-                    res += "\nMachine is out of stock. Switching to service mode.";
+                    res += "\n\n! Machine is out of stock. Switching to service mode. !";
                 }
                 return res;
             }
@@ -225,7 +231,7 @@ public class VendingMachine {
                 //!Maybe change this to just else?
                 //!Also maybe just add coin to string instead of breaking up res var
                 else if(coinList.indexOf(coin) == coinList.size()-1) {
-                    res += "\n";
+                    res += "";
                 }
             }
             
@@ -250,7 +256,8 @@ public class VendingMachine {
             totalMoney += dAmount;
             inputCoins.add(amount);
             totalCoins.add(amount);
-            System.out.println(totalCoins);
+            //TODO REMOVE THIS FROM PART 1 TOO
+            //System.out.println(totalCoins);
             return true;
         }
         return false;
@@ -317,6 +324,8 @@ public class VendingMachine {
 
 
     public VendItem findItem(int itemId) throws NullPointerException {
+
+        //TODO For some reason the itemId=10 here is just ignoring that it's null?
         VendItem target = null;
         for(int index = 0; index < stock.length; index++) { //might need to change this to length-1 idk
             VendItem currItem = stock[index];
