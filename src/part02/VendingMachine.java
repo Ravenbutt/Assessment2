@@ -60,6 +60,7 @@ public class VendingMachine {
     }
 
     private void chooseReturnCoins() {
+        //TODO Stop the infinite loop with a break
         while(userMoneyInt >= 200) {
             if(totalCoins.contains(2)) {
                 returnedCoins.add(2);
@@ -132,14 +133,30 @@ public class VendingMachine {
                 break;
             }
         }
-        
+        // if(userMoneyInt%200!=0 && userMoneyInt%100!=0 && userMoneyInt%50!=0 && userMoneyInt%20!=0 && userMoneyInt%10!=0 && userMoneyInt%5!=0) {
+        //     break;
+        // }
     }
 
+    public int getUserMoneyInt() {
+        return this.userMoneyInt;
+    }
+    
     public String purchaseItem(int choiceId) {
         //should use decrement() method
         //also if qtyRemaining = 0 then fail state
-
-        userMoneyInt = (int)(userMoney*100);
+        //System.out.println(userMoney);
+        //System.out.println();
+        //System.out.println("Before round: " + userMoneyInt);
+        //System.out.println("UMONEY: "+ userMoney*100);
+        //System.out.println("UMONEY ROUND: "+ Math.round(userMoney*100));
+        userMoneyInt = (int)Math.round((userMoney*100));
+        //System.out.println("Usermoney: " + userMoney);
+        //System.out.println("userMoney round not *100: " + Math.round(userMoney));
+        //System.out.println("Usermoney rounded: "+Math.round((userMoney*100)));
+        //System.out.println("PURCHASE ITEM 5: " + userMoneyInt);
+        //System.out.println("After round: " + userMoneyInt);
+        //System.out.println(userMoneyInt);
         VendItem itemToPurchase;
         //TODO REMOVE FROM PART01
         //System.out.println(totalCoins.containsAll(acceptedCoins));
@@ -155,6 +172,11 @@ public class VendingMachine {
             return "This item does not exist.";
         }
 
+        if(itemToPurchase == null) {
+            //System.out.println("helloo");
+            return "This product does not exist.";
+        }
+
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "This machine is in service mode.";
         }
@@ -163,7 +185,7 @@ public class VendingMachine {
             this.setVmStatus(Status.SERVICE_MODE);
         }
 
-        if(userMoney >= itemToPurchase.getPrice()) {
+        if(userMoneyInt >= (int)itemToPurchase.getPrice()*100) {
             
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
@@ -263,6 +285,25 @@ public class VendingMachine {
         return false;
     }
 
+    private void sortStock() {
+        int swaps;
+        do {
+            swaps=0;
+            for (int index = 0; index < stock.length-1; index++) {
+                if(stock[index] != null && stock[index+1] != null) {
+                    if(stock[index].getItemId() > stock[index+1].getItemId()) {
+                        VendItem temp = stock[index];
+                        stock[index] = stock[index+1];
+                        stock[index+1] = temp;
+                        swaps++;
+                    }
+                }
+                
+            }
+            
+        } while (swaps>0);
+    }
+
     public boolean addNewItem(VendItem newItem) {
         //Maybe only allow adding item when in service mode?
         if(newItem != null) {
@@ -276,6 +317,7 @@ public class VendingMachine {
                     stock[j] = newItem;
                     itemCount += 1;
                     //totalStockCount += newItem.getQty();
+                    this.sortStock();
                     return true;
                 }
             }
@@ -337,7 +379,9 @@ public class VendingMachine {
                 break;
             }
         }
-		
+        if(target == null) {
+            throw new NullPointerException("Item not found.");
+        }
 		return target;
     }
 

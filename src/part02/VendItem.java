@@ -9,17 +9,27 @@ public class VendItem implements Vendible {
     private int qtyAvailable;
 
     public VendItem(String name, double unitPrice) {
+        if(name == null) {
+            name = "UNASSIGNED";
+            unitPrice=0.0;
+        }
         this.name = name;
+        if(unitPrice < 0.0) {
+            unitPrice = 0.0;
+        }
         this.unitPrice = unitPrice;
         this.itemId = nextIdNum();
     }
 
     public VendItem(String name, double unitPrice, int qtyAvailable) {
         this(name,unitPrice);
+        if(name == null) {
+            qtyAvailable = 0;
+        }
         if(qtyAvailable < 0) {
             qtyAvailable = 0;
         }
-        if(qtyAvailable > 10) {
+        else if(qtyAvailable > 10) {
             qtyAvailable = 0;
         }
         this.qtyAvailable = qtyAvailable;
@@ -88,7 +98,8 @@ public class VendItem implements Vendible {
 
     public String deliver() {
         if(this.getQty() == 0) {
-            return null;
+            //TODO Does this get fired in the VendingMachineApp code??
+            return "Sorry for running out of " + this.getName() + ".\n";
         }
         return "Thanks for purchasing " + this.getName() + ".\n";
     }

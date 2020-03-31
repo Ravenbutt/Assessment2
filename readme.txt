@@ -9,3 +9,6 @@ insert 100 or 200 pennies into a vending machine.
 I also chose to distinguish items by them ItemID as it provides a definite unique identifier for each stock item
 and I think it makes most sense to purchase items based on their ID.
 
+
+Machine should start in service mode.
+
