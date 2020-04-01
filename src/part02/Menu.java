@@ -37,7 +37,7 @@ public class Menu {
 			choice = input.nextInt();
 		} catch (InputMismatchException e) {
 			input.next();
-			return 0;
+			return -1;
 		}
 		
 		return choice;

@@ -20,6 +20,12 @@ public class VendingMachine {
     private ArrayList<Integer> totalCoins;
     private ArrayList<Integer> returnedCoins;
     private ArrayList<Integer> missingCoins;
+    private int num5Pence;
+    private int num10Pence;
+    private int num20Pence;
+    private int num50Pence;
+    private int num1Pound;
+    private int num2Pound;
     //private int totalStockCount;
 
     //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
@@ -145,18 +151,8 @@ public class VendingMachine {
     public String purchaseItem(int choiceId) {
         //should use decrement() method
         //also if qtyRemaining = 0 then fail state
-        //System.out.println(userMoney);
-        //System.out.println();
-        //System.out.println("Before round: " + userMoneyInt);
-        //System.out.println("UMONEY: "+ userMoney*100);
-        //System.out.println("UMONEY ROUND: "+ Math.round(userMoney*100));
+
         userMoneyInt = (int)Math.round((userMoney*100));
-        //System.out.println("Usermoney: " + userMoney);
-        //System.out.println("userMoney round not *100: " + Math.round(userMoney));
-        //System.out.println("Usermoney rounded: "+Math.round((userMoney*100)));
-        //System.out.println("PURCHASE ITEM 5: " + userMoneyInt);
-        //System.out.println("After round: " + userMoneyInt);
-        //System.out.println(userMoneyInt);
         VendItem itemToPurchase;
         //TODO REMOVE FROM PART01
         //System.out.println(totalCoins.containsAll(acceptedCoins));
@@ -199,7 +195,14 @@ public class VendingMachine {
                 //         this.setVmStatus(Status.VENDING_MODE);
                 //     }
                 // }
-                String res = String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
+                String res = "";
+                if(userMoney > 0.0) {
+                    res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
+                } 
+                else {
+                    res += String.format("%s\nYour transaction returned no change.", deliver);
+                }
+                
                     //TODO Need to format the coins here
                     //return inputCoinsStr.toString().replace("[", "").replace("]", "");
 
@@ -213,7 +216,10 @@ public class VendingMachine {
                 //System.out.println(returnedCoins);
 
                 res += formatCoins(this.returnedCoins) + "\n";
-                res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
+                if(missingCoins.size()>0) {
+                    res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
+                }
+                
                 res += "\nNow dispensing.";
 
                 
