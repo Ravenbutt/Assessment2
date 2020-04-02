@@ -20,12 +20,6 @@ public class VendingMachine {
     private ArrayList<Integer> totalCoins;
     private ArrayList<Integer> returnedCoins;
     private ArrayList<Integer> missingCoins;
-    private int num5Pence;
-    private int num10Pence;
-    private int num20Pence;
-    private int num50Pence;
-    private int num1Pound;
-    private int num2Pound;
     //private int totalStockCount;
 
     //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
@@ -40,6 +34,17 @@ public class VendingMachine {
         totalCoins = new ArrayList<Integer>();
         acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
         missingCoins = new ArrayList<Integer>();
+        initTotalCoins();
+    }
+
+    private void initTotalCoins() {
+        for(int index = 0; index<=10; index++) {
+            for(int coinValue=0;coinValue<=50;coinValue++) {
+                if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
+                    totalCoins.add(coinValue);
+                }
+            }
+        }
     }
 
     public String getSystemInfo() {
