@@ -115,9 +115,9 @@ public class VendingMachineApp {
         while(inputCoin != 0) {
             System.out.printf("\n"+indentSpacing+"Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
 
-            if(vendingMachine.getInputCoins().length > 0) {
+            if(vendingMachine.getInputCoins().getTotalValue() > 0) {
                 //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
-                //System.out.println(indentSpacing+"Currently inserted coins: " + VendingMachine.formatCoins(vendingMachine.getInputCoins()));
+                System.out.print(indentSpacing+"Currently inserted coins: " + MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }
 
             System.out.print("\n> Please enter coin, enter 0 to finish: ");

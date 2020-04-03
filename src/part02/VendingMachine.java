@@ -37,7 +37,7 @@ public class VendingMachine {
         totalCoins = new MoneyBox();
         acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
         //missingCoins = new ArrayList<Integer>();
-        //initTotalCoins();
+        initTotalCoins();
     }
 
     private void initTotalCoins() {
@@ -202,10 +202,10 @@ public class VendingMachine {
             if(itemToPurchase.decrement()) {
                 //double change = userMoney-itemToPurchase.getPrice();
                 userMoneyInt -= itemPriceInt;
-                int expectedChange2 = userMoneyInt;
+
                 //int change = userMoneyInt;
                 userMoney = (double)userMoneyInt/100;
-                System.out.println(userMoneyInt);
+
                 //totalStockCount--;
                 //this.setVmStatus(Status.SERVICE_MODE);
                 // for (VendItem vendItem : stock) {
@@ -214,107 +214,39 @@ public class VendingMachine {
                 //     }
                 // }
                 String res = "";
-                // if(expectedChange2 > 0) {
-                //     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
-                //     System.out.println(userMoneyInt);
-                // } 
-                // else {
-                //     res += String.format("%s\nYour transaction returned no change.", deliver);
-                // }
-                
-                    //TODO Need to format the coins here
-                    //return inputCoinsStr.toString().replace("[", "").replace("]", "");
-                
-                //System.out.println("COIN RETURNS: " + chooseReturnCoins());
+
                 MoneyBox expectedChange = MoneyBox.breakDownValue(userMoneyInt);
                 MoneyBox returnedCoins = chooseReturnCoins();
-                //System.out.println("DIFFERENCE: " + expectedChange.getDifference(returnedCoins).getTotalValue());
-                //System.out.println(returnedCoins);
+
                 totalCoins.add(MoneyBox.breakDownValue(userMoneyInt));
-                //System.out.println(change);
-                
-                //System.out.println("EXPECTED CHANGE: " + MoneyBox.breakDownValue(change));
-                //System.out.println("ACTUAL CHANGE: " + returnedCoins);
-                //System.out.println("RETURNED VALUE: "+returnedCoins.getTotalValue());
+
                 if(returnedCoins.getTotalValue() > 0) {
-                    //System.out.println("HELLO!!");
                     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, returnedCoins.toDouble());
-                    //System.out.println(userMoneyInt);
                 } 
                 else {
                     res += String.format("%s\nYour transaction returned no change.", deliver);
                 }
-                int actualChange = expectedChange.getTotalValue() - returnedCoins.getTotalValue();
-                //System.out.println("UMONEYINT: " + userMoneyInt);
-                //System.out.println("ACTUAL CHANGE: "+actualChange);
 
-                res+=""+ outputFormattedCoins(returnedCoins.containsCoins()) + "\n";
-                
+                res+=""+ MoneyBox.formatCoins(returnedCoins.getInsertedCoins()) + "\n";
                 if(!returnedCoins.equals(expectedChange)) {
-                    // System.out.println("CHANGE: " + userMoneyInt);
-                    // System.out.println("DIFF: " + expectedChange.getDifference(returnedCoins).containsCoins());
-                    // System.out.println("EXPECTED: " + expectedChange);
-                    // System.out.println("ACTUAL: " + returnedCoins);
                     res += "Sorry, we couldn't return: ";
-                    res += outputFormattedCoins(expectedChange.getDifference(returnedCoins).containsCoins());
-                    // for (int index = 0; index < expectedChange.getDifference(returnedCoins).containsCoins().length; index++) {
-                    //     if(expectedChange.getDifference(returnedCoins).containsCoins()[index]!=null) {
-                    //         res+=expectedChange.getDifference(returnedCoins).containsCoins()[index];
-                    //         if(index != expectedChange.getDifference(returnedCoins).containsCoins().length-1) {
-                    //             res+=", ";
-                    //         }
-                    //         else {
-                    //             res+=".\n";
-                    //         }
-                    //     }
-                        
-                    // }
+                    res += MoneyBox.formatCoins(expectedChange.getDifference(returnedCoins).getInsertedCoins());
                 }
-                //System.out.println(change);
-                // if(returnedCoins.getNum2Pound() > 0) {
-                //     res+= String.format("%d x £2, ", returnedCoins.getNum2Pound());
-                // }
-                // if(returnedCoins.getNum1Pound() > 0) {
-                //     res+= String.format("%d x £1, ", returnedCoins.getNum1Pound());
-                // }
-                // if(returnedCoins.getNum50Pence() > 0) {
-                //     res+= String.format("%d x 50p, ", returnedCoins.getNum50Pence());
-                // }
-                // if(returnedCoins.getNum20Pence() > 0) {
-                //     res+= String.format("%d x 20p, ", returnedCoins.getNum20Pence());
-                // }
-                // if(returnedCoins.getNum10Pence() > 0) {
-                //     res+= String.format("%d x 10p, ", returnedCoins.getNum10Pence());
-                // }
-                // if(returnedCoins.getNum5Pence() > 0) {
-                //     res+= String.format("%d x 5p, ", returnedCoins.getNum5Pence());
-                // }
 
                 //!System.out.println(inputCoins);
-                totalMoney -= userMoney;
-                // while(userMoneyInt>0) {
-                //     chooseReturnCoins();
-                // }
-                
+                totalMoney -= userMoney;                
                 userMoney = 0.0;
-                //System.out.println(returnedCoins);
-                //System.out.println("COIN RETURNS AFTER FOR: " + chooseReturnCoins());
-                
-                // res += formatCoins(this.returnedCoins.) + "\n";
-                // if(missingCoins.size()>0) {
-                //     res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
-                // }
-                
                 res += "\nNow dispensing.";
 
                 
                 inputCoins.clear();
-                // returnedCoins.clear();
-                // missingCoins.clear();
+                
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
                     res += "\n\n! Machine is out of stock. Switching to service mode. !";
                 }
+                //System.out.println(totalCoins);
+                //System.out.println(totalMoney);
                 return res;
             }
             else {
@@ -324,63 +256,8 @@ public class VendingMachine {
         return "Not enough funds to purchase this item.";
     }
 
-    public static String outputFormattedCoins(String[] coinList) {
-        String res = "";
-        int coinCount = 0;
-        for (String item : coinList) {
-            if(item != null) {
-                coinCount++;
-            }
-        }
-        String removeNull[] = new String[coinCount];
-        for (String item : coinList) {
-            if(item != null) {
-                for (int i = 0; i < removeNull.length; i++) {
-                    removeNull[i] = item;
-                }
-            }
-        }
-        for (int index = 0; index < removeNull.length; index++) {
-            if(removeNull[index]!=null) {
-                res+=removeNull[index];
-                
-                if(index == removeNull.length-1) {
-                    res+=".\n";
-                }
-                else {
-                    res+=", ";
-                }
-            }
-        }
-        return res;
-    }
+    
 
-    public static String formatCoins(int[] coinList) {
-        String res = "";
-        if(coinList.length> 0) {
-
-            for(int index=0; index<=coinList.length-1; index++) {
-                int coin = coinList[index];
-                if(coin < 5) {
-                    res += String.format("£%d", coin);
-                }
-                else if(coin > 2) {
-                    res += String.format("%dp", coin); 
-                }
-                //System.out.println(returnedCoins.indexOf(coin));
-                if(index != coinList.length-1) {
-                    res += ", ";
-                }
-                //!Maybe change this to just else?
-                //!Also maybe just add coin to string instead of breaking up res var
-                else if(coinList[index] == coinList.length-1) {
-                    res += "";
-                }
-            }
-            
-        }
-        return res;
-    }
 
     public Status getVmStatus() {
         return this.vmStatus;
@@ -521,8 +398,8 @@ public class VendingMachine {
         return userMoney;
     }
 
-    public int[] getInputCoins() {
-        return inputCoins.getCount();
+    public MoneyBox getInputCoins() {
+        return inputCoins;
     }
 
     @Override
@@ -632,8 +509,8 @@ public class VendingMachine {
         return res;
     }
 
-    public int[] getTotalCoins() {
-        return totalCoins.getCount();
+    public MoneyBox getTotalCoins() {
+        return totalCoins;
     }
 
     public ArrayList<Integer> getAcceptedCoins() {

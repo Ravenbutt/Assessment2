@@ -1,5 +1,7 @@
 package part02;
 
+import java.util.ArrayList;
+
 public class MoneyBox {
 
     private int num5Pence;
@@ -25,7 +27,7 @@ public class MoneyBox {
         this.num2Pound = 0;
     }
 
-    public int[] getCount() {
+    public int[] getAllCoinValues() {
         int coinArray[] = {num5Pence,num10Pence,num20Pence,num50Pence,num1Pound,num2Pound};
         return coinArray;
     }
@@ -307,27 +309,42 @@ public class MoneyBox {
         return newBox;
     }
 
-    public String[] containsCoins() {
-        String coinArray[] = new String[6];
+    public ArrayList<String> getInsertedCoins() {
+        ArrayList<String> coinList = new ArrayList<String>();
         if(this.getNum2Pound() > 0) {
-            coinArray[0]= String.format("%d x £2", this.getNum2Pound());
+            coinList.add(String.format("%d x £2", this.getNum2Pound()));
         }
         if(this.getNum1Pound() > 0) {
-            coinArray[1]= String.format("%d x £1", this.getNum1Pound());
+            coinList.add(String.format("%d x £1", this.getNum1Pound()));
         }
         if(this.getNum50Pence() > 0) {
-            coinArray[2]= String.format("%d x 50p", this.getNum50Pence());
+            coinList.add(String.format("%d x 50p", this.getNum50Pence()));
         }
         if(this.getNum20Pence() > 0) {
-            coinArray[3]= String.format("%d x 20p", this.getNum20Pence());
+            coinList.add(String.format("%d x 20p", this.getNum20Pence()));
         }
         if(this.getNum10Pence() > 0) {
-            coinArray[4]= String.format("%d x 10p", this.getNum10Pence());
+            coinList.add(String.format("%d x 10p", this.getNum10Pence()));
         }
         if(this.getNum5Pence() > 0) {
-            coinArray[5]= String.format("%d x 5p", this.getNum5Pence());
+            coinList.add(String.format("%d x 5p", this.getNum5Pence()));
         }
-        return coinArray;
+        return coinList;
+    }
+
+    public static String formatCoins(ArrayList<String> coinList) {
+        String res = "";
+        for (int index = 0; index < coinList.size(); index++) {
+            res+=coinList.get(index);
+                
+            if(index == coinList.size()-1) {
+                res+=".\n";
+            }
+            else {
+                res+=", ";
+            }
+        }
+        return res;
     }
 
     public void add(MoneyBox toAdd) {
