@@ -115,9 +115,9 @@ public class VendingMachineApp {
         while(inputCoin != 0) {
             System.out.printf("\n"+indentSpacing+"Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
 
-            if(vendingMachine.getInputCoins().size() > 0) {
+            if(vendingMachine.getInputCoins().length > 0) {
                 //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
-                System.out.println(indentSpacing+"Currently inserted coins: " + VendingMachine.formatCoins(vendingMachine.getInputCoins()));
+                //System.out.println(indentSpacing+"Currently inserted coins: " + VendingMachine.formatCoins(vendingMachine.getInputCoins()));
             }
 
             System.out.print("\n> Please enter coin, enter 0 to finish: ");
@@ -150,16 +150,16 @@ public class VendingMachineApp {
         
         while(chosenItem == null) {
 
-            if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins()) && !engineerMode) {
-                System.out.print("                      ! WARNING !\n" 
-                + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
-                + "> Are you sure you wish to continue? Y/N: ");
-                boolean choice = GetInput.getYesNo();
-                if(!choice) {
-                    System.out.println("\n- Item not purchased. -");
-                    return null;
-                }
-            }
+            // if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins()) && !engineerMode) {
+            //     System.out.print("                      ! WARNING !\n" 
+            //     + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
+            //     + "> Are you sure you wish to continue? Y/N: ");
+            //     boolean choice = GetInput.getYesNo();
+            //     if(!choice) {
+            //         System.out.println("\n- Item not purchased. -");
+            //         return null;
+            //     }
+            // }
 
             System.out.println("");
             listAll();
@@ -238,9 +238,9 @@ public class VendingMachineApp {
 
             extraDetails += String.format("- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
             
-            if(VendingMachine.formatCoins(vendingMachine.getInputCoins()) != null) {
-                extraDetails += VendingMachine.formatCoins(vendingMachine.getInputCoins()) + "\n";
-            }
+            // if(VendingMachine.formatCoins(vendingMachine.getInputCoins()) != null) {
+            //     extraDetails += VendingMachine.formatCoins(vendingMachine.getInputCoins()) + "\n";
+            // }
         return extraDetails;
     }
 

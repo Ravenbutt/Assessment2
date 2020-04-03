@@ -13,13 +13,16 @@ public class VendingMachine {
     private double totalMoney;
     private double userMoney;
     private int userMoneyInt;
+    //private MoneyBox userMoneyBox;
     private Status vmStatus;
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
-    private ArrayList<Integer> inputCoins;
-    private ArrayList<Integer> totalCoins;
-    private ArrayList<Integer> returnedCoins;
-    private ArrayList<Integer> missingCoins;
+    private MoneyBox inputCoins;
+    private MoneyBox totalCoins;
+    //private ArrayList<Integer> inputCoins;
+    // private ArrayList<Integer> totalCoins;
+    // private ArrayList<Integer> returnedCoins;
+    // private ArrayList<Integer> missingCoins;
     //private int totalStockCount;
 
     //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
@@ -29,20 +32,18 @@ public class VendingMachine {
         this.maxItems = maxItems;
         this.vmStatus = Status.SERVICE_MODE;
         stock = new VendItem[maxItems];
-        inputCoins = new ArrayList<Integer>();
-        returnedCoins = new ArrayList<Integer>();
-        totalCoins = new ArrayList<Integer>();
+        inputCoins = new MoneyBox();
+        //returnedCoins = new ArrayList<Integer>();
+        totalCoins = new MoneyBox();
         acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
-        missingCoins = new ArrayList<Integer>();
-        initTotalCoins();
+        //missingCoins = new ArrayList<Integer>();
+        //initTotalCoins();
     }
 
     private void initTotalCoins() {
-        for(int index = 0; index<=10; index++) {
-            for(int coinValue=0;coinValue<=50;coinValue++) {
-                if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
-                    totalCoins.add(coinValue);
-                }
+        for(int coinValue=0;coinValue<=50;coinValue++) {
+            if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
+                totalCoins.addCoin(coinValue, 10);
             }
         }
     }
@@ -66,84 +67,90 @@ public class VendingMachine {
         //*Reset variables here
         stock = new VendItem[maxItems];
         totalMoney = 0.0;
+        totalCoins.clear();
         userMoney = 0.0;
+        inputCoins.clear();
         setVmStatus(Status.SERVICE_MODE);
     }
 
-    private void chooseReturnCoins() {
+    private MoneyBox chooseReturnCoins() {
         //TODO Stop the infinite loop with a break
+        MoneyBox returnedCoins = new MoneyBox();
+        
         while(userMoneyInt >= 200) {
             if(totalCoins.contains(2)) {
-                returnedCoins.add(2);
-                totalCoins.remove(totalCoins.indexOf(2));
+                returnedCoins.addCoin(2);
+                totalCoins.removeCoin(2);
                 userMoneyInt-=200;
             }
             else {
-                missingCoins.add(2);
-                userMoneyInt-=200;
+                //missingCoins.add(2);
+                //userMoneyInt-=200;
+                inputCoins.removeCoin(2);
                 break;
             }
         }
         while(userMoneyInt >= 100) {
             if(totalCoins.contains(1)) {
-                returnedCoins.add(1);
-                totalCoins.remove(totalCoins.indexOf(1));
+                returnedCoins.addCoin(1);
+                totalCoins.removeCoin(1);
                 userMoneyInt-=100;
             }
             else {
-                missingCoins.add(1);
-                userMoneyInt-=100;
+                //missingCoins.add(1);
+                //userMoneyInt-=100;
                 break;
             }
         }
         while(userMoneyInt >= 50) {
             if(totalCoins.contains(50)) {
-                returnedCoins.add(50);
-                totalCoins.remove(totalCoins.indexOf(50));
+                returnedCoins.addCoin(50);
+                totalCoins.removeCoin(50);
                 userMoneyInt-=50;
             }
             else {
-                missingCoins.add(50);
-                userMoneyInt-=50;
+                //missingCoins.add(50);
+                //userMoneyInt-=50;
                 break;
             }
         }
         while(userMoneyInt >= 20) {
             if(totalCoins.contains(20)) {
-                returnedCoins.add(20);
-                totalCoins.remove(totalCoins.indexOf(20));
+                returnedCoins.addCoin(20);
+                totalCoins.removeCoin(20);
                 userMoneyInt-=20;
             }
             else {
-                missingCoins.add(20);
-                userMoneyInt-=20;
+                //missingCoins.add(20);
+                //userMoneyInt-=20;
                 break;
             }
         }
         while(userMoneyInt >= 10) {
             if(totalCoins.contains(10)) {
-                returnedCoins.add(10);
-                totalCoins.remove(totalCoins.indexOf(10));
+                returnedCoins.addCoin(10);
+                totalCoins.removeCoin(10);
                 userMoneyInt-=10;
             }
             else {
-                missingCoins.add(10);
-                userMoneyInt-=10;
+                //missingCoins.add(10);
+                //userMoneyInt-=10;
                 break;
             }
         }
         while(userMoneyInt >= 5) {
             if(totalCoins.contains(5)) {
-                returnedCoins.add(5);
-                totalCoins.remove(totalCoins.indexOf(5));
+                returnedCoins.addCoin(5);
+                totalCoins.removeCoin(5);
                 userMoneyInt-=5;
             }
             else {
-                missingCoins.add(5);
-                userMoneyInt-=5;
+                //missingCoins.add(5);
+                //userMoneyInt-=5;
                 break;
             }
         }
+        return returnedCoins;
         // if(userMoneyInt%200!=0 && userMoneyInt%100!=0 && userMoneyInt%50!=0 && userMoneyInt%20!=0 && userMoneyInt%10!=0 && userMoneyInt%5!=0) {
         //     break;
         // }
@@ -157,7 +164,8 @@ public class VendingMachine {
         //should use decrement() method
         //also if qtyRemaining = 0 then fail state
 
-        userMoneyInt = (int)Math.round((userMoney*100));
+        //userMoneyInt = (int)Math.round((userMoney*100));
+        userMoneyInt = inputCoins.getTotalValue();
         VendItem itemToPurchase;
         //TODO REMOVE FROM PART01
         //System.out.println(totalCoins.containsAll(acceptedCoins));
@@ -186,13 +194,18 @@ public class VendingMachine {
             this.setVmStatus(Status.SERVICE_MODE);
         }
 
-        if(userMoneyInt >= (int)itemToPurchase.getPrice()*100) {
+        int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
+
+        if(userMoneyInt >= itemPriceInt) {
             
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
                 //double change = userMoney-itemToPurchase.getPrice();
-                userMoneyInt -= (int)(itemToPurchase.getPrice()*100);
+                userMoneyInt -= itemPriceInt;
+                int expectedChange2 = userMoneyInt;
+                //int change = userMoneyInt;
                 userMoney = (double)userMoneyInt/100;
+                System.out.println(userMoneyInt);
                 //totalStockCount--;
                 //this.setVmStatus(Status.SERVICE_MODE);
                 // for (VendItem vendItem : stock) {
@@ -201,36 +214,88 @@ public class VendingMachine {
                 //     }
                 // }
                 String res = "";
-                if(userMoney > 0.0) {
-                    res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
+                // if(expectedChange2 > 0) {
+                //     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
+                //     System.out.println(userMoneyInt);
+                // } 
+                // else {
+                //     res += String.format("%s\nYour transaction returned no change.", deliver);
+                // }
+                
+                    //TODO Need to format the coins here
+                    //return inputCoinsStr.toString().replace("[", "").replace("]", "");
+                
+                //System.out.println("COIN RETURNS: " + chooseReturnCoins());
+                MoneyBox expectedChange = MoneyBox.breakDownValue(userMoneyInt);
+                MoneyBox returnedCoins = chooseReturnCoins();
+                //System.out.println("DIFFERENCE: " + expectedChange.getDifference(returnedCoins).getTotalValue());
+                //System.out.println(returnedCoins);
+                totalCoins.add(MoneyBox.breakDownValue(userMoneyInt));
+                //System.out.println(change);
+                
+                //System.out.println("EXPECTED CHANGE: " + MoneyBox.breakDownValue(change));
+                //System.out.println("ACTUAL CHANGE: " + returnedCoins);
+                //System.out.println("RETURNED VALUE: "+returnedCoins.getTotalValue());
+                if(returnedCoins.getTotalValue() > 0) {
+                    //System.out.println("HELLO!!");
+                    res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, returnedCoins.toDouble());
+                    //System.out.println(userMoneyInt);
                 } 
                 else {
                     res += String.format("%s\nYour transaction returned no change.", deliver);
                 }
-                
-                    //TODO Need to format the coins here
-                    //return inputCoinsStr.toString().replace("[", "").replace("]", "");
-
-                
-                totalMoney -= userMoney;
-                while(userMoneyInt>0) {
-                    chooseReturnCoins();
+                int actualChange = expectedChange.getTotalValue() - returnedCoins.getTotalValue();
+                //System.out.println("UMONEYINT: " + userMoneyInt);
+                //System.out.println("ACTUAL CHANGE: "+actualChange);
+                res+=""+returnedCoins.containsCoins() + "\n";
+                if(!returnedCoins.equals(expectedChange)) {
+                    // System.out.println("CHANGE: " + userMoneyInt);
+                    // System.out.println("DIFF: " + expectedChange.getDifference(returnedCoins).containsCoins());
+                    // System.out.println("EXPECTED: " + expectedChange);
+                    // System.out.println("ACTUAL: " + returnedCoins);
+                    res += "Sorry, we couldn't return: " + expectedChange.getDifference(returnedCoins).containsCoins()+"\n";
                 }
+                //System.out.println(change);
+                // if(returnedCoins.getNum2Pound() > 0) {
+                //     res+= String.format("%d x £2, ", returnedCoins.getNum2Pound());
+                // }
+                // if(returnedCoins.getNum1Pound() > 0) {
+                //     res+= String.format("%d x £1, ", returnedCoins.getNum1Pound());
+                // }
+                // if(returnedCoins.getNum50Pence() > 0) {
+                //     res+= String.format("%d x 50p, ", returnedCoins.getNum50Pence());
+                // }
+                // if(returnedCoins.getNum20Pence() > 0) {
+                //     res+= String.format("%d x 20p, ", returnedCoins.getNum20Pence());
+                // }
+                // if(returnedCoins.getNum10Pence() > 0) {
+                //     res+= String.format("%d x 10p, ", returnedCoins.getNum10Pence());
+                // }
+                // if(returnedCoins.getNum5Pence() > 0) {
+                //     res+= String.format("%d x 5p, ", returnedCoins.getNum5Pence());
+                // }
+
+                //!System.out.println(inputCoins);
+                totalMoney -= userMoney;
+                // while(userMoneyInt>0) {
+                //     chooseReturnCoins();
+                // }
                 
                 userMoney = 0.0;
                 //System.out.println(returnedCoins);
-
-                res += formatCoins(this.returnedCoins) + "\n";
-                if(missingCoins.size()>0) {
-                    res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
-                }
+                //System.out.println("COIN RETURNS AFTER FOR: " + chooseReturnCoins());
+                
+                // res += formatCoins(this.returnedCoins.) + "\n";
+                // if(missingCoins.size()>0) {
+                //     res += "\nUnfortunately, the machine did not contain: " + formatCoins(missingCoins) + ", and thus could not return all change.\n";
+                // }
                 
                 res += "\nNow dispensing.";
 
                 
                 inputCoins.clear();
-                returnedCoins.clear();
-                missingCoins.clear();
+                // returnedCoins.clear();
+                // missingCoins.clear();
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
                     res += "\n\n! Machine is out of stock. Switching to service mode. !";
@@ -245,32 +310,32 @@ public class VendingMachine {
     }
 
 
-    public static String formatCoins(ArrayList<Integer> coinList) {
-        String res = "";
-        if(coinList.size() > 0) {
+    // public static String formatCoins(int[] coinList) {
+    //     String res = "";
+    //     if(coinList.length> 0) {
 
-            for(int index=0; index<=coinList.size()-1; index++) {
-                int coin = coinList.get(index);
-                if(coin < 5) {
-                    res += String.format("£%d", coin);
-                }
-                else if(coin > 2) {
-                    res += String.format("%dp", coin); 
-                }
-                //System.out.println(returnedCoins.indexOf(coin));
-                if(index != coinList.size()-1) {
-                    res += ", ";
-                }
-                //!Maybe change this to just else?
-                //!Also maybe just add coin to string instead of breaking up res var
-                else if(coinList.indexOf(coin) == coinList.size()-1) {
-                    res += "";
-                }
-            }
+    //         for(int index=0; index<=coinList.length-1; index++) {
+    //             int coin = coinList[index];
+    //             if(coin < 5) {
+    //                 res += String.format("£%d", coin);
+    //             }
+    //             else if(coin > 2) {
+    //                 res += String.format("%dp", coin); 
+    //             }
+    //             //System.out.println(returnedCoins.indexOf(coin));
+    //             if(index != coinList.size()-1) {
+    //                 res += ", ";
+    //             }
+    //             //!Maybe change this to just else?
+    //             //!Also maybe just add coin to string instead of breaking up res var
+    //             else if(coinList.indexOf(coin) == coinList.size()-1) {
+    //                 res += "";
+    //             }
+    //         }
             
-        }
-        return res;
-    }
+    //     }
+    //     return res;
+    // }
 
     public Status getVmStatus() {
         return this.vmStatus;
@@ -287,8 +352,9 @@ public class VendingMachine {
             }
             userMoney += dAmount;
             totalMoney += dAmount;
-            inputCoins.add(amount);
-            totalCoins.add(amount);
+            inputCoins.addCoin(amount);
+            //System.out.println(inputCoins);
+            totalCoins.addCoin(amount);
             //TODO REMOVE THIS FROM PART 1 TOO
             //System.out.println(totalCoins);
             return true;
@@ -410,8 +476,8 @@ public class VendingMachine {
         return userMoney;
     }
 
-    public ArrayList<Integer> getInputCoins() {
-        return inputCoins;
+    public int[] getInputCoins() {
+        return inputCoins.getCount();
     }
 
     @Override
@@ -521,8 +587,8 @@ public class VendingMachine {
         return res;
     }
 
-    public ArrayList<Integer> getTotalCoins() {
-        return totalCoins;
+    public int[] getTotalCoins() {
+        return totalCoins.getCount();
     }
 
     public ArrayList<Integer> getAcceptedCoins() {
