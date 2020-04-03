@@ -247,13 +247,28 @@ public class VendingMachine {
                 int actualChange = expectedChange.getTotalValue() - returnedCoins.getTotalValue();
                 //System.out.println("UMONEYINT: " + userMoneyInt);
                 //System.out.println("ACTUAL CHANGE: "+actualChange);
-                res+=""+returnedCoins.containsCoins() + "\n";
+
+                res+=""+ outputFormattedCoins(returnedCoins.containsCoins()) + "\n";
+                
                 if(!returnedCoins.equals(expectedChange)) {
                     // System.out.println("CHANGE: " + userMoneyInt);
                     // System.out.println("DIFF: " + expectedChange.getDifference(returnedCoins).containsCoins());
                     // System.out.println("EXPECTED: " + expectedChange);
                     // System.out.println("ACTUAL: " + returnedCoins);
-                    res += "Sorry, we couldn't return: " + expectedChange.getDifference(returnedCoins).containsCoins()+"\n";
+                    res += "Sorry, we couldn't return: ";
+                    res += outputFormattedCoins(expectedChange.getDifference(returnedCoins).containsCoins());
+                    // for (int index = 0; index < expectedChange.getDifference(returnedCoins).containsCoins().length; index++) {
+                    //     if(expectedChange.getDifference(returnedCoins).containsCoins()[index]!=null) {
+                    //         res+=expectedChange.getDifference(returnedCoins).containsCoins()[index];
+                    //         if(index != expectedChange.getDifference(returnedCoins).containsCoins().length-1) {
+                    //             res+=", ";
+                    //         }
+                    //         else {
+                    //             res+=".\n";
+                    //         }
+                    //     }
+                        
+                    // }
                 }
                 //System.out.println(change);
                 // if(returnedCoins.getNum2Pound() > 0) {
@@ -309,33 +324,63 @@ public class VendingMachine {
         return "Not enough funds to purchase this item.";
     }
 
+    public static String outputFormattedCoins(String[] coinList) {
+        String res = "";
+        int coinCount = 0;
+        for (String item : coinList) {
+            if(item != null) {
+                coinCount++;
+            }
+        }
+        String removeNull[] = new String[coinCount];
+        for (String item : coinList) {
+            if(item != null) {
+                for (int i = 0; i < removeNull.length; i++) {
+                    removeNull[i] = item;
+                }
+            }
+        }
+        for (int index = 0; index < removeNull.length; index++) {
+            if(removeNull[index]!=null) {
+                res+=removeNull[index];
+                
+                if(index == removeNull.length-1) {
+                    res+=".\n";
+                }
+                else {
+                    res+=", ";
+                }
+            }
+        }
+        return res;
+    }
 
-    // public static String formatCoins(int[] coinList) {
-    //     String res = "";
-    //     if(coinList.length> 0) {
+    public static String formatCoins(int[] coinList) {
+        String res = "";
+        if(coinList.length> 0) {
 
-    //         for(int index=0; index<=coinList.length-1; index++) {
-    //             int coin = coinList[index];
-    //             if(coin < 5) {
-    //                 res += String.format("£%d", coin);
-    //             }
-    //             else if(coin > 2) {
-    //                 res += String.format("%dp", coin); 
-    //             }
-    //             //System.out.println(returnedCoins.indexOf(coin));
-    //             if(index != coinList.size()-1) {
-    //                 res += ", ";
-    //             }
-    //             //!Maybe change this to just else?
-    //             //!Also maybe just add coin to string instead of breaking up res var
-    //             else if(coinList.indexOf(coin) == coinList.size()-1) {
-    //                 res += "";
-    //             }
-    //         }
+            for(int index=0; index<=coinList.length-1; index++) {
+                int coin = coinList[index];
+                if(coin < 5) {
+                    res += String.format("£%d", coin);
+                }
+                else if(coin > 2) {
+                    res += String.format("%dp", coin); 
+                }
+                //System.out.println(returnedCoins.indexOf(coin));
+                if(index != coinList.length-1) {
+                    res += ", ";
+                }
+                //!Maybe change this to just else?
+                //!Also maybe just add coin to string instead of breaking up res var
+                else if(coinList[index] == coinList.length-1) {
+                    res += "";
+                }
+            }
             
-    //     }
-    //     return res;
-    // }
+        }
+        return res;
+    }
 
     public Status getVmStatus() {
         return this.vmStatus;

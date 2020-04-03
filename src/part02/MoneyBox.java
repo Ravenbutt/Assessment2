@@ -307,27 +307,27 @@ public class MoneyBox {
         return newBox;
     }
 
-    public String containsCoins() {
-        String res = "";
+    public String[] containsCoins() {
+        String coinArray[] = new String[6];
         if(this.getNum2Pound() > 0) {
-            res+= String.format("%d x £2, ", this.getNum2Pound());
+            coinArray[0]= String.format("%d x £2", this.getNum2Pound());
         }
         if(this.getNum1Pound() > 0) {
-            res+= String.format("%d x £1, ", this.getNum1Pound());
+            coinArray[1]= String.format("%d x £1", this.getNum1Pound());
         }
         if(this.getNum50Pence() > 0) {
-            res+= String.format("%d x 50p, ", this.getNum50Pence());
+            coinArray[2]= String.format("%d x 50p", this.getNum50Pence());
         }
         if(this.getNum20Pence() > 0) {
-            res+= String.format("%d x 20p, ", this.getNum20Pence());
+            coinArray[3]= String.format("%d x 20p", this.getNum20Pence());
         }
         if(this.getNum10Pence() > 0) {
-            res+= String.format("%d x 10p, ", this.getNum10Pence());
+            coinArray[4]= String.format("%d x 10p", this.getNum10Pence());
         }
         if(this.getNum5Pence() > 0) {
-            res+= String.format("%d x 5p.", this.getNum5Pence());
+            coinArray[5]= String.format("%d x 5p", this.getNum5Pence());
         }
-        return res;
+        return coinArray;
     }
 
     public void add(MoneyBox toAdd) {
