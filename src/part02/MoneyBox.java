@@ -27,29 +27,11 @@ public class MoneyBox {
         this.num2Pound = 0;
     }
 
-    public int[] getAllCoinValues() {
-        int coinArray[] = {num5Pence,num10Pence,num20Pence,num50Pence,num1Pound,num2Pound};
-        return coinArray;
-    }
-
-    public int getTotalValue() {
+    public int getTotalBoxValue() {
         int result = 0;
         result += (5*num5Pence) + (10*num10Pence) + (20*num20Pence) + (50*num50Pence) + (100*num1Pound) + (200*num2Pound);
         return result;
     }
-
-    public String[] formatCoins() {
-        String format5Pence = String.format("%d x %dp", this.num5Pence,5);
-        String format10Pence = String.format("%d x %dp", this.num10Pence,10);
-        String format20Pence = String.format("%d x %dp", this.num20Pence,20);
-        String format50Pence = String.format("%d x %dp", this.num50Pence,50);
-        String format1Pound = String.format("%d x £%d", this.num1Pound,1);
-        String format2Pound = String.format("%d x £%d", this.num2Pound,2);
-        String coinList[] = {format5Pence,format10Pence,format20Pence,format50Pence,format1Pound,format2Pound};
-        return coinList;
-    }
-
-
 
     //Add contains() and formatCoins() method e.g. 10x10p, 15x£1
     public void clear() {
@@ -81,7 +63,10 @@ public class MoneyBox {
         return false;
     }
 
-    public boolean contains(int coin) {
+    public boolean containsCoin(int coin) {
+        if(coin == 0) {
+            return false;
+        }
         if(coin == 2 && num2Pound>0) {
             return true;
         }
@@ -104,184 +89,129 @@ public class MoneyBox {
     }
 
     public boolean addCoin(int value) {
-        if(value==2) {
-            num2Pound++;
+        switch (value) {
+            case 2:
+                num2Pound++;
+                return true;
+            case 1:
+                num1Pound++;
+                return true;
+            case 50:
+                num50Pence++;
+                return true;
+            case 20:
+                num20Pence++;
+                return true;
+            case 10:
+                num10Pence++;
+                return true;
+            case 5:
+                num5Pence++;
+                return true;
+            default:
+                return false;
         }
-        else if(value==1) {
-            num1Pound++;
-        }
-        else if(value==50) {
-            num50Pence++;
-        }
-        else if(value==20) {
-            num20Pence++;
-        }
-        else if(value==10) {
-            num10Pence++;
-        }
-        else if(value==5) {
-            num5Pence++;
-        }
-        return false;
     }
 
     public boolean addCoin(int value, int count) {
-
-        if(value==2) {
-            for(int amount=0; amount<count; amount++) {
-                num2Pound++;
-            }
-            return true;
+        switch (value) {
+            case 2:
+                for(int amount=0; amount<count; amount++) {
+                    num2Pound++;
+                }
+                return true;
+            case 1:
+                for(int amount=0; amount<count; amount++) {
+                    num1Pound++;
+                }
+                return true;
+            case 50:
+                for(int amount=0; amount<count; amount++) {
+                    num50Pence++;
+                }
+                return true;
+            case 20:
+                for(int amount=0; amount<count; amount++) {
+                    num20Pence++;
+                }
+                return true;
+            case 10:
+                for(int amount=0; amount<count; amount++) {
+                    num10Pence++;
+                }
+                return true;
+            case 5:
+                for(int amount=0; amount<count; amount++) {
+                    num5Pence++;
+                }
+                return true;
+            default:
+                return false;
         }
-        else if(value==1) {
-            for(int amount=0; amount<count; amount++) {
-                num1Pound++;
-            }
-            return true;
-        }
-        else if(value==50) {
-            for(int amount=0; amount<count; amount++) {
-                num50Pence++;
-            }
-            return true;
-        }
-        else if(value==20) {
-            for(int amount=0; amount<count; amount++) {
-                num20Pence++;
-            }
-            return true;
-        }
-        else if(value==10) {
-            for(int amount=0; amount<count; amount++) {
-                num10Pence++;
-            }
-            return true;
-        }
-        else if(value==5) {
-            for(int amount=0; amount<count; amount++) {
-                num5Pence++;
-            }
-            return true;
-        }
-        return false;
     }
 
     public boolean removeCoin(int value, int count) {
 
-        if(value==2) {
-            for(int amount=0; amount<count; amount++) {
-                num2Pound--;
-            }
-            return true;
+        switch (value) {
+            case 2:
+                for(int amount=0; amount<count; amount++) {
+                    num2Pound--;
+                }
+                return true;
+            case 1:
+                for(int amount=0; amount<count; amount++) {
+                    num1Pound--;
+                }
+                return true;
+            case 50:
+                for(int amount=0; amount<count; amount++) {
+                    num50Pence--;
+                }
+                return true;
+            case 20:
+                for(int amount=0; amount<count; amount++) {
+                    num20Pence--;
+                }
+                return true;
+            case 10:
+                for(int amount=0; amount<count; amount++) {
+                    num10Pence--;
+                }
+                return true;
+            case 5:
+                for(int amount=0; amount<count; amount++) {
+                    num5Pence--;
+                }
+                return true;
+            default:
+                return false;
         }
-        else if(value==1) {
-            for(int amount=0; amount<count; amount++) {
-                num1Pound--;
-            }
-            return true;
-        }
-        else if(value==50) {
-            for(int amount=0; amount<count; amount++) {
-                num50Pence--;
-            }
-            return true;
-        }
-        else if(value==20) {
-            for(int amount=0; amount<count; amount++) {
-                num20Pence--;
-            }
-            return true;
-        }
-        else if(value==10) {
-            for(int amount=0; amount<count; amount++) {
-                num10Pence--;
-            }
-            return true;
-        }
-        else if(value==5) {
-            for(int amount=0; amount<count; amount++) {
-                num5Pence--;
-            }
-            return true;
-        }
-        return false;
     }
 
 
     public boolean removeCoin(int value) {
-        if(value==2) {
-            num2Pound--;
+        switch (value) {
+            case 2:
+                num2Pound++;
+                return true;
+            case 1:
+                num1Pound++;
+                return true;
+            case 50:
+                num50Pence++;
+                return true;
+            case 20:
+                num20Pence++;
+                return true;
+            case 10:
+                num10Pence++;
+                return true;
+            case 5:
+                num5Pence++;
+                return true;
+            default:
+                return false;
         }
-        else if(value==1) {
-            num1Pound--;
-        }
-        else if(value==50) {
-            num50Pence--;
-        }
-        else if(value==20) {
-            num20Pence--;
-        }
-        else if(value==10) {
-            num10Pence--;
-        }
-        else if(value==5) {
-            num5Pence--;
-        }
-        return false;
-    }
-
-
-    public int getNum5Pence() {
-        return num5Pence;
-    }
-
-    public void setNum5Pence(int num5Pence) {
-        this.num5Pence = num5Pence;
-    }
-
-    public int getNum10Pence() {
-        return num10Pence;
-    }
-
-    public void setNum10Pence(int num10Pence) {
-        this.num10Pence = num10Pence;
-    }
-
-    public int getNum20Pence() {
-        return num20Pence;
-    }
-
-    public void setNum20Pence(int num20Pence) {
-        this.num20Pence = num20Pence;
-    }
-
-    public int getNum50Pence() {
-        return num50Pence;
-    }
-
-    public void setNum50Pence(int num50Pence) {
-        this.num50Pence = num50Pence;
-    }
-
-    public int getNum1Pound() {
-        return num1Pound;
-    }
-
-    public void setNum1Pound(int num1Pound) {
-        this.num1Pound = num1Pound;
-    }
-
-    public int getNum2Pound() {
-        return num2Pound;
-    }
-
-    public void setNum2Pound(int num2Pound) {
-        this.num2Pound = num2Pound;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%d, %d, %d, %d, %d, %d",num5Pence,num10Pence,num20Pence,num50Pence,num1Pound,num2Pound);
     }
 
     public boolean isEmpty() {
@@ -356,13 +286,22 @@ public class MoneyBox {
         this.num5Pence+=toAdd.getNum5Pence();
     }
 
+    public void subtract(MoneyBox toSubtract) {
+        this.num2Pound-=toSubtract.getNum2Pound();
+        this.num1Pound-=toSubtract.getNum1Pound();
+        this.num50Pence-=toSubtract.getNum50Pence();
+        this.num20Pence-=toSubtract.getNum20Pence();
+        this.num10Pence-=toSubtract.getNum10Pence();
+        this.num5Pence-=toSubtract.getNum5Pence();
+    }
+
     public double toDouble() {
-        int value = this.getTotalValue();
+        int value = this.getTotalBoxValue();
         double dValue = (double)value/100;
         return dValue;
     }
 
-    public static MoneyBox breakDownValue(int value) {
+    public static MoneyBox intToDenoms(int value) {
         MoneyBox brokenValue = new MoneyBox();
         while(value >= 200) {
             brokenValue.addCoin(2);
@@ -390,4 +329,73 @@ public class MoneyBox {
         }
         return brokenValue;
     }
+
+    public int getNum5Pence() {
+        return num5Pence;
+    }
+
+    public void setNum5Pence(int num5Pence) {
+        this.num5Pence = num5Pence;
+    }
+
+    public int getNum10Pence() {
+        return num10Pence;
+    }
+
+    public void setNum10Pence(int num10Pence) {
+        this.num10Pence = num10Pence;
+    }
+
+    public int getNum20Pence() {
+        return num20Pence;
+    }
+
+    public void setNum20Pence(int num20Pence) {
+        this.num20Pence = num20Pence;
+    }
+
+    public int getNum50Pence() {
+        return num50Pence;
+    }
+
+    public void setNum50Pence(int num50Pence) {
+        this.num50Pence = num50Pence;
+    }
+
+    public int getNum1Pound() {
+        return num1Pound;
+    }
+
+    public void setNum1Pound(int num1Pound) {
+        this.num1Pound = num1Pound;
+    }
+
+    public int getNum2Pound() {
+        return num2Pound;
+    }
+
+    public void setNum2Pound(int num2Pound) {
+        this.num2Pound = num2Pound;
+    }
+
+    public boolean loadFromArray(String[] fromArr) {
+        
+        try {
+            this.num2Pound = Integer.parseInt(fromArr[0]);
+            this.num1Pound = Integer.parseInt(fromArr[1]);
+            this.num50Pence = Integer.parseInt(fromArr[2]);
+            this.num20Pence = Integer.parseInt(fromArr[3]);
+            this.num10Pence = Integer.parseInt(fromArr[4]);
+            this.num5Pence = Integer.parseInt(fromArr[5]);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d,%d,%d,%d,%d,%d",num5Pence,num10Pence,num20Pence,num50Pence,num1Pound,num2Pound);
+    }
+
 }

@@ -62,19 +62,23 @@ public class VendingMachineRead {
         int currentItems = Integer.parseInt(readList.get(2));
         double totalMoney = Double.parseDouble(readList.get(3));
         double userMoney = Double.parseDouble(readList.get(4));
+        MoneyBox totalCoins = new MoneyBox();
+        MoneyBox inputCoins = new MoneyBox();
+        totalCoins.loadFromArray(readList.subList(5, 11).toArray(new String[6]));
+        inputCoins.loadFromArray(readList.subList(11, 17).toArray(new String[6]));
         Status vmStatus = null;
 
-        if(readList.get(5).equals("VENDING_MODE")) {
+        if(readList.get(17).equals("VENDING_MODE")) {
             vmStatus = Status.VENDING_MODE;
         }
-        else if(readList.get(5).equals("SERVICE_MODE")) {
+        else if(readList.get(17).equals("SERVICE_MODE")) {
             vmStatus = Status.SERVICE_MODE;
         }
 
         VendItem stock[] = new VendItem[maxItems];
-        List<String> vendingMachineData = readList.subList(0, 6);
+        //List<String> vendingMachineData = readList.subList(0, 6);
 
-        for (int j = 6; j < readList.size(); j+=4) {
+        for (int j = 18; j < readList.size(); j+=4) {
             List<String> currentItemList = readList.subList(j, j+4);
 
             int itemId = Integer.parseInt(currentItemList.get(0));
@@ -94,9 +98,11 @@ public class VendingMachineRead {
     VendingMachine loadedMachine = new VendingMachine(name, maxItems);
     loadedMachine.setItemCount(currentItems);
     loadedMachine.setTotalMoney(totalMoney);
+    loadedMachine.setInputCoins(inputCoins);
+    loadedMachine.setTotalCoins(totalCoins);
     loadedMachine.setUserMoney(userMoney);
-    loadedMachine.setVmStatus(vmStatus);
     loadedMachine.setStock(stock);
+    loadedMachine.setVmStatus(vmStatus);
 
     return loadedMachine;
     }

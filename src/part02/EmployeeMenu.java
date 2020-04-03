@@ -6,10 +6,12 @@ import java.util.Scanner;
 public class EmployeeMenu extends VendingMachineApp {
     //static Scanner input;
 
+    String indentSpacing = "    ";
+
     public EmployeeMenu() {
         input = new Scanner(System.in);
         initEmpMenu();
-        System.out.println("Going back to customer menu.");
+        System.out.println(indentSpacing + "Going back to customer menu.");
         engineerMode = false;
     }
 
@@ -19,11 +21,11 @@ public class EmployeeMenu extends VendingMachineApp {
         Menu vendMenu = new Menu("VendOS v1.0 - ENGINEER MENU", menuOptions);
 
         if (authenticate()) {
-            System.out.println("\nLogin successful.");
+            System.out.println("\n- Login successful. -");
             engineerMode = true;
 
         } else {
-            System.out.println("\nLogin failed.");
+            System.out.println("\n! Login failed. !");
             return;
         }
 
@@ -48,9 +50,11 @@ public class EmployeeMenu extends VendingMachineApp {
     private boolean authenticate() {
         int tries = 3;
         String password = "password";
+        System.out.println("\n- ENGINEER ACCESS ONLY -");
+        System.out.println("++++++++++++++++++++++++\n");
         while (tries > 0) {
             System.out.println("Tries remaining: " + tries);
-            System.out.print("Please enter the engineer password: ");
+            System.out.print("> Please enter the engineer password: ");
             String inputPassword = input.nextLine();
             if (inputPassword.equals(password)) {
                 return true;
@@ -101,36 +105,37 @@ public class EmployeeMenu extends VendingMachineApp {
 
     private void addItem() {
         if(vendingMachine.getItemCount() == vendingMachine.getMaxItems()) {
-            System.out.println("No more items can be added.");
+            System.out.println(indentSpacing + "No more items can be added.");
             return;
         }
-        System.out.println("Adding item");
+        System.out.println("\nAdding item");
         System.out.println("+++++++++++\n");
         
-        System.out.print("Enter item name: ");
+        System.out.print("> Enter item name: ");
         String newName = input.nextLine();
+        
 
         while (true) {
-            System.out.print("Enter item price: £");
+            System.out.print("> Enter item price: £");
             double newPrice = GetInput.checkDoubleInput();
             if(newPrice == 0.0) {
-                System.out.println("Price must be greater than 0.0.");
+                System.out.println("\n" + indentSpacing + "! Price must be greater than £0.00. !");
                 continue;
             }
             else if(newPrice == -1.0) {
-                System.err.println("Please enter a valid value.\n");
+                System.out.println("\n" + indentSpacing + "! Please enter a valid value. !\n");
                 continue;
             }
-
-            System.out.printf("Item named '%s' at £%.2f. Is this correct?: ");
+            
+            System.out.printf("\n> Item named '%s' at £%.2f. Is this correct? Y/N: ", newName, newPrice);
             boolean choice = GetInput.getYesNo();
             if(choice) {
                 VendItem newItem = new VendItem(newName, newPrice);
                 if (vendingMachine.addNewItem(newItem)) {
-                    System.out.printf("Item named %s at price: £%.2f has been added.\n", newName, newPrice);
+                    System.out.printf(indentSpacing + "- Item named %s at price: £%.2f has been added. -\n", newName, newPrice);
                     break;
                 } else {
-                    System.out.println("Adding item failed.");
+                    System.out.println(indentSpacing + "! Adding item failed. !");
                     break;
                 }
             }
@@ -159,37 +164,37 @@ public class EmployeeMenu extends VendingMachineApp {
     private void setStatus() {
         int choice = -1;
         if(!vendingMachine.setVmStatus(Status.VENDING_MODE)) {
-            System.out.println("\n> Machine status cannot be changed from service mode while it contains no stock to vend. <");
+            System.out.println("\n" + indentSpacing + "! Machine status cannot be changed from service mode while it contains no stock to vend. !");
             return;
         }
         while (choice != 0) {
-            System.out.println("1. Vending Mode.");
-            System.out.println("2. Service Mode.");
+            System.out.println(indentSpacing + "1. Vending Mode.");
+            System.out.println(indentSpacing + "2. Service Mode.");
             System.out.print("Please select the vending machine status, enter 0 to cancel: ");
 
             choice = GetInput.checkIntInput();
 
             if(choice == -1) {
-                System.err.println("\nPlease choose a valid number.");
+                System.err.println("\n" + indentSpacing + "! Please choose a valid number. !");
                 input.next();
                 continue;
             }
 
             if(choice-1 == 0) {
                 vendingMachine.setVmStatus(Status.VENDING_MODE);
-                System.out.println("\n> Machine set to " + vendingMachine.getVmStatus().getStatus() + " <");
+                System.out.println("\n" + indentSpacing + "- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             }
             else if(choice-1 == 1) {
                 vendingMachine.setVmStatus(Status.SERVICE_MODE);
-                System.out.println("\nMachine set to " + vendingMachine.getVmStatus().getStatus());
+                System.out.println("\n" + indentSpacing + "- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             }
             else if(choice == 0) {
                 break;
             }
             else {
-                System.out.println("\nPlease choose either 1, 2 or 0 to cancel.");
+                System.out.println("\n" + indentSpacing + "Please choose either 1, 2 or 0 to cancel.");
                 continue;
             }
             
@@ -198,22 +203,24 @@ public class EmployeeMenu extends VendingMachineApp {
 
     private void restockItem() {
         System.out.println("Restocking Item");
+        System.out.println("+++++++++++++++");
+
         VendItem chosenItem = super.selectItem();
 
         while (true && chosenItem != null) {
-            System.out.print("\nPlease enter the new stock amount: ");
+            System.out.print("\n> Please enter the new stock amount: ");
             int restockAmount = GetInput.checkIntInput();
             if(restockAmount == -1) {
-                System.err.println("\nPlease enter a valid number.");
+                System.err.println("\n" + indentSpacing + "! Please enter a valid number. !");
                 continue;
             }
             if(chosenItem.restock(restockAmount)) {
                 System.out.println(
-                            "\nItem " + chosenItem.getName() + " restocked with quantity: " + chosenItem.getQty());
+                            "\n"+indentSpacing+"Item " + chosenItem.getName() + " restocked with quantity: " + chosenItem.getQty());
                     break;
             }
             else {
-                System.out.println("\nPlease enter a quantity from 1 to 10.");
+                System.out.println("\n" + indentSpacing + "! Please enter a quantity from 1 to 10. !");
             }
 
         }

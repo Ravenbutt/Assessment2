@@ -32,9 +32,9 @@ public class VendingMachineApp {
         //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
         //*Then check if those are still the values and if so produce an error
         vendingMachine = new VendingMachine("Coca Cola", 4);
-        VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35);
-        VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35);
-        VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 2);
+        VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
+        VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
+        VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
         
         vendingMachine.addNewItem(cocaCola);
         vendingMachine.addNewItem(fanta);
@@ -115,7 +115,7 @@ public class VendingMachineApp {
         while(inputCoin != 0) {
             System.out.printf("\n"+indentSpacing+"Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
 
-            if(vendingMachine.getInputCoins().getTotalValue() > 0) {
+            if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
                 //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
                 System.out.print(indentSpacing+"Currently inserted coins: " + MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }

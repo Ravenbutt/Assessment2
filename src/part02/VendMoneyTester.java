@@ -13,7 +13,7 @@ public class VendMoneyTester {
         //printArr(myVend.getInputCoins());
 
         System.out.println(myVend.purchaseItem(1));
-        System.out.println("BROKEN VALUE: " + MoneyBox.breakDownValue(220));
+        System.out.println("BROKEN VALUE: " + MoneyBox.intToDenoms(220));
     }
 
     private static void printArr(int[] array) {

@@ -13,17 +13,12 @@ public class VendingMachine {
     private double totalMoney;
     private double userMoney;
     private int userMoneyInt;
-    //private MoneyBox userMoneyBox;
     private Status vmStatus;
     private VendItem[] stock;
     private static ArrayList<Integer> acceptedCoins;
     private MoneyBox inputCoins;
     private MoneyBox totalCoins;
-    //private ArrayList<Integer> inputCoins;
-    // private ArrayList<Integer> totalCoins;
-    // private ArrayList<Integer> returnedCoins;
-    // private ArrayList<Integer> missingCoins;
-    //private int totalStockCount;
+
 
     //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
     //TODO otherwise say no change required
@@ -33,10 +28,9 @@ public class VendingMachine {
         this.vmStatus = Status.SERVICE_MODE;
         stock = new VendItem[maxItems];
         inputCoins = new MoneyBox();
-        //returnedCoins = new ArrayList<Integer>();
         totalCoins = new MoneyBox();
+        totalMoney = totalCoins.toDouble();
         acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
-        //missingCoins = new ArrayList<Integer>();
         initTotalCoins();
     }
 
@@ -44,6 +38,7 @@ public class VendingMachine {
         for(int coinValue=0;coinValue<=50;coinValue++) {
             if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
                 totalCoins.addCoin(coinValue, 10);
+                totalMoney = totalCoins.toDouble();
             }
         }
     }
@@ -78,7 +73,7 @@ public class VendingMachine {
         MoneyBox returnedCoins = new MoneyBox();
         
         while(userMoneyInt >= 200) {
-            if(totalCoins.contains(2)) {
+            if(totalCoins.containsCoin(2)) {
                 returnedCoins.addCoin(2);
                 totalCoins.removeCoin(2);
                 userMoneyInt-=200;
@@ -91,7 +86,7 @@ public class VendingMachine {
             }
         }
         while(userMoneyInt >= 100) {
-            if(totalCoins.contains(1)) {
+            if(totalCoins.containsCoin(1)) {
                 returnedCoins.addCoin(1);
                 totalCoins.removeCoin(1);
                 userMoneyInt-=100;
@@ -103,7 +98,7 @@ public class VendingMachine {
             }
         }
         while(userMoneyInt >= 50) {
-            if(totalCoins.contains(50)) {
+            if(totalCoins.containsCoin(50)) {
                 returnedCoins.addCoin(50);
                 totalCoins.removeCoin(50);
                 userMoneyInt-=50;
@@ -115,7 +110,7 @@ public class VendingMachine {
             }
         }
         while(userMoneyInt >= 20) {
-            if(totalCoins.contains(20)) {
+            if(totalCoins.containsCoin(20)) {
                 returnedCoins.addCoin(20);
                 totalCoins.removeCoin(20);
                 userMoneyInt-=20;
@@ -127,7 +122,7 @@ public class VendingMachine {
             }
         }
         while(userMoneyInt >= 10) {
-            if(totalCoins.contains(10)) {
+            if(totalCoins.containsCoin(10)) {
                 returnedCoins.addCoin(10);
                 totalCoins.removeCoin(10);
                 userMoneyInt-=10;
@@ -139,7 +134,7 @@ public class VendingMachine {
             }
         }
         while(userMoneyInt >= 5) {
-            if(totalCoins.contains(5)) {
+            if(totalCoins.containsCoin(5)) {
                 returnedCoins.addCoin(5);
                 totalCoins.removeCoin(5);
                 userMoneyInt-=5;
@@ -150,6 +145,7 @@ public class VendingMachine {
                 break;
             }
         }
+        totalMoney = totalCoins.toDouble();
         return returnedCoins;
         // if(userMoneyInt%200!=0 && userMoneyInt%100!=0 && userMoneyInt%50!=0 && userMoneyInt%20!=0 && userMoneyInt%10!=0 && userMoneyInt%5!=0) {
         //     break;
@@ -161,19 +157,10 @@ public class VendingMachine {
     }
     
     public String purchaseItem(int choiceId) {
-        //should use decrement() method
-        //also if qtyRemaining = 0 then fail state
-
-        //userMoneyInt = (int)Math.round((userMoney*100));
-        userMoneyInt = inputCoins.getTotalValue();
+        userMoneyInt = inputCoins.getTotalBoxValue();
         VendItem itemToPurchase;
         //TODO REMOVE FROM PART01
         //System.out.println(totalCoins.containsAll(acceptedCoins));
-
-        // if(!totalCoins.containsAll(acceptedCoins)) {
-        //     this.setVmStatus(Status.SERVICE_MODE);
-        //     return "Machine does not have enough coins to give operate.\nSwitching to SERVICE MODE.";
-        // }
 
         try {
             itemToPurchase = findItem(choiceId);
@@ -200,27 +187,17 @@ public class VendingMachine {
             
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
-                //double change = userMoney-itemToPurchase.getPrice();
                 userMoneyInt -= itemPriceInt;
 
-                //int change = userMoneyInt;
                 userMoney = (double)userMoneyInt/100;
-
-                //totalStockCount--;
-                //this.setVmStatus(Status.SERVICE_MODE);
-                // for (VendItem vendItem : stock) {
-                //     if(vendItem != null && vendItem.getQty() > 0) {
-                //         this.setVmStatus(Status.VENDING_MODE);
-                //     }
-                // }
                 String res = "";
 
-                MoneyBox expectedChange = MoneyBox.breakDownValue(userMoneyInt);
+                MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyInt);
                 MoneyBox returnedCoins = chooseReturnCoins();
 
-                totalCoins.add(MoneyBox.breakDownValue(userMoneyInt));
+                totalCoins.add(MoneyBox.intToDenoms(userMoneyInt));
 
-                if(returnedCoins.getTotalValue() > 0) {
+                if(returnedCoins.getTotalBoxValue() > 0) {
                     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, returnedCoins.toDouble());
                 } 
                 else {
@@ -236,17 +213,15 @@ public class VendingMachine {
                 //!System.out.println(inputCoins);
                 totalMoney -= userMoney;                
                 userMoney = 0.0;
-                res += "\nNow dispensing.";
-
-                
+                totalMoney = totalCoins.toDouble();
                 inputCoins.clear();
+                res += "\nNow dispensing.";
                 
                 if(this.getAllStockQty() == 0) {
                     this.setVmStatus(Status.SERVICE_MODE);
                     res += "\n\n! Machine is out of stock. Switching to service mode. !";
                 }
-                //System.out.println(totalCoins);
-                //System.out.println(totalMoney);
+
                 return res;
             }
             else {
@@ -498,9 +473,8 @@ public class VendingMachine {
     }
 
     public String getDetails() {
-        String res = String.format("%s,%d,%d,%f,%f,%s,", owner, maxItems, itemCount, totalMoney, userMoney, vmStatus);
+        String res = String.format("%s,%d,%d,%f,%f,%s,%s,%s,", owner, maxItems, itemCount, totalMoney, userMoney, this.totalCoins.toString(), this.inputCoins.toString(), vmStatus);
         for (VendItem vendItem : stock) {
-            
             if(vendItem != null) {
                 res += vendItem.getData() + ",";
             }
@@ -515,6 +489,22 @@ public class VendingMachine {
 
     public ArrayList<Integer> getAcceptedCoins() {
         return acceptedCoins;
+    }
+
+    public void setUserMoneyInt(int userMoneyInt) {
+        this.userMoneyInt = userMoneyInt;
+    }
+
+    public static void setAcceptedCoins(ArrayList<Integer> acceptedCoins) {
+        VendingMachine.acceptedCoins = acceptedCoins;
+    }
+
+    public void setInputCoins(MoneyBox inputCoins) {
+        this.inputCoins = inputCoins;
+    }
+
+    public void setTotalCoins(MoneyBox totalCoins) {
+        this.totalCoins = totalCoins;
     }
 
 
