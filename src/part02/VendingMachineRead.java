@@ -24,6 +24,9 @@ public class VendingMachineRead {
         Scanner sc;
         
         File csvFile = new File(csvPath);
+        if(csvFile.length() == 0) {
+            return null;
+        }
         try {
             sc = new Scanner(csvFile);
             while(sc.hasNextLine()) {
@@ -57,6 +60,9 @@ public class VendingMachineRead {
     //Creating VendingMachine from data
     public static VendingMachine loadData(ArrayList<String> testDataList) {
         ArrayList<String> readList = testDataList;
+        if(readList == null) {
+            return null;
+        }
         String name = readList.get(0);
         int maxItems = Integer.parseInt(readList.get(1));
         int currentItems = Integer.parseInt(readList.get(2));
@@ -123,7 +129,7 @@ public class VendingMachineRead {
             System.err.println(e.getStackTrace());
         }
         writer.println(toWrite);
-        System.out.printf("State written successfully to %s\n", csvOutPath);
+        System.out.printf("\n\t- State written successfully to %s -\n\n", csvOutPath);
         writer.close();
         return true;
     }

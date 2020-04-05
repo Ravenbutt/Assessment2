@@ -43,6 +43,14 @@ public class MoneyBox {
         num2Pound = 0;
     }
 
+    public boolean containsAllCoins() {
+        if(this.getNum5Pence()>=1 && this.getNum10Pence()>=1 && this.getNum20Pence()>=1 
+        && this.getNum50Pence()>=1 && this.getNum1Pound()>=1 && this.getNum2Pound()>=1) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {
@@ -268,7 +276,7 @@ public class MoneyBox {
             res+=coinList.get(index);
                 
             if(index == coinList.size()-1) {
-                res+=".\n";
+                res+=".";
             }
             else {
                 res+=", ";

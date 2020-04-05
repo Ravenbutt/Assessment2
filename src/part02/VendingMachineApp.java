@@ -21,7 +21,7 @@ public class VendingMachineApp {
         initMenu();
         input.close();
         System.out.println("Goodbye!");
-        
+        VendingMachineRead.exportData(vendingMachine.getDetails());
     }
 
     private static void initVendMachine() {
@@ -31,16 +31,25 @@ public class VendingMachineApp {
 
         //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
         //*Then check if those are still the values and if so produce an error
-        vendingMachine = new VendingMachine("Coca Cola", 4);
-        VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
-        VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
-        VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
         
-        vendingMachine.addNewItem(cocaCola);
-        vendingMachine.addNewItem(fanta);
-        vendingMachine.addNewItem(taytoCheese);
+        if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
+            vendingMachine = new VendingMachine("Coca Cola", 4);
+            VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
+            VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
+            VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
+            vendingMachine.addNewItem(cocaCola);
+            vendingMachine.addNewItem(fanta);
+            vendingMachine.addNewItem(taytoCheese);
+            vendingMachine.setVmStatus(Status.VENDING_MODE);
+            System.out.println("\t- Machine state data could not be loaded\n\t  New Vending Machine has been created -");
+        }
+        else {
+            vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
+            System.out.println("\n\t- State has been loaded from file successfully -");
+        }
+
         //!This is causing problems for some reason
-        vendingMachine.setVmStatus(Status.VENDING_MODE);
+        
     }
 
     private static void initMenu() {
@@ -64,12 +73,12 @@ public class VendingMachineApp {
 
     private static void processChoice(int choice) {
         if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4 && choice != 1) {
-            System.out.println(indentSpacing+"Vending machine is in service mode.\n"+indentSpacing+"Only item viewing permitted.\n");
+            System.out.println("\t! Vending machine is in service mode !\n\tOnly item viewing permitted !\n");
             return;
         }
         switch (choice) {
             case -1:
-                System.out.printf("%sPlease enter the NUMBER value of the desired option only.\n\n",indentSpacing,choice,indentSpacing);
+                System.out.println("\n\t! Please enter the NUMBER value of the desired option only !");
                 break;
                 
             case 1:
@@ -89,7 +98,7 @@ public class VendingMachineApp {
                 break;
 
             default:
-                System.out.printf("%s'%d' is not a valid option. \n%s Please only enter one of the valid option numbers.\n\n",indentSpacing,choice,indentSpacing);
+                System.out.printf("\t! '%d' is not a valid option !\n\t   Please only enter one of the valid option numbers.\n\n",choice);
                 break;
         }
     }
@@ -98,7 +107,7 @@ public class VendingMachineApp {
         System.out.println("Item List");
         System.out.println("+++++++++++\n");
         if(vendingMachine.listItems().length == 0) {
-            System.out.println(indentSpacing+"There are no items to display.\n");
+            System.out.println("\t! There are no items to display !\n");
         }
         for (String item : vendingMachine.listItems()) {
             System.out.println(item);
@@ -108,23 +117,23 @@ public class VendingMachineApp {
     private static void insertCoins() {
         System.out.println("\nInsert a Coin");
         System.out.println("+++++++++++\n");
-        System.out.println("NOTE: This vending machine only accepts 5p, 10p, 20p, 50p, £1 and £2 denominations.");;
+        System.out.println("> NOTE: This vending machine only accepts 5p, 10p, 20p, 50p, £1 and £2 denominations. <");;
 
         int inputCoin = -1;
 
         while(inputCoin != 0) {
-            System.out.printf("\n"+indentSpacing+"Current inserted value: £%.2f\n", vendingMachine.getUserMoney());
+            System.out.printf("\n\t- Current inserted value: £%.2f -\n", vendingMachine.getUserMoney());
 
             if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
                 //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
-                System.out.print(indentSpacing+"Currently inserted coins: " + MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
+                System.out.printf("\t- Currently inserted coins: %s -\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }
 
             System.out.print("\n> Please enter coin, enter 0 to finish: ");
             
             inputCoin = GetInput.checkIntInput();
             if(inputCoin == -1) {
-                System.out.println(indentSpacing+"Please insert a valid coin.\n");
+                System.out.println("\t! Please insert a valid coin. !\n");
                 continue;
             }
             if(inputCoin == 0) {
@@ -132,10 +141,10 @@ public class VendingMachineApp {
             }
             if(!vendingMachine.insertCoin(inputCoin)) {
                 if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                    System.out.println(indentSpacing+"Machine is in service mode.\n"+indentSpacing+"Coin insertion is disabled.\n");
+                    System.out.println("\t! Machine is in service mode. !\n\t  Coin insertion is disabled.\n");
                     break;
                 }
-                System.out.println(indentSpacing+"Please enter only the denominations listed.");
+                System.out.println("\t! Please enter only the denominations listed. !");
                 continue;
             }
             
@@ -150,16 +159,16 @@ public class VendingMachineApp {
         
         while(chosenItem == null) {
 
-            // if(!vendingMachine.getTotalCoins().containsAll(vendingMachine.getAcceptedCoins()) && !engineerMode) {
-            //     System.out.print("                      ! WARNING !\n" 
-            //     + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
-            //     + "> Are you sure you wish to continue? Y/N: ");
-            //     boolean choice = GetInput.getYesNo();
-            //     if(!choice) {
-            //         System.out.println("\n- Item not purchased. -");
-            //         return null;
-            //     }
-            // }
+            if(!vendingMachine.getTotalCoins().containsAllCoins() && !engineerMode) {
+                System.out.print("                      ! WARNING !\n" 
+                + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
+                + "> Are you sure you wish to continue? Y/N: ");
+                boolean choice = GetInput.getYesNo();
+                if(!choice) {
+                    System.out.println("\n\t- Item not purchased. -");
+                    return null;
+                }
+            }
 
             System.out.println("");
             listAll();
@@ -170,7 +179,7 @@ public class VendingMachineApp {
                 break;
             }
             if(chosenId == -1) {
-                System.err.println("! Please enter a valid number. !\n");
+                System.err.println("\t! Please enter a valid number !\n");
                 //input.next();
                 continue;
             }
@@ -179,7 +188,7 @@ public class VendingMachineApp {
                 chosenItem = vendingMachine.findItem(chosenId);
                 return chosenItem;
             } catch (NullPointerException e) {
-                System.err.println("! Item not found. !\n");
+                System.err.println("\t! Item not found. !\n");
                 //input.next();
                 continue;
             }
@@ -190,12 +199,18 @@ public class VendingMachineApp {
 
     private static void purchaseItem() {
         VendItem chosenItem = selectItem();
+
         if(chosenItem == null) {
             return;
         }
-        System.out.printf("- Selected item: %d. %s at £%.2f. -\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
+
+        System.out.printf("\t- Selected item: %d. %s at £%.2f. -\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
         if(chosenItem.getQty() == 0) {
-            System.out.println("! THIS ITEM IS OUT OF STOCK. !");
+            System.out.println("\n\t! Sorry, this item is out of stock !");
+            return;
+        }
+        if(vendingMachine.getUserMoney() < chosenItem.getPrice()) {
+            System.out.printf("\n\t! You don't have enough funds to purchase this item !\n");
             return;
         }
         // else {
@@ -209,7 +224,7 @@ public class VendingMachineApp {
             return;
         }
         else if(!choice) {
-            System.out.println("\n- Item not purchased. -");
+            System.out.println("\n\t- Item not purchased. -");
             return;
         }
         // while (true) {
@@ -232,11 +247,11 @@ public class VendingMachineApp {
     private static String getExtraDetails() {
         String extraDetails = "";
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += "! " + vendingMachine.getVmStatus().getStatus() + " !";
-                extraDetails += " - CUSTOMER OPERATIONS DISABLED - \n\n";
+                extraDetails += "\t! " + vendingMachine.getVmStatus().getStatus() + " !";
+                extraDetails += "\t  - CUSTOMER OPERATIONS DISABLED - \n\n";
             }
 
-            extraDetails += String.format("- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
+            extraDetails += String.format("\t- Current funds inserted: £%.2f -\n\n", vendingMachine.getUserMoney());
             
             // if(VendingMachine.formatCoins(vendingMachine.getInputCoins()) != null) {
             //     extraDetails += VendingMachine.formatCoins(vendingMachine.getInputCoins()) + "\n";

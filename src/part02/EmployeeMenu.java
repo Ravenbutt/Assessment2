@@ -17,7 +17,7 @@ public class EmployeeMenu extends VendingMachineApp {
 
     private void initEmpMenu() {
         String menuOptions[] = { "View All Items", "View an Item", "Add an Item", "Restock an Item",
-                "View Vending Machine Details", "Set Status", "Save State", "Load State", "Back" };
+                "View Vending Machine Details", "Set Status", "Reset the Machine", "Back" };
         Menu vendMenu = new Menu("VendOS v1.0 - ENGINEER MENU", menuOptions);
 
         if (authenticate()) {
@@ -91,13 +91,10 @@ public class EmployeeMenu extends VendingMachineApp {
                 break;
 
             case 7:
-                VendingMachineRead.saveState(vendingMachine);
+                vendingMachine.reset();
+                System.out.println("The machine has been reset.");
                 break;
-
-            case 8:
-                vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
-                break;
-
+                
             default:
                 break;
         }

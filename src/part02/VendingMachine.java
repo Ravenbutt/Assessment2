@@ -60,12 +60,14 @@ public class VendingMachine {
 
     public void reset() {
         //*Reset variables here
-        stock = new VendItem[maxItems];
-        totalMoney = 0.0;
-        totalCoins.clear();
-        userMoney = 0.0;
-        inputCoins.clear();
-        setVmStatus(Status.SERVICE_MODE);
+        this.stock = new VendItem[maxItems];
+        this.totalMoney = 0.0;
+        this.totalCoins.clear();
+        this.userMoney = 0.0;
+        this.userMoneyInt = 0;
+        this.inputCoins.clear();
+        this.itemCount = 0;
+        this.setVmStatus(Status.SERVICE_MODE);
     }
 
     private MoneyBox chooseReturnCoins() {
@@ -228,7 +230,7 @@ public class VendingMachine {
                 return "None of " + itemToPurchase.getName() + " left. Please choose another item.";
             }
         }
-        return "Not enough funds to purchase this item.";
+        return "\n\t! Not enough funds to purchase this item. !";
     }
 
     
