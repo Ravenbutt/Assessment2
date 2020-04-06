@@ -637,6 +637,11 @@ public class VendingMachine {
         return totalCoins;
     }
 
+    /**
+     * Getter for acceptedCoins
+     * @return ArrayList of integers containing the machine's accepted coins
+     */
+    //TODO Unneccessary?
     public ArrayList<Integer> getAcceptedCoins() {
         return acceptedCoins;
     }
