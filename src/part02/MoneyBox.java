@@ -75,22 +75,28 @@ public class MoneyBox {
         if(coin == 0) {
             return false;
         }
-        if(coin == 2 && num2Pound>0) {
+        if(coin == 200 && num2Pound>0) {
             return true;
         }
-        if(coin == 1 && num1Pound>0) {
+        else if(coin == 2 && num2Pound>0) {
             return true;
         }
-        if(coin == 50 && num50Pence>0) {
+        else if(coin == 100 && num1Pound>0) {
             return true;
         }
-        if(coin == 20 && num20Pence>0) {
+        else if(coin == 1 && num1Pound>0) {
             return true;
         }
-        if(coin == 10 && num10Pence>0) {
+        else if(coin == 50 && num50Pence>0) {
             return true;
         }
-        if(coin == 5 && num5Pence>0) {
+        else if(coin == 20 && num20Pence>0) {
+            return true;
+        }
+        else if(coin == 10 && num10Pence>0) {
+            return true;
+        }
+        else if(coin == 5 && num5Pence>0) {
             return true;
         }
         return false;
@@ -403,7 +409,7 @@ public class MoneyBox {
 
     @Override
     public String toString() {
-        return String.format("%d,%d,%d,%d,%d,%d",num5Pence,num10Pence,num20Pence,num50Pence,num1Pound,num2Pound);
+        return String.format("%d,%d,%d,%d,%d,%d",num2Pound, num1Pound, num50Pence, num20Pence, num10Pence, num5Pence);
     }
 
 }

@@ -41,7 +41,7 @@ public class VendingMachineApp {
             vendingMachine.addNewItem(fanta);
             vendingMachine.addNewItem(taytoCheese);
             vendingMachine.setVmStatus(Status.VENDING_MODE);
-            System.out.println("\t- Machine state data could not be loaded\n\t  New Vending Machine has been created -");
+            System.out.println("\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
         }
         else {
             vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());

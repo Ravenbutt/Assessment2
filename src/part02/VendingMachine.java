@@ -15,7 +15,7 @@ public class VendingMachine {
     private int userMoneyInt;
     private Status vmStatus;
     private VendItem[] stock;
-    private static ArrayList<Integer> acceptedCoins;
+    private static final ArrayList<Integer> ACCEPTED_COINS = new ArrayList<Integer>(Arrays.asList(2,1,50,20,10,5));
     private MoneyBox inputCoins;
     private MoneyBox totalCoins;
 
@@ -38,8 +38,6 @@ public class VendingMachine {
         totalCoins = new MoneyBox();
         //Using MoneyBox's toDouble() method to calculate totalMoney from inserted coins
         totalMoney = totalCoins.toDouble();
-        //ArrayList to store the accepted coins
-        acceptedCoins = new ArrayList<>(Arrays.asList(1,2,5,10,20,50));
         //Method call to store an initial amount of coins in the machine
         initTotalCoins();
     }
@@ -97,88 +95,31 @@ public class VendingMachine {
      * @return MoneyBox - With the values for each coin returned
      */
     private MoneyBox chooseReturnCoins() {
-        //TODO Stop the infinite loop with a break
         MoneyBox returnedCoins = new MoneyBox();
-        
-        while(userMoneyInt >= 200) {
-            if(totalCoins.containsCoin(2)) {
-                returnedCoins.addCoin(2);
-                totalCoins.removeCoin(2);
-                userMoneyInt-=200;
+        for (Integer acceptedCoin : ACCEPTED_COINS) {
+            boolean isPound = false;
+            if(totalCoins.containsCoin(acceptedCoin)) {
+                if(acceptedCoin == 1 || acceptedCoin == 2) {
+                    isPound = true;
+                    acceptedCoin *= 100;
+                }
+                while(userMoneyInt >= acceptedCoin) {
+                    userMoneyInt-=acceptedCoin;
+                    if(isPound) {
+                        returnedCoins.addCoin(acceptedCoin/100);
+                        totalCoins.removeCoin(acceptedCoin/100);
+                    }
+                    else {
+                        returnedCoins.addCoin(acceptedCoin);
+                        totalCoins.removeCoin(acceptedCoin);
+                    }
+                }
             }
-            else {
-                //missingCoins.add(2);
-                //userMoneyInt-=200;
-                inputCoins.removeCoin(2);
-                break;
-            }
-        }
-        while(userMoneyInt >= 100) {
-            if(totalCoins.containsCoin(1)) {
-                returnedCoins.addCoin(1);
-                totalCoins.removeCoin(1);
-                userMoneyInt-=100;
-            }
-            else {
-                //missingCoins.add(1);
-                //userMoneyInt-=100;
-                break;
-            }
-        }
-        while(userMoneyInt >= 50) {
-            if(totalCoins.containsCoin(50)) {
-                returnedCoins.addCoin(50);
-                totalCoins.removeCoin(50);
-                userMoneyInt-=50;
-            }
-            else {
-                //missingCoins.add(50);
-                //userMoneyInt-=50;
-                break;
-            }
-        }
-        while(userMoneyInt >= 20) {
-            if(totalCoins.containsCoin(20)) {
-                returnedCoins.addCoin(20);
-                totalCoins.removeCoin(20);
-                userMoneyInt-=20;
-            }
-            else {
-                //missingCoins.add(20);
-                //userMoneyInt-=20;
-                break;
-            }
-        }
-        while(userMoneyInt >= 10) {
-            if(totalCoins.containsCoin(10)) {
-                returnedCoins.addCoin(10);
-                totalCoins.removeCoin(10);
-                userMoneyInt-=10;
-            }
-            else {
-                //missingCoins.add(10);
-                //userMoneyInt-=10;
-                break;
-            }
-        }
-        while(userMoneyInt >= 5) {
-            if(totalCoins.containsCoin(5)) {
-                returnedCoins.addCoin(5);
-                totalCoins.removeCoin(5);
-                userMoneyInt-=5;
-            }
-            else {
-                //missingCoins.add(5);
-                //userMoneyInt-=5;
-                break;
-            }
+            
         }
         //totalMoney is calculated from totalCoins
         totalMoney = totalCoins.toDouble();
         return returnedCoins;
-        // if(userMoneyInt%200!=0 && userMoneyInt%100!=0 && userMoneyInt%50!=0 && userMoneyInt%20!=0 && userMoneyInt%10!=0 && userMoneyInt%5!=0) {
-        //     break;
-        // }
     }
 
     /**
@@ -308,7 +249,7 @@ public class VendingMachine {
         if(this.vmStatus == Status.SERVICE_MODE) {
             return false;
         }
-        if(acceptedCoins.contains(amount)) {
+        if(ACCEPTED_COINS.contains(amount)) {
             if(dAmount > 2) {
                 dAmount /= 100;
             }
@@ -488,19 +429,6 @@ public class VendingMachine {
     //     return res;
     // }
 
-
-    // protected void saveState() throws FileNotFoundException {
-    //     try {
-    //         String stateDir = "vendingState.txt";
-    //         PrintWriter savePw = new PrintWriter(stateDir);
-    //         savePw.println(this.toString());
-    //         savePw.close();
-    //     } catch (FileNotFoundException e) {
-    //         System.out.println(e.getStackTrace());
-            
-    //     }
-    // }
-
     /**
      * Getter the owner of the machine
      * @return String with the owner of the machcine
@@ -642,44 +570,28 @@ public class VendingMachine {
      * @return ArrayList of integers containing the machine's accepted coins
      */
     //TODO Unneccessary?
-    public ArrayList<Integer> getAcceptedCoins() {
-        return acceptedCoins;
-    }
 
+    /**
+     * Setter to set userMoneyInt
+     * @param userMoneyInt integer to be new value of userMoneyInt
+     */
     public void setUserMoneyInt(int userMoneyInt) {
         this.userMoneyInt = userMoneyInt;
     }
 
-    public static void setAcceptedCoins(ArrayList<Integer> acceptedCoins) {
-        VendingMachine.acceptedCoins = acceptedCoins;
-    }
-
+    /**
+     * Setter for MoneyBox inputCoins containing user input coins
+     * @param inputCoins MoneyBox containing user input coins
+     */
     public void setInputCoins(MoneyBox inputCoins) {
         this.inputCoins = inputCoins;
     }
 
+    /**
+     * Setter for MoneyBox totalCoins containing all coins in the machine
+     * @param totalCoins MoneyBox containing total coins contained in the machine
+     */
     public void setTotalCoins(MoneyBox totalCoins) {
         this.totalCoins = totalCoins;
     }
-
-
-    // public int getTotalStockCount() {
-    //     return totalStockCount;
-    // }
-
-
-    // protected void loadState(String owner, int maxItems, int itemCount, double totalMoney, double userMoney, Status vmStatus, VendItem[] stock) {
-    //     setOwner(owner);
-    //     setMaxItems(maxItems);
-    //     setItemCount(itemCount);
-    //     setTotalMoney(totalMoney);
-    //     setUserMoney(userMoney);
-    //     setVmStatus(vmStatus);
-    //     setStock(stock);
-    // }
-
 }
-
-//Composition relationship as this class as parent
-
-//Add check to see if item is already there or not when adding vendItem
