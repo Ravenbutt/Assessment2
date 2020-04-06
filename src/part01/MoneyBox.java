@@ -296,7 +296,6 @@ public class MoneyBox {
      * Formats the coin like 'COUNT x COIN', so a MoneyBox with num1Pound=11 would format like '11 x £1'
      * @return ArrayList<String> containing the formatted inserted coins
      */
-    //TODO Maybe change to formatInsertedCoins()?
     public ArrayList<String> getInsertedCoins() {
         ArrayList<String> coinList = new ArrayList<String>();
         if(this.getNum2Pound() > 0) {

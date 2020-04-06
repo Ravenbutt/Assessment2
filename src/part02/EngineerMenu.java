@@ -32,14 +32,12 @@ public class EngineerMenu extends VendingMachineApp {
         if (authenticate()) {
             System.out.println("\n\t- Login successful -");
             engineerMode = true;
-
         } else {
             System.out.println("\n\t! Login failed !");
             return;
         }
 
         int choice = -1;
-
         do {
             String extraDetails = "";
             if (vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
@@ -50,7 +48,6 @@ public class EngineerMenu extends VendingMachineApp {
             choice = vendMenu.getChoice();
             processChoice(choice);
         } while (choice != menuOptions.length);
-
     }
 
     /**
@@ -89,31 +86,25 @@ public class EngineerMenu extends VendingMachineApp {
             case 1:
                 super.listAll();
                 break;
-
             case 2:
                 viewItemDetails();
                 break;
-
             case 3:
                 addItem();
                 break;
-
             case 4:
                 restockItem();
                 break;
             case 5:
                 getDetails();
                 break;
-
             case 6:
                 setStatus();
                 break;
-
             case 7:
                 vendingMachine.reset();
                 System.out.println("\n\t- The machine has been reset -");
                 break;
-                
             default:
                 System.out.printf("\t! '%d' is not a valid option !\n\n",choice);
                 break;
@@ -136,7 +127,6 @@ public class EngineerMenu extends VendingMachineApp {
         System.out.print("> Enter item name: ");
         String newName = input.nextLine();
         
-
         while (true) {
             System.out.print("> Enter item price: £");
             double newPrice = GetInput.checkDoubleInput();
@@ -200,7 +190,6 @@ public class EngineerMenu extends VendingMachineApp {
             System.out.println("\t1. Vending Mode.");
             System.out.println("\t2. Service Mode.");
             System.out.print("> Please select the vending machine status, enter 0 to cancel: ");
-
             choice = GetInput.checkIntInput();
 
             if(choice == -1) {
@@ -208,8 +197,7 @@ public class EngineerMenu extends VendingMachineApp {
                 input.next();
                 continue;
             }
-
-            if(choice-1 == 0) {
+            else if(choice-1 == 0) {
                 vendingMachine.setStatus(Status.VENDING_MODE);
                 System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatusString() + " -");
                 break;
@@ -254,10 +242,6 @@ public class EngineerMenu extends VendingMachineApp {
             else {
                 System.out.println("\n\t! Please enter a quantity from 1 to 10. !");
             }
-
         }
-
     }
-
-
 }

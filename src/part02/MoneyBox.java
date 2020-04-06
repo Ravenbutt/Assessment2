@@ -17,13 +17,6 @@ public class MoneyBox {
     private int num1Pound;
     private int num2Pound;
 
-    public static void main(String[] args) {
-        MoneyBox myMoney = new MoneyBox();
-        myMoney.addCoin(10, 20);
-        System.out.println(myMoney.getNum10Pence());
-        System.out.println(myMoney.addCoin(11, 10));
-    }
-
     /**
      * Constructor for MoneyBox; initialises with count of 0 for each coin
      */
@@ -181,50 +174,6 @@ public class MoneyBox {
         }
     }
 
-        /**
-     * Overloaded method for removeCoin() to remove a coin, also asking how many coins should be removed
-     * @param coinToRemove - Integer coin which is to be removed if it is an accepted coin 
-     * @param count - Integer pertaining to how many of coinToRemove should be removed
-     * @return boolean - Returns true if the coins were removed successfully, else false
-     */
-    public boolean removeCoin(int coinToRemove, int count) {
-
-        switch (coinToRemove) {
-            case 2:
-                for(int amount=0; amount<count; amount++) {
-                    num2Pound--;
-                }
-                return true;
-            case 1:
-                for(int amount=0; amount<count; amount++) {
-                    num1Pound--;
-                }
-                return true;
-            case 50:
-                for(int amount=0; amount<count; amount++) {
-                    num50Pence--;
-                }
-                return true;
-            case 20:
-                for(int amount=0; amount<count; amount++) {
-                    num20Pence--;
-                }
-                return true;
-            case 10:
-                for(int amount=0; amount<count; amount++) {
-                    num10Pence--;
-                }
-                return true;
-            case 5:
-                for(int amount=0; amount<count; amount++) {
-                    num5Pence--;
-                }
-                return true;
-            default:
-                return false;
-        }
-    }
-
     /**
      * Method to remove/decrement a single coin by 1
      * @param coinToRemove - Integer coin which is to be removed if it is an accepted coin 
@@ -296,7 +245,6 @@ public class MoneyBox {
      * Formats the coin like 'COUNT x COIN', so a MoneyBox with num1Pound=11 would format like '11 x £1'
      * @return ArrayList<String> containing the formatted inserted coins
      */
-    //TODO Maybe change to formatInsertedCoins()?
     public ArrayList<String> getInsertedCoins() {
         ArrayList<String> coinList = new ArrayList<String>();
         if(this.getNum2Pound() > 0) {
@@ -359,6 +307,9 @@ public class MoneyBox {
      * @param toSub MoneyBox whose coin counts should be subtracted from this instance's own counts
      */
     public void subtract(MoneyBox toSub) {
+        if(toSub == null) {
+            return;
+        }
         this.num2Pound-=toSub.getNum2Pound();
         this.num1Pound-=toSub.getNum1Pound();
         this.num50Pence-=toSub.getNum50Pence();
@@ -386,6 +337,9 @@ public class MoneyBox {
      */
     public static MoneyBox intToDenoms(int value) {
         MoneyBox brokenValue = new MoneyBox();
+        if(value <= 0) {
+            return brokenValue;
+        }
         while(value >= 200) {
             brokenValue.addCoin(2);
             value-=200;
@@ -411,6 +365,36 @@ public class MoneyBox {
             value-=5;
         }
         return brokenValue;
+    }
+
+    /**
+     * Method to load MoneyBox coin counts from an array
+     * @param fromArr array to load coin counts from
+     * @return boolean - True if values were loaded successfully else false
+     */
+    public boolean loadFromArray(String[] fromArr) {
+        if(fromArr.length != 6) {
+            return false;
+        }
+        try {
+            this.num2Pound = Integer.parseInt(fromArr[0]);
+            this.num1Pound = Integer.parseInt(fromArr[1]);
+            this.num50Pence = Integer.parseInt(fromArr[2]);
+            this.num20Pence = Integer.parseInt(fromArr[3]);
+            this.num10Pence = Integer.parseInt(fromArr[4]);
+            this.num5Pence = Integer.parseInt(fromArr[5]);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * toString method
+     */
+    @Override
+    public String toString() {
+        return String.format("%d,%d,%d,%d,%d,%d",num2Pound, num1Pound, num50Pence, num20Pence, num10Pence, num5Pence);
     }
 
     /**
@@ -460,35 +444,4 @@ public class MoneyBox {
     public int getNum2Pound() {
         return num2Pound;
     }
-
-    /**
-     * Method to load MoneyBox coin counts from an array
-     * @param fromArr array to load coin counts from
-     * @return boolean - True if values were loaded successfully else false
-     */
-    public boolean loadFromArray(String[] fromArr) {
-        if(fromArr.length != 6) {
-            return false;
-        }
-        try {
-            this.num2Pound = Integer.parseInt(fromArr[0]);
-            this.num1Pound = Integer.parseInt(fromArr[1]);
-            this.num50Pence = Integer.parseInt(fromArr[2]);
-            this.num20Pence = Integer.parseInt(fromArr[3]);
-            this.num10Pence = Integer.parseInt(fromArr[4]);
-            this.num5Pence = Integer.parseInt(fromArr[5]);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    /**
-     * toString method
-     */
-    @Override
-    public String toString() {
-        return String.format("%d,%d,%d,%d,%d,%d",num2Pound, num1Pound, num50Pence, num20Pence, num10Pence, num5Pence);
-    }
-
 }

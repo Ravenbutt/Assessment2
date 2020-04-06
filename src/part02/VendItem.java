@@ -153,8 +153,7 @@ public class VendItem implements Vendible {
     @Override
     public String deliver() {
         if(this.getQty() == 0) {
-            //TODO Does this get fired in the VendingMachineApp code??
-            return "Sorry for running out of " + this.getName() + ".\n";
+            return String.format("\n\t- Sorry for running out of %s -\n", this.getName());
         }
         return "Thanks for purchasing " + this.getName() + ".\n";
     }
