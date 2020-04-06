@@ -50,7 +50,7 @@ public class VendingMachineTester {
     }
     
     private static void testGetters() {
-        testingMachine.getDetails();
+        testingMachine.getData();
         testingMachine.getMaxItems();
     }
 
@@ -153,7 +153,7 @@ public class VendingMachineTester {
     }
 
     private static void testSetStatus() {
-        displayTestFrame("TESTING setVmStatus() TO CHANGE STATUS OF MACHINE");
+        displayTestFrame("TESTING setStatus() TO CHANGE STATUS OF MACHINE");
         
         //testCase16
         System.out.println("INITIAL STATUS:");
@@ -162,7 +162,7 @@ public class VendingMachineTester {
         System.out.println("    Machine is in: " + testingMachine.getVmStatus());
 
         //testCase17
-        testingMachine.setVmStatus(Status.VENDING_MODE);
+        testingMachine.setStatus(Status.VENDING_MODE);
         System.out.println("> EXPECTED RESULT: Machine is set to VENDING_MODE <");
         System.out.println("> ACTUAL RESULT: <");
         System.out.println("    Machine is in: " + testingMachine.getVmStatus());

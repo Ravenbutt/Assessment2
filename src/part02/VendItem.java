@@ -76,7 +76,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for unitPrice
-     * NOTE: This should be getUnitPrice() by naming conventions but UML diagram specified it as getPrice()
+     * NOTE: This should be getUnitPrice() as per naming conventions but UML diagram specified it as getPrice()
      * @return double value for the unit price of the VendItem
      */
     public double getPrice() {
@@ -85,7 +85,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for qtyAvailable
-     * NOTE: This should be getQtyAvailable() by naming conventions but UML diagram specified it as getQty()
+     * NOTE: This should be getQtyAvailable() as per naming conventions but UML diagram specified it as getQty()
      * @return returns the current quantity available for the VendItem instance
      */
     public int getQty() {
@@ -158,16 +158,6 @@ public class VendItem implements Vendible {
         }
         return "Thanks for purchasing " + this.getName() + ".\n";
     }
-
-    // //Remove this
-    // public ArrayList<String> getData2() {
-    //     ArrayList<String> itemData = new ArrayList<String>();
-    //     itemData.add(Integer.toString(itemId));
-    //     itemData.add(name);
-    //     itemData.add(Double.toString(unitPrice));
-    //     itemData.add(Integer.toString(qtyAvailable));
-    //     return itemData;
-    // }
 
     /**
      * Method to get data pertaining to the VendItem as a String

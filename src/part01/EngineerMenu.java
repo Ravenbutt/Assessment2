@@ -1,13 +1,7 @@
-package part02;
+package part01;
 
 import java.util.Scanner;
 
-/**
- * Class which implements an engineer menu for use with the VendingMachineApp
- * This class inherits from VendingMachineApp as it makes use of a lot of it's functionality
- * @author Andrew Ellis
- * @version V1.1
- */
 public class EngineerMenu extends VendingMachineApp {
 
     /**
@@ -30,11 +24,11 @@ public class EngineerMenu extends VendingMachineApp {
         Menu vendMenu = new Menu("VendOS v1.0 - ENGINEER MENU", menuOptions);
 
         if (authenticate()) {
-            System.out.println("\n\t- Login successful -");
+            System.out.println("\n- Login successful. -");
             engineerMode = true;
 
         } else {
-            System.out.println("\n\t! Login failed !");
+            System.out.println("\n! Login failed. !");
             return;
         }
 
@@ -43,8 +37,8 @@ public class EngineerMenu extends VendingMachineApp {
         do {
             String extraDetails = "";
             if (vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += String.format("\t  %s\n\t- Customer operations disabled -\n\n", vendingMachine.getVmStatus().getStatusString());
-                extraDetails += "";
+                extraDetails += vendingMachine.getVmStatus().getStatus();
+                extraDetails += " - PURCHASING DISABLED\n";
             }
             vendMenu.setExtraDetails(extraDetails);
             choice = vendMenu.getChoice();
@@ -111,11 +105,10 @@ public class EngineerMenu extends VendingMachineApp {
 
             case 7:
                 vendingMachine.reset();
-                System.out.println("\n\t- The machine has been reset -");
+                System.out.println("The machine has been reset.");
                 break;
                 
             default:
-                System.out.printf("\t! '%d' is not a valid option !\n\n",choice);
                 break;
         }
     }
@@ -204,19 +197,19 @@ public class EngineerMenu extends VendingMachineApp {
             choice = GetInput.checkIntInput();
 
             if(choice == -1) {
-                System.out.println("\n\t! Please choose a valid number. !");
+                System.err.println("\n\t! Please choose a valid number. !");
                 input.next();
                 continue;
             }
 
             if(choice-1 == 0) {
                 vendingMachine.setStatus(Status.VENDING_MODE);
-                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatusString() + " -");
+                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             }
             else if(choice-1 == 1) {
                 vendingMachine.setStatus(Status.SERVICE_MODE);
-                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatusString() + " -");
+                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             }
             else if(choice == 0) {
@@ -244,7 +237,7 @@ public class EngineerMenu extends VendingMachineApp {
             System.out.print("\n> Please enter the new stock amount: ");
             int restockAmount = GetInput.checkIntInput();
             if(restockAmount == -1) {
-                System.out.println("\n\t! Please enter a valid number. !");
+                System.err.println("\n\t! Please enter a valid number. !");
                 continue;
             }
             if(chosenItem.restock(restockAmount)) {

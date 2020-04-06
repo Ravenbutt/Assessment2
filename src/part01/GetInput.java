@@ -8,23 +8,27 @@ public class GetInput {
 
     public static int checkIntInput() {
         int intToTest = -1;
+        String input = uInput.nextLine();
         try {
-            intToTest = uInput.nextInt();
-            uInput.nextLine();
-        } catch (InputMismatchException e) {
-            uInput.nextLine();
+            intToTest = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return -1;
         }
         //uInput.close();
         return intToTest;
     }
 
+    /**
+     * Reason it reads a String rather than double as double ignores whitespace and you can press enter constantly.
+     * @return
+     */
     public static double checkDoubleInput() {
         double doubleToTest = -1.0;
+        String input = uInput.nextLine();
         try {
-            doubleToTest = uInput.nextDouble();
-            uInput.nextLine();
-        } catch (InputMismatchException e) {
-            uInput.nextLine();
+            doubleToTest = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return -1.0;
         }
         //uInput.close();
         return doubleToTest;

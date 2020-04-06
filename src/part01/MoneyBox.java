@@ -1,4 +1,4 @@
-package part02;
+package part01;
 
 import java.util.ArrayList;
 
@@ -233,22 +233,22 @@ public class MoneyBox {
     public boolean removeCoin(int coinToRemove) {
         switch (coinToRemove) {
             case 2:
-                num2Pound--;
+                num2Pound++;
                 return true;
             case 1:
-                num1Pound--;
+                num1Pound++;
                 return true;
             case 50:
-                num50Pence--;
+                num50Pence++;
                 return true;
             case 20:
-                num20Pence--;
+                num20Pence++;
                 return true;
             case 10:
-                num10Pence--;
+                num10Pence++;
                 return true;
             case 5:
-                num5Pence--;
+                num5Pence++;
                 return true;
             default:
                 return false;

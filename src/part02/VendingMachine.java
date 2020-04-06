@@ -1,10 +1,7 @@
 package part02;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 public class VendingMachine {
     private String owner; 
@@ -19,9 +16,6 @@ public class VendingMachine {
     private MoneyBox inputCoins;
     private MoneyBox totalCoins;
 
-
-    //TODO If machine can't give change, say "cannot give change"; do this by checking if change is required, then if returned coins size = 0 then say that
-    //TODO otherwise say no change required
     /**
      * Constructor for VendingMachine object - builds a new instance from the parameters
      * @param owner - The owner of the VendingMachine instance - input as String
@@ -31,40 +25,45 @@ public class VendingMachine {
         this.owner = owner;
         this.maxItems = maxItems;
         this.vmStatus = Status.SERVICE_MODE;
+
         //Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
+
         //Coins will be stored using a MoneyBox
         inputCoins = new MoneyBox();
         totalCoins = new MoneyBox();
+
         //Using MoneyBox's toDouble() method to calculate totalMoney from inserted coins
         totalMoney = totalCoins.toDouble();
+
         //Method call to store an initial amount of coins in the machine
-        initTotalCoins();
+        //initTotalCoins();
     }
 
     /**
      * Private method to initially insert 10 of each coin into totalCoins
      */
-    private void initTotalCoins() {
-        for(int coinValue=0;coinValue<=50;coinValue++) {
-            if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
-                totalCoins.addCoin(coinValue, 10);
-                totalMoney = totalCoins.toDouble();
-            }
-        }
-    }
+    // private void initTotalCoins() {
+    //     for(int coinValue=0;coinValue<=50;coinValue++) {
+    //         if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
+    //             totalCoins.addCoin(coinValue, 10);
+    //             totalMoney = totalCoins.toDouble();
+    //         }
+    //     }
+    // }
 
     /**
      * Method to get all data pertaining to the VendingMachine instance
-     * @return String - Containing the VendingMachine data
+     * @return String containing the VendingMachine data
      */
     public String getSystemInfo() {
         String res = "\nOwner: " + owner + "\n";
         res += "Max items: " + maxItems + "\n";
         res += "Current item count: " + itemCount + "\n";
         res += String.format("Current total funds: £%.2f\n", totalMoney);
+        res += String.format("Current coins inserted: %s\n", totalCoins.getInsertedCoins());
         res += String.format("Current user funds: £%.2f\n", userMoney);
-        res += this.getVmStatus().getStatus();
+        res += this.getVmStatus().getStatusString();
         res += "\n\n       ITEM LIST\n";
         res += "       +++++++++\n";
         for (String itemDetail : this.listItems()) {
@@ -85,7 +84,7 @@ public class VendingMachine {
         this.userMoneyInt = 0;
         this.inputCoins.clear();
         this.itemCount = 0;
-        this.setVmStatus(Status.SERVICE_MODE);
+        this.setStatus(Status.SERVICE_MODE);
     }
 
     /**
@@ -94,7 +93,7 @@ public class VendingMachine {
      * if the machine doesn't contain it
      * @return MoneyBox - With the values for each coin returned
      */
-    private MoneyBox chooseReturnCoins() {
+    private MoneyBox chooseReturnedCoins() {
         MoneyBox returnedCoins = new MoneyBox();
         for (Integer acceptedCoin : ACCEPTED_COINS) {
             boolean isPound = false;
@@ -150,10 +149,7 @@ public class VendingMachine {
         try {
             itemToPurchase = findItem(choiceId);
         } catch (NullPointerException e) {
-            return "This item does not exist.";
-        }
-        if(itemToPurchase == null) {
-            return "This product does not exist.";
+            return "\n\t- This item does not exist -";
         }
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "This machine is in service mode.";
@@ -161,13 +157,13 @@ public class VendingMachine {
 
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE
         if(this.getAllStockQty() == 0) {
-            this.setVmStatus(Status.SERVICE_MODE);
+            this.setStatus(Status.SERVICE_MODE);
         }
 
         /**
          * Get the selected item's price and convert it into pennies
          * Used Math.round() as precision errors were causing quite a problem
-         * Multiplying by 100, then rounding, then casting to int solved this
+         * Multiplying by 100, then rounding to nearest whole number, then casting to int solved this
          */
         int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
 
@@ -180,8 +176,9 @@ public class VendingMachine {
                 //Calculates the expected change by breaking down userMoneyInt
                 MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyInt);
                 //Gets the coins that the system can actually return
-                MoneyBox returnedCoins = chooseReturnCoins();
-                totalCoins.add(MoneyBox.intToDenoms(userMoneyInt));
+                MoneyBox returnedCoins = chooseReturnedCoins();
+
+                //totalCoins.add(MoneyBox.intToDenoms(userMoneyInt));
 
                 if(returnedCoins.getTotalBoxValue() > 0) {
                     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, returnedCoins.toDouble());
@@ -197,16 +194,17 @@ public class VendingMachine {
                     res += "Sorry, we couldn't return: ";
                     res += MoneyBox.formatCoins(expectedChange.getDifference(returnedCoins).getInsertedCoins());
                 }
-            
+                res += "\nNow dispensing.";
+
                 userMoney = 0.0;
                 totalMoney = totalCoins.toDouble();
                 inputCoins.clear();
-                res += "\nNow dispensing.";
-                
+
                 if(this.getAllStockQty() == 0) {
-                    this.setVmStatus(Status.SERVICE_MODE);
-                    res += "\n\n! Machine is out of stock. Switching to service mode. !";
+                    this.setStatus(Status.SERVICE_MODE);
+                    res += "\n\n\t! Machine is out of stock. Switching to service mode. !";
                 }
+                System.out.println(totalCoins);
                 return res;
             }
             else {
@@ -215,9 +213,7 @@ public class VendingMachine {
         }
         return "\n\t! Not enough funds to purchase this item. !";
     }
-
     
-
     /**
      * Getter for status of VendingMachine
      * @return Status - Enum giving the current status of the machine
@@ -330,11 +326,12 @@ public class VendingMachine {
     }
 
     /**
-     * 
-     * @param vStatus - The new status of the VendingMachine, either VENDING_MODE or SERVICE_MODE
-     * @return boolean - True if the status was changed successfully else false
+     * Method to set the status of the VendingMachine
+     * NOTE: This should be getVmStatus() as per naming conventions but UML diagram specified it as getStatus()
+     * @param vStatus - The new status of the VendingMachine of enum type Status, either VENDING_MODE or SERVICE_MODE
+     * @return boolean returns true if the status was changed successfully else false
      */
-    public boolean setVmStatus(Status vStatus) {
+    public boolean setStatus(Status vStatus) {
         int totalQty = getAllStockQty();
         //The machine will only change to VENDING_MODE if there are more than 0 item count in the machine in total
         if(totalQty == 0 && vStatus == Status.VENDING_MODE) {
@@ -348,7 +345,7 @@ public class VendingMachine {
     /**
      * Method used to get the entire quantity of VendItem(s) contained in the machine
      * While itemCount variable stores the amount of VendItem(s), this stores the sum of all their quantity
-     * @return integer - Contains the sum of the qtyAvailable of all VendItem(s) in the machine
+     * @return integer containing the sum of the qtyAvailable of all VendItem(s) in the machine
      */
     private int getAllStockQty() {
         int totalQty = 0;
@@ -363,9 +360,9 @@ public class VendingMachine {
 
     /**
      * Method for searching for a VendItem in the stock array based on it's itemID
-     * @param itemId - ID of the VendItem to be found; input as integer
-     * @return VendItem - The VendItem with the ID input if found
-     * @throws NullPointerException - If VendItem with itemId could not be found
+     * @param itemId integer for the ID of the VendItem to be found
+     * @return VendItem with the input ID if found
+     * @throws NullPointerException thrown if VendItem with itemId could not be found
      */
     public VendItem findItem(int itemId) throws NullPointerException {
 
@@ -415,7 +412,7 @@ public class VendingMachine {
 
     /**
      * Setter to set the owner of the machine
-     * @param owner - Name of the owner of the machine to be set
+     * @param owner String containing name of the owner of the machine to be set
      */
     public void setOwner(String owner) {
         this.owner = owner;
@@ -423,7 +420,7 @@ public class VendingMachine {
 
     /**
      * Getter for maxItems
-     * @return integer - The maximum items the machine can contain
+     * @return integer representing the maximum items the machine can contain
      */
     public int getMaxItems() {
         return maxItems;
@@ -431,7 +428,7 @@ public class VendingMachine {
 
     /**
      * Setter for maxItems
-     * @param maxItems integer - The new maximum items the machine can contain
+     * @param maxItems integer representing the new maximum items the machine can contain
      */
     //TODO make private - Maybe not cause it's setter?
     public void setMaxItems(int maxItems) {
@@ -446,7 +443,7 @@ public class VendingMachine {
 
     /**
      * Getter for itemCount
-     * @return integer - The amount of VendItem(s) in the machine
+     * @return integer representing the amount of VendItem(s) in the machine
      */
     public int getItemCount() {
         return itemCount;
@@ -454,7 +451,7 @@ public class VendingMachine {
 
     /**
      * Setter for itemCount
-     * @param itemCount integer - New item count
+     * @param itemCount integer representing the new item count
      */
     //TODO make private - Maybe not cause it's setter?
     public void setItemCount(int itemCount) {
@@ -468,7 +465,7 @@ public class VendingMachine {
 
     /**
      * Getter for totalMoney (as a double)
-     * @return double - Containing the total money the machine contains
+     * @return double representing the total money the machine contains
      */
     public double getTotalMoney() {
         return totalMoney;
@@ -476,10 +473,8 @@ public class VendingMachine {
 
     /**
      * Setter for totalMoney
-     * @param totalMoney double - value to set totalMoney to
+     * @param totalMoney double with the value to set totalMoney to
      */
-    //TODO Not needed?
-    //TODO make private - Maybe not cause it's setter?
     public void setTotalMoney(double totalMoney) {
         if(totalMoney > 0.0) {
             this.totalMoney = totalMoney;
@@ -493,7 +488,6 @@ public class VendingMachine {
      * Setter for userMoney
      * @param userMoney double - value to set userMoney to
      */
-    //TODO make private - Maybe not cause it's setter?
     public void setUserMoney(double userMoney) {
         if(userMoney > 0.0) {
             this.userMoney = userMoney;
@@ -503,10 +497,6 @@ public class VendingMachine {
         }
 
     }
-
-    // public void setVmStatus(Status vmStatus) {
-    //     this.vmStatus = vmStatus;
-    // }
 
     /**
      * Setter for the stock array which stores VendItem(s)
@@ -522,7 +512,7 @@ public class VendingMachine {
      * Used when saving the machine state
      * @return formatted String with all the VendingMachine's details
      */
-    public String getDetails() {
+    public String getData() {
         String res = String.format("%s,%d,%d,%f,%f,%s,%s,%s,", owner, maxItems, itemCount, totalMoney, userMoney, this.totalCoins.toString(), this.inputCoins.toString(), vmStatus);
         for (VendItem vendItem : stock) {
             if(vendItem != null) {
@@ -540,12 +530,6 @@ public class VendingMachine {
     public MoneyBox getTotalCoins() {
         return totalCoins;
     }
-
-    /**
-     * Getter for acceptedCoins
-     * @return ArrayList of integers containing the machine's accepted coins
-     */
-    //TODO Unneccessary?
 
     /**
      * Setter to set userMoneyInt

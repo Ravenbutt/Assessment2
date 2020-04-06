@@ -1,23 +1,23 @@
-package part02;
+package part01;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-/**
- * Class to facilitate the reading of VendingMachine data from a csv file
- * @author Andrew Ellis
- * @version V1.1
- */
 public class VendingMachineRead {
 
-    /**
-     * Method to read data from a csv file and parses the data into an ArrayList
-     * @return ArrayList of type String containing each comma separated value
-     */
+    
+
+    public static void main(String[] args) {
+        loadData(parseData());
+    }
+
+
+    //Getting data from csv, turning it into ArrayList
     public static ArrayList<String> parseData() {
         String csvPath = "VendingState.csv";
         String testData = null;
@@ -57,45 +57,35 @@ public class VendingMachineRead {
     }
 
 
-    /**
-     * Method that creates and returns a new VendingMachine instance from the data
-     * obtained from parseData()
-     * @param listData ArrayList of type String containing the data to load
-     * @return new VendingMachine to with the data which was loaded from file
-     */
-    public static VendingMachine loadData(ArrayList<String> listData) {
-        
-        /**
-         * The second condition in this if statement is a check to try and ensure the integrity of the csv data
-         * The first 17 values of the csv file are regarding the VendingMachine itself, and the following n values
-         * are any amount of VendItem(s). Each VendItem has 4 data values each, so this is an attempt to ensure each one 
-         * is 4 values long, but is not foolproof
-         */
-        if(listData == null || listData.subList(18, listData.size()).size() %4 != 0) {
+    //Creating VendingMachine from data
+    public static VendingMachine loadData(ArrayList<String> testDataList) {
+        ArrayList<String> readList = testDataList;
+        if(readList == null || readList.subList(18, readList.size()).size() %4 != 0) {
             return null;
         }
-        String name = listData.get(0);
-        int maxItems = Integer.parseInt(listData.get(1));
-        int currentItems = Integer.parseInt(listData.get(2));
-        double totalMoney = Double.parseDouble(listData.get(3));
-        double userMoney = Double.parseDouble(listData.get(4));
+        String name = readList.get(0);
+        int maxItems = Integer.parseInt(readList.get(1));
+        int currentItems = Integer.parseInt(readList.get(2));
+        double totalMoney = Double.parseDouble(readList.get(3));
+        double userMoney = Double.parseDouble(readList.get(4));
         MoneyBox totalCoins = new MoneyBox();
         MoneyBox inputCoins = new MoneyBox();
-        totalCoins.loadFromArray(listData.subList(5, 11).toArray(new String[6]));
-        inputCoins.loadFromArray(listData.subList(11, 17).toArray(new String[6]));
+        totalCoins.loadFromArray(readList.subList(5, 11).toArray(new String[6]));
+        inputCoins.loadFromArray(readList.subList(11, 17).toArray(new String[6]));
         Status vmStatus = null;
 
-        if(listData.get(17).equals("VENDING_MODE")) {
+        if(readList.get(17).equals("VENDING_MODE")) {
             vmStatus = Status.VENDING_MODE;
         }
-        else if(listData.get(17).equals("SERVICE_MODE")) {
+        else if(readList.get(17).equals("SERVICE_MODE")) {
             vmStatus = Status.SERVICE_MODE;
         }
 
         VendItem stock[] = new VendItem[maxItems];
+        //List<String> vendingMachineData = readList.subList(0, 6);
 
-        for (int j = 18; j < listData.size(); j+=4) {
-            List<String> currentItemList = listData.subList(j, j+4);
+        for (int j = 18; j < readList.size(); j+=4) {
+            List<String> currentItemList = readList.subList(j, j+4);
 
             int itemId = Integer.parseInt(currentItemList.get(0));
             String itemName = currentItemList.get(1);
@@ -121,6 +111,27 @@ public class VendingMachineRead {
     loadedMachine.setStatus(vmStatus);
 
     return loadedMachine;
-
     }
+
+    //Saves state of input VendingMachine and writes to CSV
+    public static void saveState(VendingMachine vendingMachine) {
+        //Maybe say VendingMachine extends this so it can have saveState?
+        String toWrite = vendingMachine.getDetails();
+        exportData(toWrite);
+    }
+
+    public static boolean exportData(String toWrite) {
+        String csvOutPath = "VendingState.csv";
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(csvOutPath);
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getStackTrace());
+        }
+        writer.println(toWrite);
+        System.out.printf("\n\t- State written successfully to %s -\n\n", csvOutPath);
+        writer.close();
+        return true;
+    }
+
 }

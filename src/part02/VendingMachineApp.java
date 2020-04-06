@@ -2,6 +2,13 @@ package part02;
 
 import java.util.Scanner;
 
+/**
+ * VendingMachineApp class which implements a system which can perform operations
+ * on a VendingMachine instance and it's various components all through a console-based
+ * interface
+ * @author Andrew Ellis
+ * @version V1.5
+ */
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
@@ -9,14 +16,18 @@ public class VendingMachineApp {
     protected static boolean engineerMode = false;
 
     public static void main(String[] args) {
-        //*Was thinking of doing extends VendingMachine so it could change what is printed by menu?
-
         initVendMachine();
         input = new Scanner(System.in);
         initMenu();
         input.close();
         System.out.println("\nGoodbye!");
-        VendingMachineRead.exportData(vendingMachine.getDetails());
+        if(VendingMachineWrite.exportData(vendingMachine.getData())) {
+            System.out.println("\n\t- State written successfully to VendingState.csv -\n");
+        }
+        else {
+            System.out.println("\n\t- Could not save machine state -");
+        }
+        
     }
 
     /**
@@ -27,15 +38,15 @@ public class VendingMachineApp {
     private static void initVendMachine() {
         
         if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
-            vendingMachine = new VendingMachine("Coca Cola", 4);
+            vendingMachine = new VendingMachine("Coca Cola", 10);
             VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
             VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
             VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
             vendingMachine.addNewItem(cocaCola);
             vendingMachine.addNewItem(fanta);
             vendingMachine.addNewItem(taytoCheese);
-            vendingMachine.setVmStatus(Status.VENDING_MODE);
-            System.out.println("\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
+            vendingMachine.setStatus(Status.VENDING_MODE);
+            System.out.println("\n\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
         }
         else {
             vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
@@ -88,11 +99,12 @@ public class VendingMachineApp {
                 break;
 
             case 5:
+                //NOTE: Entering 5 in the menu will access the hidden engineer menu
                 EngineerMenu empMenu = new EngineerMenu();
                 break;
 
             default:
-                System.out.printf("\t! '%d' is not a valid option !\n\t   Please only enter one of the valid option numbers.\n\n",choice);
+                System.out.printf("\t! '%d' is not a valid option !\n\n",choice);
                 break;
         }
     }
@@ -162,7 +174,6 @@ public class VendingMachineApp {
      */
     protected static VendItem selectItem() {
         
-        //int chosenId = -1;
         VendItem chosenItem = null;
         
         while(chosenItem == null) {
@@ -187,8 +198,7 @@ public class VendingMachineApp {
                 break;
             }
             if(chosenId == -1) {
-                System.err.println("\t! Please enter a valid number !\n");
-                //input.next();
+                System.out.println("\t! Please enter a valid number !\n");
                 continue;
             }
 
@@ -196,8 +206,7 @@ public class VendingMachineApp {
                 chosenItem = vendingMachine.findItem(chosenId);
                 return chosenItem;
             } catch (NullPointerException e) {
-                System.err.println("\t! Item not found. !\n");
-                //input.next();
+                System.out.println("\n\t! Item not found !\n");
                 continue;
             }
         }
@@ -247,15 +256,15 @@ public class VendingMachineApp {
     private static String getExtraDetails() {
         String extraDetails = "";
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatus());
+                extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatusString());
                 
-                extraDetails += "\t  - CUSTOMER OPERATIONS DISABLED - \n\n";
+                extraDetails += "\n\t- CUSTOMER OPERATIONS DISABLED - \n\n";
             }
 
             extraDetails += String.format("\t- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
             
             if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
-                extraDetails += String.format("\t- Currently inserted coins: %s -\n\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
+                extraDetails += String.format("\t  Currently inserted coins: %s\n\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }
             else {
                 extraDetails += "\n";

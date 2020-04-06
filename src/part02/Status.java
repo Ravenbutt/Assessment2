@@ -1,5 +1,10 @@
 package part02;
 
+/**
+ * An enumeration encompassing the different statuses a VendingMachine instance can have
+ * @author Andrew Ellis
+ * @version V1.0
+ */
 public enum Status {
     VENDING_MODE(0),
     SERVICE_MODE(1);
@@ -7,14 +12,27 @@ public enum Status {
     private int statIntVal;
     private String[] statString = {"MODE: Vending", "MODE: Service"};
 
+    /**
+     * Constructor for Status
+     * @param value integer value of the status
+     */
     private Status(int value) {
         statIntVal = value;
     }
 
-    public String getStatus() {
+    /**
+     * Method to get the String from statString which details the status
+     * @return String containing the status String
+     */
+    public String getStatusString() {
         return statString[statIntVal];
     }
 
+    /**
+     * Method to return the Status enum type based on the input String
+     * @param strStat Status value as a String
+     * @return Status enum type
+     */
     public static Status fromString(String strStat) {
         if(strStat == "VENDING_MODE") {
             return VENDING_MODE;

@@ -1,18 +1,13 @@
 package part02;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 /**
  * This class represents ...a console-based menu
- * @author 
- * @version V1.0
- *
+ * @author Paul Sage, Andrew Ellis
+ * @version V1.2
  */
 public class Menu {
 	private String options[];	// array of strings representing user options
 	private String title;		// menu title
-	private Scanner input;		// for KB input
 	private String extraDetails; //used to store extra details to display in the menu
 	/**
 	 * Constructor for class
@@ -22,7 +17,6 @@ public class Menu {
 	public Menu(String title, String options[]) {
 		this.title = title;
 		copyOptions(options);
-		input = new Scanner(System.in);
 	}
 	
 	/**
@@ -32,14 +26,7 @@ public class Menu {
 	public int getChoice() {
 		display();
 		System.out.print("> Enter choice: ");
-		int choice;
-		try {
-			choice = input.nextInt();
-		} catch (InputMismatchException e) {
-			input.next();
-			return -1;
-		}
-		
+		int choice = GetInput.checkIntInput();
 		return choice;
 	}
 	
