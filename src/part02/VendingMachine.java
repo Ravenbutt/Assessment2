@@ -142,8 +142,6 @@ public class VendingMachine {
          */
         userMoneyInt = inputCoins.getTotalBoxValue();
         VendItem itemToPurchase;
-        //TODO REMOVE FROM PART01
-        //System.out.println(totalCoins.containsAll(acceptedCoins));
 
         /**
          * Calling findItem(id) method to search for the item in the stock list by the input ID
@@ -154,12 +152,9 @@ public class VendingMachine {
         } catch (NullPointerException e) {
             return "This item does not exist.";
         }
-
-        
         if(itemToPurchase == null) {
             return "This product does not exist.";
         }
-
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "This machine is in service mode.";
         }
@@ -177,20 +172,15 @@ public class VendingMachine {
         int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
 
         if(userMoneyInt >= itemPriceInt) {
-            
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
                 userMoneyInt -= itemPriceInt;
-
                 userMoney = (double)userMoneyInt/100;
                 String res = "";
-
                 //Calculates the expected change by breaking down userMoneyInt
                 MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyInt);
-                
                 //Gets the coins that the system can actually return
                 MoneyBox returnedCoins = chooseReturnCoins();
-
                 totalCoins.add(MoneyBox.intToDenoms(userMoneyInt));
 
                 if(returnedCoins.getTotalBoxValue() > 0) {
@@ -217,7 +207,6 @@ public class VendingMachine {
                     this.setVmStatus(Status.SERVICE_MODE);
                     res += "\n\n! Machine is out of stock. Switching to service mode. !";
                 }
-
                 return res;
             }
             else {
@@ -240,7 +229,7 @@ public class VendingMachine {
     /**
      * Method to facilitate inserting coins into the system
      * NOTE: Pound denominations are inserted like 1 for £1 and 2 for £2 rather than 100 and 200 respectively
-     * This is detailed in the readme.txt along with my reasoning for this
+     * This is detailed in the readme.txt along with my reasoning behind this
      * @param amount - The amount which is to be inserted; input as integer
      * @return boolean - True if the coin could be inserted successfully else false
      */
@@ -382,7 +371,7 @@ public class VendingMachine {
 
         //TODO For some reason the itemId=10 here is just ignoring that it's null?
         VendItem target = null;
-        for(int index = 0; index < stock.length; index++) { //might need to change this to length-1 idk
+        for(int index = 0; index < stock.length; index++) {
             VendItem currItem = stock[index];
             if(currItem == null) {
                 throw new NullPointerException("Item not found.");
@@ -403,7 +392,7 @@ public class VendingMachine {
      * Getter for userMoney
      * @return double containing userMoney
      */
-    //Unnecessary?
+    //TODO Unnecessary?
     public double getUserMoney() {
         return userMoney;
     }
@@ -415,19 +404,6 @@ public class VendingMachine {
     public MoneyBox getInputCoins() {
         return inputCoins;
     }
-
-
-    // @Override
-    // public String toString() {
-    //     String res = owner + "," + maxItems + "," + itemCount + "," + totalMoney + "," + userMoney + "," + vmStatus + ",";
-    //     for (VendItem vendItem : stock) {
-    //         if(vendItem != null) {
-    //             res += vendItem + ",";
-    //         }
-            
-    //     }
-    //     return res;
-    // }
 
     /**
      * Getter the owner of the machine

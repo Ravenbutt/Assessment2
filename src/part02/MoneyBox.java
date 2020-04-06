@@ -2,6 +2,12 @@ package part02;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a 'coin pouch' or 'piggy bank'
+ * Can be used to store £2, £1, 50p, 20p, 10p and 5p coins
+ * @author Andrew Ellis
+ * @version V1.0
+ */
 public class MoneyBox {
 
     private int num5Pence;
@@ -18,22 +24,31 @@ public class MoneyBox {
         System.out.println(myMoney.addCoin(11, 10));
     }
 
+    /**
+     * Constructor for MoneyBox; initialises with count of 0 for each coin
+     */
     public MoneyBox() {
-        this.num5Pence = 0;
-        this.num10Pence = 0;
-        this.num20Pence = 0;
-        this.num50Pence = 0;
-        this.num1Pound = 0;
         this.num2Pound = 0;
+        this.num1Pound = 0;
+        this.num50Pence = 0;
+        this.num20Pence = 0;
+        this.num10Pence = 0;
+        this.num5Pence = 0;
     }
 
+    /**
+     * Method to calculate the total value, in pennies, of the MoneyBox instance
+     * @return int as the total value of the MoneyBox in pennies
+     */
     public int getTotalBoxValue() {
         int result = 0;
         result += (5*num5Pence) + (10*num10Pence) + (20*num20Pence) + (50*num50Pence) + (100*num1Pound) + (200*num2Pound);
         return result;
     }
 
-    //Add contains() and formatCoins() method e.g. 10x10p, 15x£1
+    /**
+     * Method to reset the MoneyBox instance to it's default, empty state
+     */
     public void clear() {
         num5Pence = 0;
         num10Pence = 0;
@@ -43,6 +58,10 @@ public class MoneyBox {
         num2Pound = 0;
     }
 
+    /**
+     * Method to check if the MoneyBox instance has at least one of each coin
+     * @return boolean - True if box contains at least one of each coin, else false
+     */
     public boolean containsAllCoins() {
         if(this.getNum5Pence()>=1 && this.getNum10Pence()>=1 && this.getNum20Pence()>=1 
         && this.getNum50Pence()>=1 && this.getNum1Pound()>=1 && this.getNum2Pound()>=1) {
@@ -51,6 +70,11 @@ public class MoneyBox {
         return false;
     }
 
+    /**
+     * Method to check if one instance of MoneyBox is the same as another instance of MoneyBox
+     * Checks based on object reference, along with checking if the coin count is the same
+     * @return boolean - True if either object reference is the same or coin count is the same, else false
+     */
     @Override
     public boolean equals(Object obj) {
         if(this == obj) {
@@ -71,39 +95,26 @@ public class MoneyBox {
         return false;
     }
 
+    /**
+     * Method to check if the MoneyBox instance contains at least 1 of the param coin
+     * @param coin - Coin as integer to be checked to see if the MoneyBox contains at least 1
+     * @return boolean - True if the MoneyBox contains coin, else false
+     */
     public boolean containsCoin(int coin) {
-        if(coin == 0) {
-            return false;
-        }
-        if(coin == 200 && num2Pound>0) {
-            return true;
-        }
-        else if(coin == 2 && num2Pound>0) {
-            return true;
-        }
-        else if(coin == 100 && num1Pound>0) {
-            return true;
-        }
-        else if(coin == 1 && num1Pound>0) {
-            return true;
-        }
-        else if(coin == 50 && num50Pence>0) {
-            return true;
-        }
-        else if(coin == 20 && num20Pence>0) {
-            return true;
-        }
-        else if(coin == 10 && num10Pence>0) {
-            return true;
-        }
-        else if(coin == 5 && num5Pence>0) {
+        if(coin==2 && num1Pound>0 || coin==1 && num1Pound>0 || coin==50 && num50Pence>0 
+            || coin==20 && num20Pence>0 || coin==10 && num10Pence>0 || coin==5 && num10Pence>0) {
             return true;
         }
         return false;
     }
 
-    public boolean addCoin(int value) {
-        switch (value) {
+    /**
+     * Method to add/increment a single coin by 1
+     * @param coinToAdd - Integer coin which is to be added if it is an accepted coin 
+     * @return boolean - Returns true if the coin was added successfully, else false
+     */
+    public boolean addCoin(int coinToAdd) {
+        switch (coinToAdd) {
             case 2:
                 num2Pound++;
                 return true;
@@ -127,8 +138,14 @@ public class MoneyBox {
         }
     }
 
-    public boolean addCoin(int value, int count) {
-        switch (value) {
+    /**
+     * Overloaded method for addCoin() to add a coin, also asking how many coins should be added
+     * @param coinToAdd - Integer coin which is to be added if it is an accepted coin 
+     * @param count - Integer pertaining to how many of coinToAdd should be added
+     * @return boolean - Returns true if the coins were added successfully, else false
+     */
+    public boolean addCoin(int coinToAdd, int count) {
+        switch (coinToAdd) {
             case 2:
                 for(int amount=0; amount<count; amount++) {
                     num2Pound++;
@@ -164,9 +181,15 @@ public class MoneyBox {
         }
     }
 
-    public boolean removeCoin(int value, int count) {
+        /**
+     * Overloaded method for removeCoin() to remove a coin, also asking how many coins should be removed
+     * @param coinToRemove - Integer coin which is to be removed if it is an accepted coin 
+     * @param count - Integer pertaining to how many of coinToRemove should be removed
+     * @return boolean - Returns true if the coins were removed successfully, else false
+     */
+    public boolean removeCoin(int coinToRemove, int count) {
 
-        switch (value) {
+        switch (coinToRemove) {
             case 2:
                 for(int amount=0; amount<count; amount++) {
                     num2Pound--;
@@ -202,9 +225,13 @@ public class MoneyBox {
         }
     }
 
-
-    public boolean removeCoin(int value) {
-        switch (value) {
+    /**
+     * Method to remove/decrement a single coin by 1
+     * @param coinToRemove - Integer coin which is to be removed if it is an accepted coin 
+     * @return boolean - Returns true if the coin was removed successfully, else false
+     */
+    public boolean removeCoin(int coinToRemove) {
+        switch (coinToRemove) {
             case 2:
                 num2Pound++;
                 return true;
@@ -228,6 +255,10 @@ public class MoneyBox {
         }
     }
 
+    /**
+     * Method to check if the MoneyBox contains none of any coin
+     * @return boolean - Returns true if MoneyBox doesn't contain any coins, else false
+     */
     public boolean isEmpty() {
         if(this.getNum5Pence()==0 && this.getNum10Pence()==0 && this.getNum20Pence()==0 
         && this.getNum50Pence()==0 && this.getNum1Pound()==0 && this.getNum2Pound()==0) {
@@ -236,6 +267,11 @@ public class MoneyBox {
         return false;
     }
 
+    /**
+     * Method to return a new MoneyBox containing the difference between two MoneyBox instance's values
+     * @param secondBox - MoneyBox which is to be compared
+     * @return MoneyBox with the difference between the original two
+     */
     public MoneyBox getDifference(MoneyBox secondBox) {
         int num2PoundDifference = this.getNum2Pound()-secondBox.getNum2Pound();
         int num1PoundDifference = this.getNum1Pound()-secondBox.getNum1Pound();
@@ -243,7 +279,9 @@ public class MoneyBox {
         int num20PenceDiff = this.getNum20Pence()-secondBox.getNum20Pence();
         int num10PenceDiff = this.getNum10Pence()-secondBox.getNum10Pence();
         int num5PenceDiff = this.getNum5Pence()-secondBox.getNum5Pence();
+
         MoneyBox newBox = new MoneyBox();
+        
         newBox.addCoin(2, num2PoundDifference);
         newBox.addCoin(1, num1PoundDifference);
         newBox.addCoin(50, num50PenceDiff);
@@ -253,6 +291,12 @@ public class MoneyBox {
         return newBox;
     }
 
+    /**
+     * Method to get ONLY the currently inserted coins from the MoneyBox, and format them
+     * Formats the coin like 'COUNT x COIN', so a MoneyBox with num1Pound=11 would format like '11 x £1'
+     * @return ArrayList<String> containing the formatted inserted coins
+     */
+    //TODO Maybe change to formatInsertedCoins()?
     public ArrayList<String> getInsertedCoins() {
         ArrayList<String> coinList = new ArrayList<String>();
         if(this.getNum2Pound() > 0) {
@@ -276,6 +320,12 @@ public class MoneyBox {
         return coinList;
     }
 
+    /**
+     * Method to format an ArrayList containing coin Strings so they can be formatted nicely for output
+     * by adding ',' and '.' where necessary
+     * @param coinList ArrayList<String> containing each formatted coin
+     * @return String with the formatted coins 
+     */
     public static String formatCoins(ArrayList<String> coinList) {
         String res = "";
         for (int index = 0; index < coinList.size(); index++) {
@@ -291,6 +341,10 @@ public class MoneyBox {
         return res;
     }
 
+    /**
+     * Method to add the coin counts of two MoneyBox instances together
+     * @param toAdd MoneyBox whose coin counts should be added to this instance's own counts
+     */
     public void add(MoneyBox toAdd) {
         this.num2Pound+=toAdd.getNum2Pound();
         this.num1Pound+=toAdd.getNum1Pound();
@@ -300,21 +354,36 @@ public class MoneyBox {
         this.num5Pence+=toAdd.getNum5Pence();
     }
 
-    public void subtract(MoneyBox toSubtract) {
-        this.num2Pound-=toSubtract.getNum2Pound();
-        this.num1Pound-=toSubtract.getNum1Pound();
-        this.num50Pence-=toSubtract.getNum50Pence();
-        this.num20Pence-=toSubtract.getNum20Pence();
-        this.num10Pence-=toSubtract.getNum10Pence();
-        this.num5Pence-=toSubtract.getNum5Pence();
+    /**
+     * Method to subtract the coin counts of two MoneyBox instances
+     * @param toSub MoneyBox whose coin counts should be subtracted from this instance's own counts
+     */
+    public void subtract(MoneyBox toSub) {
+        this.num2Pound-=toSub.getNum2Pound();
+        this.num1Pound-=toSub.getNum1Pound();
+        this.num50Pence-=toSub.getNum50Pence();
+        this.num20Pence-=toSub.getNum20Pence();
+        this.num10Pence-=toSub.getNum10Pence();
+        this.num5Pence-=toSub.getNum5Pence();
     }
 
+    /**
+     * Method to get the value, in pounds and pence, of a MoneyBox instance as a double
+     * @return double containing the value of the MoneyBox instance in pounds and pence
+     */
     public double toDouble() {
         int value = this.getTotalBoxValue();
         double dValue = (double)value/100;
         return dValue;
     }
 
+    /**
+     * Static method that breaks down an integer of pennies into coins that make it up,
+     * returning a new MoneyBox with those coin counts
+     * E.g. intToDenoms(120) would return a new MoneyBox with 1 x £1 and 1 x 20p
+     * @param value integer to be broken down into it's respective coins
+     * @return MoneyBox with the count of coins that make up param value
+     */
     public static MoneyBox intToDenoms(int value) {
         MoneyBox brokenValue = new MoneyBox();
         while(value >= 200) {
@@ -344,56 +413,63 @@ public class MoneyBox {
         return brokenValue;
     }
 
+    /**
+     * Getter for num5Pence
+     * @return integer value of num5Pence
+     */
     public int getNum5Pence() {
         return num5Pence;
     }
 
-    public void setNum5Pence(int num5Pence) {
-        this.num5Pence = num5Pence;
-    }
-
+    /**
+     * Getter for num10Pence
+     * @return integer value of num10Pence
+     */
     public int getNum10Pence() {
         return num10Pence;
     }
 
-    public void setNum10Pence(int num10Pence) {
-        this.num10Pence = num10Pence;
-    }
-
+    /**
+     * Getter for num20Pence
+     * @return integer value of num20Pence
+     */
     public int getNum20Pence() {
         return num20Pence;
     }
 
-    public void setNum20Pence(int num20Pence) {
-        this.num20Pence = num20Pence;
-    }
-
+    /**
+     * Getter for num50Pence
+     * @return integer value of num50Pence
+     */
     public int getNum50Pence() {
         return num50Pence;
     }
 
-    public void setNum50Pence(int num50Pence) {
-        this.num50Pence = num50Pence;
-    }
-
+    /**
+     * Getter for num1Pound
+     * @return integer value of num1Pound
+     */
     public int getNum1Pound() {
         return num1Pound;
     }
 
-    public void setNum1Pound(int num1Pound) {
-        this.num1Pound = num1Pound;
-    }
-
+    /**
+     * Getter for num2Pound
+     * @return integer value of num2Pound
+     */
     public int getNum2Pound() {
         return num2Pound;
     }
 
-    public void setNum2Pound(int num2Pound) {
-        this.num2Pound = num2Pound;
-    }
-
+    /**
+     * Method to load MoneyBox coin counts from an array
+     * @param fromArr array to load coin counts from
+     * @return boolean - True if values were loaded successfully else false
+     */
     public boolean loadFromArray(String[] fromArr) {
-        
+        if(fromArr.length != 6) {
+            return false;
+        }
         try {
             this.num2Pound = Integer.parseInt(fromArr[0]);
             this.num1Pound = Integer.parseInt(fromArr[1]);
@@ -407,6 +483,9 @@ public class MoneyBox {
         }
     }
 
+    /**
+     * toString method
+     */
     @Override
     public String toString() {
         return String.format("%d,%d,%d,%d,%d,%d",num2Pound, num1Pound, num50Pence, num20Pence, num10Pence, num5Pence);

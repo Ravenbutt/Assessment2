@@ -1,17 +1,12 @@
 package part02;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
     protected static Scanner input;
-    //protected static double coinsInput[];
-    //protected static double total = 0;
     protected static boolean engineerMode = false;
-    protected static String indentSpacing = "   ";
 
     public static void main(String[] args) {
         //*Was thinking of doing extends VendingMachine so it could change what is printed by menu?
@@ -20,17 +15,16 @@ public class VendingMachineApp {
         input = new Scanner(System.in);
         initMenu();
         input.close();
-        System.out.println("Goodbye!");
+        System.out.println("\nGoodbye!");
         VendingMachineRead.exportData(vendingMachine.getDetails());
     }
 
+    /**
+     * Static method to initialise the VendingMachine instance
+     * This method checks if VendingState.csv contains a valid state
+     * If not, it will initialise a new VendingMachine instance with several VendItems
+     */
     private static void initVendMachine() {
-
-        //Max of 50 coins can be input by user5
-        //Change to variable adjustable by engineer
-
-        //*On part 2, initially set to new VendingMachine("UNDEFINED", 0);
-        //*Then check if those are still the values and if so produce an error
         
         if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
             vendingMachine = new VendingMachine("Coca Cola", 4);
@@ -47,18 +41,15 @@ public class VendingMachineApp {
             vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
             System.out.println("\n\t- State has been loaded from file successfully -");
         }
-
-        //!This is causing problems for some reason
-        
     }
 
+    /**
+     * Static method to initiate the menu with options
+     */
     private static void initMenu() {
         //set this to options and title as param for initMenu, then allow employeeMenu to just call this init menu
         String menuOptions[] = {"View All Items", "Insert Coins", "Purchase an Item", "Quit"};
         Menu vendMenu = new Menu("VendOS v1.0", menuOptions);
-
-        //Condition to check if user has chose to quit and ensure last option is Quit
-        //Maybe set it instead that if menuOptions[option-1].equals("Quit") for more robust?
         int choice = -1;
         do {
             vendMenu.setExtraDetails(getExtraDetails());
@@ -66,11 +57,14 @@ public class VendingMachineApp {
             if(choice != menuOptions.length) {
                 processChoice(choice);
             }
-            
         } while (choice != menuOptions.length);
-
     }
 
+    /**
+     * Static method to process the choice input by the user in the menu
+     * Will execute the corresponding code/method to each option
+     * @param choice integer corresponding to the user's choice from the menu
+     */
     private static void processChoice(int choice) {
         if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4 && choice != 1) {
             System.out.println("\t! Vending machine is in service mode !\n\tOnly item viewing permitted !\n");
@@ -94,7 +88,7 @@ public class VendingMachineApp {
                 break;
 
             case 5:
-                EmployeeMenu empMenu = new EmployeeMenu();
+                EngineerMenu empMenu = new EngineerMenu();
                 break;
 
             default:
@@ -103,7 +97,10 @@ public class VendingMachineApp {
         }
     }
 
-    public static void listAll() {
+    /**
+     * Method to list all items in the machine if there are any to list
+     */
+    protected static void listAll() {
         System.out.println("Item List");
         System.out.println("+++++++++++\n");
         if(vendingMachine.listItems().length == 0) {
@@ -114,6 +111,13 @@ public class VendingMachineApp {
         }
     }
 
+    /**
+     * Method that makes use of the VendingMachine's insertCoin() method
+     * to facilitate inserting a coin through the menu
+     * Coins can be inserted repeatedly until the user inputs 0 to cancel
+     * NOTE: Pound denominations are inserted like 1 for £1 and 2 for £2 rather than 100 and 200 respectively
+     * This is detailed in the readme.txt along with my reasoning behind this
+     */
     private static void insertCoins() {
         System.out.println("\nInsert a Coin");
         System.out.println("+++++++++++\n");
@@ -125,7 +129,6 @@ public class VendingMachineApp {
             System.out.printf("\n\t- Current inserted value: £%.2f -\n", vendingMachine.getUserMoney());
 
             if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
-                //!TODO Need to remove formatCoins() in this class and just use vendingMachine.formatCoins()
                 System.out.printf("\t- Currently inserted coins: %s -\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }
 
@@ -151,8 +154,13 @@ public class VendingMachineApp {
         }
     }
 
-
-    public static VendItem selectItem() {
+    /**
+     * Method used to select a VendItem from the list of stock
+     * If the machine does not contain at least one of each coin, they will be notified 
+     * that they may not receive all change and asked if they wish to continue
+     * @return VendItem which the user has selected
+     */
+    protected static VendItem selectItem() {
         
         //int chosenId = -1;
         VendItem chosenItem = null;
@@ -197,7 +205,11 @@ public class VendingMachineApp {
         
     }
 
-    private static void purchaseItem() {
+    /**
+     * Method which makes use of the VendingMachine's purchaseItem() method to
+     * facilitate the purchasing of a VendItem using the menu
+     */
+    protected static void purchaseItem() {
         VendItem chosenItem = selectItem();
 
         if(chosenItem == null) {
@@ -213,9 +225,6 @@ public class VendingMachineApp {
             System.out.printf("\n\t! You don't have enough funds to purchase this item !\n");
             return;
         }
-        // else {
-        //     System.out.printf("Selected item: %d. %s at £%.2f.\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
-        // }
         System.out.print("\n> Would you like to purchase this item? Y/N: ");
 
         boolean choice = GetInput.getYesNo();
@@ -227,59 +236,30 @@ public class VendingMachineApp {
             System.out.println("\n\t- Item not purchased. -");
             return;
         }
-        // while (true) {
-        //     char choice = input.nextLine().charAt(0);
-        //     if(Character.toUpperCase(choice) == 'Y') {
-        //         System.out.println(vendingMachine.purchaseItem(chosenItem.getItemId()));
-        //         break;
-        //     }
-        //     else if(Character.toUpperCase(choice) == 'N') {
-        //         System.out.println("Item not purchased.");
-        //         break;
-        //     }
-        //     else {
-        //         System.out.println("Please enter Y for yes or N for no.");
-        //         continue;
-        //     }
-        // }
     }
 
+    /**
+     * Method to get extra details to display on the main menu page
+     * Includes details like whether the machine is in SERVICE_MODE, 
+     * along with inserted coins and their value
+     * @return String with the extra details
+     */
     private static String getExtraDetails() {
         String extraDetails = "";
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += "\t! " + vendingMachine.getVmStatus().getStatus() + " !";
+                extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatus());
+                
                 extraDetails += "\t  - CUSTOMER OPERATIONS DISABLED - \n\n";
             }
 
-            extraDetails += String.format("\t- Current funds inserted: £%.2f -\n\n", vendingMachine.getUserMoney());
+            extraDetails += String.format("\t- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
             
-            // if(VendingMachine.formatCoins(vendingMachine.getInputCoins()) != null) {
-            //     extraDetails += VendingMachine.formatCoins(vendingMachine.getInputCoins()) + "\n";
-            // }
+            if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
+                extraDetails += String.format("\t- Currently inserted coins: %s -\n\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
+            }
+            else {
+                extraDetails += "\n";
+            }
         return extraDetails;
     }
-
-    // private static String formatCoins() {
-    //     ArrayList<String> inputCoinsStr = new ArrayList<String>();
-    //     if(vendingMachine.getInputCoins().size() > 0) {
-
-    //         for(int coin : vendingMachine.getInputCoins()) {
-    //             String coinStr = "";
-    //             if(coin < 5) {
-    //                 coinStr = String.format("£%d", coin);
-    //             }
-    //             else if(coin > 2) {
-    //                 coinStr = String.format("%dp", coin); 
-    //             }
-    //             inputCoinsStr.add(coinStr);
-    //         }
-            
-    //     }
-    //     return inputCoinsStr.toString().replace("[", "").replace("]", "");
-    // }
-
-
 }
-
-//Add refund method?
-// TODO Add change etc for customer

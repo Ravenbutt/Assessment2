@@ -60,7 +60,7 @@ public class VendingMachineRead {
     //Creating VendingMachine from data
     public static VendingMachine loadData(ArrayList<String> testDataList) {
         ArrayList<String> readList = testDataList;
-        if(readList == null) {
+        if(readList == null || readList.subList(18, readList.size()).size() %4 != 0) {
             return null;
         }
         String name = readList.get(0);
