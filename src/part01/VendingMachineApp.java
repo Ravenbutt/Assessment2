@@ -14,7 +14,7 @@ public class VendingMachineApp {
     public static void main(String[] args) {
         initVendMachine();
         initMenu();
-        System.out.println("\nGoodbye!");
+        System.out.println("Goodbye!");
     }
 
     /**
@@ -114,7 +114,7 @@ public class VendingMachineApp {
             
             inputCoin = GetInput.getIntInput();
             if(inputCoin == -1) {
-                System.out.println("\t! Please insert a valid coin. !\n");
+                System.out.println("\n\t! Please insert a valid coin. !");
                 continue;
             }
             if(inputCoin == 0) {
@@ -164,7 +164,7 @@ public class VendingMachineApp {
                 break;
             }
             if(chosenId == -1) {
-                System.out.println("\t! Please enter a valid number !\n");
+                System.out.println("\n\t! Please enter a valid number !");
                 continue;
             }
 

@@ -15,7 +15,7 @@ public class VendingMachineApp {
     public static void main(String[] args) {
         initVendingMachine();
         initMenu();
-        System.out.println("\nGoodbye!");
+        System.out.println("Goodbye!");
         if(VendingMachineWrite.exportData(vendingMachine.getData())) {
             System.out.println("\n\t- State written successfully to VendingState.csv -\n");
         }
