@@ -19,7 +19,7 @@ public class VendingMachineRead {
      * @return ArrayList of type String containing each comma separated value
      */
     public static ArrayList<String> parseData() {
-        String csvPath = "VendingState.csv";
+        String csvPath = "src/part02/VendingState.csv";
         String testData = null;
         Scanner sc;
         

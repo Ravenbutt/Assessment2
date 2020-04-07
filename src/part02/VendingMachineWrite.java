@@ -27,7 +27,7 @@ public class VendingMachineWrite {
      * @return boolean true if the data was successfully written else false
      */
     public static boolean exportData(String toWrite) {
-        String csvOutPath = "VendingState.csv";
+        String csvOutPath = "src/part02/VendingState.csv";
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(csvOutPath);

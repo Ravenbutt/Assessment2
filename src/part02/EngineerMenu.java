@@ -5,6 +5,7 @@ import java.util.Scanner;
 /**
  * Class which implements an engineer menu for use with the VendingMachineApp
  * This class inherits from VendingMachineApp as it makes use of a lot of it's functionality
+ * NOTE: The password to access the menu is 'password'
  * @author Andrew Ellis
  * @version V1.1
  */
@@ -58,7 +59,8 @@ public class EngineerMenu extends VendingMachineApp {
      */
     private boolean authenticate() {
         int tries = 3;
-        //password is here
+        
+        //PASSWORD IS HERE
         String password = "password";
         System.out.println("\n- ENGINEER ACCESS ONLY -");
         System.out.println("++++++++++++++++++++++++\n");

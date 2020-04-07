@@ -4,6 +4,7 @@ package part02;
  * VendingMachineApp class which implements a system which can perform operations
  * on a VendingMachine instance and it's various components all through a console-based
  * interface
+ * NOTE: To enter the hidden/engineer menu, input 5 on the main menu
  * @author Andrew Ellis
  * @version V1.5
  */
