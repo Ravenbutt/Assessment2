@@ -143,7 +143,7 @@ public class VendingMachine {
             return "\n\t- This item does not exist -";
         }
         if(this.getVmStatus() == Status.SERVICE_MODE) {
-            return "This machine is in service mode.";
+            return "\n\t- This machine is in service mode -";
         }
 
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE

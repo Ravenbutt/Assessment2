@@ -146,7 +146,7 @@ public class VendingMachineApp {
 
             System.out.print("\n> Please enter coin, enter 0 to finish: ");
             
-            inputCoin = GetInput.checkIntInput();
+            inputCoin = GetInput.getIntInput();
             if(inputCoin == -1) {
                 System.out.println("\t! Please insert a valid coin. !\n");
                 continue;
@@ -193,7 +193,7 @@ public class VendingMachineApp {
             listAll();
 
             System.out.print("\n> Enter the number of the item you wish to select, enter 0 to cancel: ");
-            int chosenId = GetInput.checkIntInput();
+            int chosenId = GetInput.getIntInput();
             if(chosenId == 0) {
                 break;
             }

@@ -26,7 +26,7 @@ public class Menu {
 	public int getChoice() {
 		display();
 		System.out.print("> Enter choice: ");
-		int choice = GetInput.checkIntInput();
+		int choice = GetInput.getIntInput();
 		return choice;
 	}
 	

@@ -129,7 +129,7 @@ public class EngineerMenu extends VendingMachineApp {
         
         while (true) {
             System.out.print("> Enter item price: £");
-            double newPrice = GetInput.checkDoubleInput();
+            double newPrice = GetInput.getDoubleInput();
             if(newPrice == 0.0) {
                 System.out.println("\n\t! Price must be greater than £0.00. !");
                 continue;
@@ -190,7 +190,7 @@ public class EngineerMenu extends VendingMachineApp {
             System.out.println("\t1. Vending Mode.");
             System.out.println("\t2. Service Mode.");
             System.out.print("> Please select the vending machine status, enter 0 to cancel: ");
-            choice = GetInput.checkIntInput();
+            choice = GetInput.getIntInput();
 
             if(choice == -1) {
                 System.out.println("\n\t! Please choose a valid number. !");
@@ -230,7 +230,7 @@ public class EngineerMenu extends VendingMachineApp {
 
         while (true && chosenItem != null) {
             System.out.print("\n> Please enter the new stock amount: ");
-            int restockAmount = GetInput.checkIntInput();
+            int restockAmount = GetInput.getIntInput();
             if(restockAmount == -1) {
                 System.out.println("\n\t! Please enter a valid number. !");
                 continue;

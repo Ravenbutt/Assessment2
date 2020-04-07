@@ -3,7 +3,7 @@ package part02;
 import java.util.Scanner;
 
 /**
- * Class which is used to get and check user inputs
+ * Class which is used to get and check user inputs for validity
  * Created in order to facilitate code reuse and have DRY code
  * @author Andrew Ellis
  * @version V1.1
@@ -17,7 +17,7 @@ public class GetInput {
      * integer inputs ignore whitespace, allowing the user to press enter constantly
      * @return the integer the user input, else -1 if they did not enter an integer
      */
-    public static int checkIntInput() {
+    public static int getIntInput() {
         int intToTest = -1;
         String input = uInput.nextLine();
         try {
@@ -35,7 +35,7 @@ public class GetInput {
      * double inputs ignore whitespace, allowing the user to press enter constantly
      * @return the double the user input, else -1 if they did not enter an double
      */
-    public static double checkDoubleInput() {
+    public static double getDoubleInput() {
         double doubleToTest = -1.0;
         String input = uInput.nextLine();
         try {
