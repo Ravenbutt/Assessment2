@@ -5,6 +5,7 @@ import java.util.Scanner;
 /**
  * Class which is used to get and check user inputs for validity
  * Created in order to facilitate code reuse and have DRY code
+ * Consolidates user input into a seperate class
  * @author Andrew Ellis
  * @version V1.1
  */
@@ -70,15 +71,17 @@ public class GetInput {
                     System.out.println("Please enter Y for yes or N for no.");
                     break;
             }
-
-            
-            // else {
-            //     System.out.println("Please enter Y for yes or N for no.");
-            //     continue;
-            // }
         }
-        
         return false;
+    }
+
+    /**
+     * Method to get user input for a String
+     * @return String that the user input
+     */
+    public static String getString() {
+        String choice = uInput.nextLine();
+        return choice;
     }
 
 }

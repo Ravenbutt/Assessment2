@@ -16,6 +16,11 @@ public class VendItemTester {
         testDeliver();
     }
 
+    /**
+     * Simple method to create a frame around the different test blocks
+     * Just to make it easier to differentiate each type of test
+     * @param title String input to be displayed
+     */
     private static void displayTestFrame(String title) {
         String line = "-------------------------------------------------------------------------------------";
         int lineLength = line.length()/2+(title.length()/2);

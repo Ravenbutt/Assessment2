@@ -1,7 +1,5 @@
 package part01;
 
-import java.util.Scanner;
-
 /**
  * VendingMachineApp class which implements a system which can perform operations
  * on a VendingMachine instance and it's various components all through a console-based
@@ -12,14 +10,10 @@ import java.util.Scanner;
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
-    protected static Scanner input;
-    protected static boolean engineerMode = false;
 
     public static void main(String[] args) {
         initVendMachine();
-        input = new Scanner(System.in);
         initMenu();
-        input.close();
         System.out.println("\nGoodbye!");
     }
 
@@ -37,7 +31,6 @@ public class VendingMachineApp {
         vendingMachine.addNewItem(fanta);
         vendingMachine.addNewItem(taytoCheese);
         vendingMachine.setStatus(Status.VENDING_MODE);
-        System.out.println("\n\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
     }
 
     /**

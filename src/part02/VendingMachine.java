@@ -1,8 +1,5 @@
 package part02;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class VendingMachine {
     private String owner; 
     private int maxItems; //max amount of items the machine can hold
@@ -12,7 +9,7 @@ public class VendingMachine {
     private int userMoneyInt;
     private Status vmStatus;
     private VendItem[] stock;
-    private static final ArrayList<Integer> ACCEPTED_COINS = new ArrayList<Integer>(Arrays.asList(2,1,50,20,10,5));
+    private static final int[] ACCEPTED_COINS = {2,1,50,20,10,5};
     private MoneyBox inputCoins;
     private MoneyBox totalCoins;
 
@@ -24,7 +21,7 @@ public class VendingMachine {
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
         this.maxItems = maxItems;
-        this.vmStatus = Status.SERVICE_MODE;
+        this.setStatus(Status.SERVICE_MODE);
 
         //Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
@@ -147,7 +144,7 @@ public class VendingMachine {
         }
 
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE
-        if(this.getAllStockQty() == 0) {
+        if(this.sumAllStockQty() == 0) {
             this.setStatus(Status.SERVICE_MODE);
         }
 
@@ -185,7 +182,7 @@ public class VendingMachine {
                 }
                 res += "\nNow dispensing.";
 
-                if(this.getAllStockQty() == 0) {
+                if(this.sumAllStockQty() == 0) {
                     this.setStatus(Status.SERVICE_MODE);
                     res += "\n\n\t! Machine is out of stock. Switching to service mode. !";
                 }
@@ -197,7 +194,7 @@ public class VendingMachine {
                 return res;
             }
             else {
-                return String.format("None of %s left. Please choose another item.", itemToPurchase.getName());
+                return String.format("\n\t- None of %s left; please choose another item -", itemToPurchase.getName());
             }
         }
         return "\n\t! Not enough funds to purchase this item. !";
@@ -215,7 +212,7 @@ public class VendingMachine {
         if(this.vmStatus == Status.SERVICE_MODE) {
             return false;
         }
-        if(ACCEPTED_COINS.contains(amount)) {
+        for (int acceptedCoin : ACCEPTED_COINS) {
             if(dAmount > 2) {
                 dAmount /= 100;
             }
@@ -302,13 +299,16 @@ public class VendingMachine {
      * While itemCount variable stores the amount of VendItem(s), this stores the sum of all their quantity
      * @return integer containing the sum of the qtyAvailable of all VendItem(s) in the machine
      */
-    private int getAllStockQty() {
+    private int sumAllStockQty() {
         int totalQty = 0;
-        for (VendItem item : stock) {
-            if(item != null) {
-                totalQty += item.getQty();
+        if(stock != null) {
+            for (VendItem item : stock) {
+                if(item != null) {
+                    totalQty += item.getQty();
+                }
             }
         }
+
         return totalQty;
     }
 
@@ -346,7 +346,7 @@ public class VendingMachine {
      * @return boolean returns true if the status was changed successfully else false
      */
     public boolean setStatus(Status vStatus) {
-        int totalQty = getAllStockQty();
+        int totalQty = sumAllStockQty();
         //The machine will only change to VENDING_MODE if there are more than 0 item count in the machine in total
         if(totalQty == 0 && vStatus == Status.VENDING_MODE) {
             this.vmStatus = Status.SERVICE_MODE;

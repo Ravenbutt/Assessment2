@@ -70,15 +70,14 @@ public class GetInput {
                     System.out.println("Please enter Y for yes or N for no.");
                     break;
             }
-
-            
-            // else {
-            //     System.out.println("Please enter Y for yes or N for no.");
-            //     continue;
-            // }
         }
         
         return false;
+    }
+
+    public static String getString() {
+        String choice = uInput.nextLine();
+        return choice;
     }
 
 }

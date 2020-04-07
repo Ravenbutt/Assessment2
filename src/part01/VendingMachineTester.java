@@ -29,6 +29,11 @@ public class VendingMachineTester {
         testingMachine = new VendingMachine("Testing Machine", 5);
     }
 
+    /**
+     * Simple method to create a frame around the different test blocks
+     * Just to make it easier to differentiate each type of test
+     * @param title String input to be displayed
+     */
     private static void displayTestFrame(String title) {
         String line = "-------------------------------------------------------------------------------------";
         int lineLength = line.length()/2+(title.length()/2);
@@ -36,8 +41,6 @@ public class VendingMachineTester {
         System.out.printf("%" + lineLength + "s\n", title);
         System.out.println(line+"\n");
     }
-
-
 
     private static void displayStock() {
 

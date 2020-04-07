@@ -1,8 +1,5 @@
 package part01;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class VendingMachine {
     private String owner; 
     private int maxItems; //max amount of items the machine can hold
@@ -12,7 +9,7 @@ public class VendingMachine {
     private int userMoneyInt;
     private Status vmStatus;
     private VendItem[] stock;
-    private static final ArrayList<Integer> ACCEPTED_COINS = new ArrayList<Integer>(Arrays.asList(2,1,50,20,10,5));
+    private static final int[] ACCEPTED_COINS = {2,1,50,20,10,5};
 
     /**
      * Constructor for VendingMachine object - builds a new instance from the parameters
@@ -22,7 +19,7 @@ public class VendingMachine {
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
         this.maxItems = maxItems;
-        this.vmStatus = Status.SERVICE_MODE;
+        this.setStatus(Status.SERVICE_MODE);
 
         //Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
@@ -85,7 +82,7 @@ public class VendingMachine {
         }
 
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE
-        if(this.getAllStockQty() == 0) {
+        if(this.sumAllStockQty() == 0) {
             this.setStatus(Status.SERVICE_MODE);
         }
 
@@ -107,13 +104,13 @@ public class VendingMachine {
                 String res = "";
                 
                 if(userMoneyInt > 0) {
-                    res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, userMoney);
+                    res += String.format("%s\nYour change is £%.2f.", deliver, userMoney);
                 }
                 else {
                     res += String.format("%s\nYour transaction returned no change.", deliver);
                 }
                 res += "\nNow dispensing.";
-                if(this.getAllStockQty() == 0) {
+                if(this.sumAllStockQty() == 0) {
                     this.setStatus(Status.SERVICE_MODE);
                     res += "\n\n\t! Machine is out of stock. Switching to service mode. !";
                 }
@@ -121,7 +118,7 @@ public class VendingMachine {
                 return res;
             }
             else {
-                return String.format("None of %s left. Please choose another item.", itemToPurchase.getName());
+                return String.format("\n\t- None of %s left; please choose another item -", itemToPurchase.getName());
             }
         }
         return "\n\t! Not enough funds to purchase this item. !";
@@ -139,15 +136,18 @@ public class VendingMachine {
         if(this.vmStatus == Status.SERVICE_MODE) {
             return false;
         }
-        if(ACCEPTED_COINS.contains(amount)) {
-            if(dAmount > 2) {
-                dAmount /= 100;
+        for (int acceptedCoin : ACCEPTED_COINS) {
+            if(acceptedCoin == amount) {
+                if(dAmount > 2) {
+                    dAmount /= 100;
+                }
+                userMoney += dAmount;
+                totalMoney += dAmount;
+                return true;
             }
-            userMoney += dAmount;
-            totalMoney += dAmount;
-            return true;
         }
         return false;
+        
     }
 
     /**
@@ -224,13 +224,16 @@ public class VendingMachine {
      * While itemCount variable stores the amount of VendItem(s), this stores the sum of all their quantity
      * @return integer containing the sum of the qtyAvailable of all VendItem(s) in the machine
      */
-    private int getAllStockQty() {
+    private int sumAllStockQty() {
         int totalQty = 0;
-        for (VendItem item : stock) {
-            if(item != null) {
-                totalQty += item.getQty();
+        if(stock != null) {
+            for (VendItem item : stock) {
+                if(item != null) {
+                    totalQty += item.getQty();
+                }
             }
         }
+        
         return totalQty;
     }
 
@@ -268,7 +271,7 @@ public class VendingMachine {
      * @return boolean returns true if the status was changed successfully else false
      */
     public boolean setStatus(Status vStatus) {
-        int totalQty = getAllStockQty();
+        int totalQty = sumAllStockQty();
         //The machine will only change to VENDING_MODE if there are more than 0 item count in the machine in total
         if(totalQty == 0 && vStatus == Status.VENDING_MODE) {
             this.vmStatus = Status.SERVICE_MODE;
@@ -286,7 +289,6 @@ public class VendingMachine {
         return this.vmStatus;
     }
 
-
     /**
      * Getter the owner of the machine
      * @return String with the owner of the machcine
@@ -294,19 +296,6 @@ public class VendingMachine {
     public String getOwner() {
         return owner;
     }
-
-
-    /**
-     * Setter to set the owner of the machine
-     * @param owner String containing name of the owner of the machine to be set
-     */
-    public void setOwner(String owner) {
-        if(owner.length() == 0 || owner == null) {
-            owner = "UNASSIGNED";
-        }
-        this.owner = owner; 
-    }
-
 
     /**
      * Getter for maxItems
@@ -316,22 +305,6 @@ public class VendingMachine {
         return maxItems;
     }
 
-
-    /**
-     * Setter for maxItems
-     * @param maxItems integer representing the new maximum items the machine can contain
-     */
-    public void setMaxItems(int maxItems) {
-        if(maxItems > 0) {
-            this.maxItems = maxItems;
-        }
-        else {
-            this.maxItems = 0;
-        }
-        
-    }
-
-
     /**
      * Getter for itemCount
      * @return integer representing the amount of VendItem(s) in the machine
@@ -339,21 +312,6 @@ public class VendingMachine {
     public int getItemCount() {
         return itemCount;
     }
-
-
-    /**
-     * Setter for itemCount
-     * @param itemCount integer representing the new item count
-     */
-    public void setItemCount(int itemCount) {
-        if(itemCount < maxItems && itemCount >= 0) {
-            this.itemCount = itemCount;
-        }
-        else {
-            this.itemCount = 0;
-        }
-    }
-
 
     /**
      * Getter for totalMoney (as a double)
@@ -364,20 +322,6 @@ public class VendingMachine {
         return totalMoney;
     }
 
-
-    /**
-     * Setter for totalMoney
-     * @param totalMoney double with the value to set totalMoney to
-     */
-    public void setTotalMoney(double totalMoney) {
-        if(totalMoney > 0.0) {
-            this.totalMoney = totalMoney;
-        }
-        else {
-            this.totalMoney = 0.0;
-        }
-    }
-
     /**
      * Getter for userMoney
      * @return double containing userMoney
@@ -386,48 +330,11 @@ public class VendingMachine {
         return userMoney;
     }
 
-
-    /**
-     * Setter for userMoney
-     * @param userMoney double - value to set userMoney to
-     */
-    public void setUserMoney(double userMoney) {
-        if(userMoney > 0.0) {
-            this.userMoney = userMoney;
-        }
-        else {
-            this.userMoney = 0.0;
-        }
-
-    }
-
-
     /**
      * Getter used to get the stock array of VendItem(s) 
      * @return VendItem array containing each VendItem in the machine
      */
     public VendItem[] getStock() {
         return stock;
-    }
-
-
-    /**
-     * Setter for the stock array which stores VendItem(s)
-     * @param stock array of type VendItem
-     */
-    public void setStock(VendItem[] stock) {
-        this.stock = stock;
-    }
-
-    
-    /**
-     * Setter to set userMoneyInt
-     * @param userMoneyInt integer to be new value of userMoneyInt
-     */
-    public void setUserMoneyInt(int userMoneyInt) {
-        if(userMoneyInt < 0) {
-            userMoneyInt = 0;
-        }
-        this.userMoneyInt = userMoneyInt;
     }
 }

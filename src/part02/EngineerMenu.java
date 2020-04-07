@@ -14,7 +14,6 @@ public class EngineerMenu extends VendingMachineApp {
      * Constructor for EngineerMenu
      */
     public EngineerMenu() {
-        input = new Scanner(System.in);
         initEmpMenu();
         System.out.println("\n\t- Going back to customer menu -");
         engineerMode = false;
@@ -66,7 +65,7 @@ public class EngineerMenu extends VendingMachineApp {
         while (tries > 0) {
             System.out.println("Tries remaining: " + tries);
             System.out.print("> Please enter the engineer password: ");
-            String inputPassword = input.nextLine();
+            String inputPassword = GetInput.getString();
             if (inputPassword.equals(password)) {
                 return true;
             } else {
@@ -124,9 +123,19 @@ public class EngineerMenu extends VendingMachineApp {
         System.out.println("\nAdding item");
         System.out.println("+++++++++++\n");
         
-        System.out.print("> Enter item name: ");
-        String newName = input.nextLine();
-        
+        String newName = "";
+        while(newName.isBlank() || newName == null) {
+            System.out.print("> Enter item name: ");
+            newName = GetInput.getString();
+            if(newName.isBlank()) {
+                System.out.println("\n\t! Please enter a valid name !\n");
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+
         while (true) {
             System.out.print("> Enter item price: £");
             double newPrice = GetInput.getDoubleInput();
@@ -194,7 +203,6 @@ public class EngineerMenu extends VendingMachineApp {
 
             if(choice == -1) {
                 System.out.println("\n\t! Please choose a valid number. !");
-                input.next();
                 continue;
             }
             else if(choice-1 == 0) {

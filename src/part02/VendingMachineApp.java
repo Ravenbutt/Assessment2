@@ -1,7 +1,5 @@
 package part02;
 
-import java.util.Scanner;
-
 /**
  * VendingMachineApp class which implements a system which can perform operations
  * on a VendingMachine instance and it's various components all through a console-based
@@ -12,14 +10,11 @@ import java.util.Scanner;
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
-    protected static Scanner input;
     protected static boolean engineerMode = false;
 
     public static void main(String[] args) {
-        initVendMachine();
-        input = new Scanner(System.in);
+        initVendingMachine();
         initMenu();
-        input.close();
         System.out.println("\nGoodbye!");
         if(VendingMachineWrite.exportData(vendingMachine.getData())) {
             System.out.println("\n\t- State written successfully to VendingState.csv -\n");
@@ -35,7 +30,7 @@ public class VendingMachineApp {
      * This method checks if VendingState.csv contains a valid state
      * If not, it will initialise a new VendingMachine instance with several VendItems
      */
-    private static void initVendMachine() {
+    private static void initVendingMachine() {
         
         if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
             vendingMachine = new VendingMachine("Coca Cola", 10);
