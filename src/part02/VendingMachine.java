@@ -123,17 +123,14 @@ public class VendingMachine {
      * @return String - To feedback to the user regarding their purchase (Whether it was successful or failed, etc)
      */
     public String purchaseItem(int choiceId) {
-        /**
-         * userMoneyInt calculated using MoneyBox getTotalBoxValue()
-         * which calculates the total value (in pennies) of a MoneyBox
-         */
+
+        //userMoneyInt calculated using MoneyBox getTotalBoxValue()
+        //which calculates the total value (in pennies) of a MoneyBox
         userMoneyInt = inputCoins.getTotalBoxValue();
         VendItem itemToPurchase;
+        //res stores the result of the purchase to be returned by the method
+        String res = "";
 
-        /**
-         * Calling findItem(id) method to search for the item in the stock list by the input ID
-         * Will catch NullPointerException if the item is not found
-         */
         try {
             itemToPurchase = findItem(choiceId);
         } catch (NullPointerException e) {
@@ -148,11 +145,7 @@ public class VendingMachine {
             this.setStatus(Status.SERVICE_MODE);
         }
 
-        /**
-         * Get the selected item's price and convert it into pennies
-         * Used Math.round() as precision errors were causing quite a problem
-         * Multiplying by 100, then rounding to nearest whole number, then casting to int solved this
-         */
+        //Getting item price in pennies - Also, see DEFECT_3
         int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
 
         if(userMoneyInt >= itemPriceInt) {
@@ -160,14 +153,10 @@ public class VendingMachine {
             if(itemToPurchase.decrement()) {
                 userMoneyInt -= itemPriceInt;
                 userMoney = (double)userMoneyInt/100;
-
-                String res = "";
-                
                 //Calculates the expected change by breaking down userMoneyInt
                 MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyInt);
                 //Gets the coins that the system can actually return
                 MoneyBox returnedCoins = chooseReturnedCoins();
-
                 if(returnedCoins.getTotalBoxValue() > 0) {
                     res += String.format("%s\nYour change is £%.2f.\nYour change consists of: ", deliver, returnedCoins.toDouble());
                 } 
@@ -181,12 +170,13 @@ public class VendingMachine {
                     res += MoneyBox.formatCoins(expectedChange.getDifference(returnedCoins).getInsertedCoins());
                 }
                 res += "\nNow dispensing.";
-
+                //Gets the sum of all stock after each purchase and if it is 0 then sets SERVICE_MODE
                 if(this.sumAllStockQty() == 0) {
                     this.setStatus(Status.SERVICE_MODE);
                     res += "\n\n\t! Machine is out of stock. Switching to service mode. !";
                 }
 
+                //Performing post-purchase operations like clearing userMoney and clearing input coins
                 userMoney = 0.0;
                 totalMoney = totalCoins.toDouble();
                 inputCoins.clear();
@@ -194,9 +184,11 @@ public class VendingMachine {
                 return res;
             }
             else {
+                //Will return if the chosen item is out of stock
                 return String.format("\n\t- None of %s left; please choose another item -", itemToPurchase.getName());
             }
         }
+        //Will return if user doesn't have enough money
         return "\n\t! Not enough funds to purchase this item. !";
     }
 
@@ -213,14 +205,16 @@ public class VendingMachine {
             return false;
         }
         for (int acceptedCoin : ACCEPTED_COINS) {
-            if(dAmount > 2) {
-                dAmount /= 100;
+            if(acceptedCoin == amount) {
+                if(dAmount > 2) {
+                    dAmount /= 100;
+                }
+                userMoney += dAmount;
+                inputCoins.addCoin(amount);
+                totalCoins.addCoin(amount);
+                totalMoney = totalCoins.toDouble();
+                return true;
             }
-            userMoney += dAmount;
-            inputCoins.addCoin(amount);
-            totalCoins.addCoin(amount);
-            totalMoney = totalCoins.toDouble();
-            return true;
         }
         return false;
     }

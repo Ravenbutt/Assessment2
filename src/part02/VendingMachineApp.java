@@ -32,12 +32,12 @@ public class VendingMachineApp {
      * If not, it will initialise a new VendingMachine instance with several VendItems
      */
     private static void initVendingMachine() {
-        
         if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
             vendingMachine = new VendingMachine("Coca Cola", 10);
             VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
             VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
             VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
+
             vendingMachine.addNewItem(cocaCola);
             vendingMachine.addNewItem(fanta);
             vendingMachine.addNewItem(taytoCheese);
@@ -54,7 +54,6 @@ public class VendingMachineApp {
      * Static method to initiate the menu with options
      */
     private static void initMenu() {
-        //set this to options and title as param for initMenu, then allow employeeMenu to just call this init menu
         String menuOptions[] = {"View All Items", "Insert Coins", "Purchase an Item", "Quit"};
         Menu vendMenu = new Menu("VendOS v1.0", menuOptions);
         int choice = -1;
@@ -81,24 +80,19 @@ public class VendingMachineApp {
             case -1:
                 System.out.println("\n\t! Please enter the NUMBER value of the desired option only !");
                 break;
-                
             case 1:
                 listAll();
                 break;
-
             case 2:
                 insertCoins();
                 break;
-
             case 3:
                 purchaseItem();
                 break;
-
             case 5:
                 //NOTE: Entering 5 in the menu will access the hidden engineer menu
                 EngineerMenu empMenu = new EngineerMenu();
                 break;
-
             default:
                 System.out.printf("\t! '%d' is not a valid option !\n\n",choice);
                 break;
@@ -132,16 +126,12 @@ public class VendingMachineApp {
         System.out.println("> NOTE: This vending machine only accepts 5p, 10p, 20p, 50p, £1 and £2 denominations. <");;
 
         int inputCoin = -1;
-
         while(inputCoin != 0) {
             System.out.printf("\n\t- Current inserted value: £%.2f -\n", vendingMachine.getUserMoney());
-
             if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
                 System.out.printf("\t- Currently inserted coins: %s -\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }
-
             System.out.print("\n> Please enter coin, enter 0 to finish: ");
-            
             inputCoin = GetInput.getIntInput();
             if(inputCoin == -1) {
                 System.out.println("\t! Please insert a valid coin. !\n");
@@ -169,11 +159,8 @@ public class VendingMachineApp {
      * @return VendItem which the user has selected
      */
     protected static VendItem selectItem() {
-        
         VendItem chosenItem = null;
-        
         while(chosenItem == null) {
-
             if(!vendingMachine.getTotalCoins().containsAllCoins() && !engineerMode) {
                 System.out.print("                      ! WARNING !\n" 
                 + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
@@ -184,10 +171,8 @@ public class VendingMachineApp {
                     return null;
                 }
             }
-
             System.out.println("");
             listAll();
-
             System.out.print("\n> Enter the number of the item you wish to select, enter 0 to cancel: ");
             int chosenId = GetInput.getIntInput();
             if(chosenId == 0) {
@@ -197,7 +182,6 @@ public class VendingMachineApp {
                 System.out.println("\t! Please enter a valid number !\n");
                 continue;
             }
-
             try {
                 chosenItem = vendingMachine.findItem(chosenId);
                 return chosenItem;
@@ -216,11 +200,9 @@ public class VendingMachineApp {
      */
     protected static void purchaseItem() {
         VendItem chosenItem = selectItem();
-
         if(chosenItem == null) {
             return;
         }
-
         System.out.printf("\t- Selected item: %d. %s at £%.2f. -\n", chosenItem.getItemId(), chosenItem.getName(), chosenItem.getPrice());
         if(chosenItem.getQty() == 0) {
             System.out.println("\n\t! Sorry, this item is out of stock !");
@@ -231,7 +213,6 @@ public class VendingMachineApp {
             return;
         }
         System.out.print("\n> Would you like to purchase this item? Y/N: ");
-
         boolean choice = GetInput.getYesNo();
         if(choice) {
             System.out.println("\n"+vendingMachine.purchaseItem(chosenItem.getItemId()));
@@ -256,9 +237,7 @@ public class VendingMachineApp {
                 
                 extraDetails += "\n\t- CUSTOMER OPERATIONS DISABLED - \n\n";
             }
-
             extraDetails += String.format("\t- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
-            
             if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
                 extraDetails += String.format("\t  Currently inserted coins: %s\n\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
             }

@@ -9,6 +9,7 @@ import java.util.Scanner;
  * @version V1.1
  */
 public class GetInput {
+    
     private static Scanner uInput = new Scanner(System.in);;
 
     /**
@@ -60,7 +61,6 @@ public class GetInput {
             } catch (StringIndexOutOfBoundsException e) {
                 System.out.println("Please enter Y for yes or N for no.");
             }
-            
             switch (Character.toUpperCase(choice)) {
                 case 'Y':
                     return true;

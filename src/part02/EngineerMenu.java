@@ -28,7 +28,6 @@ public class EngineerMenu extends VendingMachineApp {
         String menuOptions[] = { "View All Items", "View an Item", "Add an Item", "Restock an Item",
                 "View Vending Machine Details", "Set Status", "Reset the Machine", "Back" };
         Menu vendMenu = new Menu("VendOS v1.0 - ENGINEER MENU", menuOptions);
-
         if (authenticate()) {
             System.out.println("\n\t- Login successful -");
             engineerMode = true;
@@ -36,7 +35,6 @@ public class EngineerMenu extends VendingMachineApp {
             System.out.println("\n\t! Login failed !");
             return;
         }
-
         int choice = -1;
         do {
             String extraDetails = "";
@@ -59,8 +57,7 @@ public class EngineerMenu extends VendingMachineApp {
      */
     private boolean authenticate() {
         int tries = 3;
-        
-        //PASSWORD IS HERE
+        //PASSWORD IS HERE !!!
         String password = "password";
         System.out.println("\n- ENGINEER ACCESS ONLY -");
         System.out.println("++++++++++++++++++++++++\n");
@@ -124,7 +121,6 @@ public class EngineerMenu extends VendingMachineApp {
         }
         System.out.println("\nAdding item");
         System.out.println("+++++++++++\n");
-        
         String newName = "";
         while(newName.isBlank() || newName == null) {
             System.out.print("> Enter item name: ");
@@ -137,7 +133,6 @@ public class EngineerMenu extends VendingMachineApp {
                 break;
             }
         }
-
         while (true) {
             System.out.print("> Enter item price: £");
             double newPrice = GetInput.getDoubleInput();
@@ -149,7 +144,7 @@ public class EngineerMenu extends VendingMachineApp {
                 System.out.println("\n\t! Please enter a valid value. !\n");
                 continue;
             }
-            
+
             System.out.printf("\n> Item named '%s' at £%.2f. Is this correct? Y/N: ", newName, newPrice);
             boolean choice = GetInput.getYesNo();
             if(choice) {
@@ -202,7 +197,6 @@ public class EngineerMenu extends VendingMachineApp {
             System.out.println("\t2. Service Mode.");
             System.out.print("> Please select the vending machine status, enter 0 to cancel: ");
             choice = GetInput.getIntInput();
-
             if(choice == -1) {
                 System.out.println("\n\t! Please choose a valid number. !");
                 continue;
@@ -237,7 +231,6 @@ public class EngineerMenu extends VendingMachineApp {
         System.out.println("+++++++++++++++");
 
         VendItem chosenItem = super.selectItem();
-
         while (true && chosenItem != null) {
             System.out.print("\n> Please enter the new stock amount: ");
             int restockAmount = GetInput.getIntInput();

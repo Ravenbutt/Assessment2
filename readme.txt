@@ -22,4 +22,4 @@ SOME POINTS ON PART 2 FUNCTIONALITY
 The engineer/hidden menu can be accessed by inputting 5 on the main system menu, and typing in the password of 'password'.
 
 - Regarding saving the machine's state:
-The state csv file is saved relative to the src folder, in package part 2: src/part02/VendingState.csv.
+The state csv file should be saved in the top level directory of the project.

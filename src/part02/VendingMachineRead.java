@@ -19,7 +19,7 @@ public class VendingMachineRead {
      * @return ArrayList of type String containing each comma separated value
      */
     public static ArrayList<String> parseData() {
-        String csvPath = "src/part02/VendingState.csv";
+        String csvPath = "VendingState.csv";
         String testData = null;
         Scanner sc;
         
@@ -37,24 +37,21 @@ public class VendingMachineRead {
             e.printStackTrace();
         }
 
-        StringTokenizer stringTok = new StringTokenizer(testData, ",[]", true);
+        StringTokenizer dataTokenized = new StringTokenizer(testData, ",[]", true);
         
-        ArrayList<String> testDataList = new ArrayList<String>();
+        ArrayList<String> dataList = new ArrayList<String>();
 
-        while(stringTok.hasMoreTokens()) {
-            String currentToken = stringTok.nextToken();
+        while(dataTokenized.hasMoreTokens()) {
+            String currentToken = dataTokenized.nextToken();
             if(currentToken.equals(",")) {
                 continue;
             }
             else {
-                testDataList.add(currentToken.trim());
+                dataList.add(currentToken.trim());
             }
-            
         }
-
-        return testDataList;
+        return dataList;
     }
-
 
     /**
      * Method that creates and returns a new VendingMachine instance from the data
