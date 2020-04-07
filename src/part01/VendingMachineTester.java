@@ -50,7 +50,6 @@ public class VendingMachineTester {
     }
     
     private static void testGetters() {
-        testingMachine.getDetails();
         testingMachine.getMaxItems();
     }
 

@@ -2,6 +2,13 @@ package part01;
 
 import java.util.Scanner;
 
+/**
+ * VendingMachineApp class which implements a system which can perform operations
+ * on a VendingMachine instance and it's various components all through a console-based
+ * interface
+ * @author Andrew Ellis
+ * @version V1.5
+ */
 public class VendingMachineApp {
 
     protected static VendingMachine vendingMachine;
@@ -9,14 +16,11 @@ public class VendingMachineApp {
     protected static boolean engineerMode = false;
 
     public static void main(String[] args) {
-        //*Was thinking of doing extends VendingMachine so it could change what is printed by menu?
-
         initVendMachine();
         input = new Scanner(System.in);
         initMenu();
         input.close();
         System.out.println("\nGoodbye!");
-        VendingMachineRead.exportData(vendingMachine.getDetails());
     }
 
     /**
@@ -25,22 +29,15 @@ public class VendingMachineApp {
      * If not, it will initialise a new VendingMachine instance with several VendItems
      */
     private static void initVendMachine() {
-        
-        if(VendingMachineRead.loadData(VendingMachineRead.parseData()) == null) {
-            vendingMachine = new VendingMachine("Coca Cola", 4);
-            VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
-            VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
-            VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
-            vendingMachine.addNewItem(cocaCola);
-            vendingMachine.addNewItem(fanta);
-            vendingMachine.addNewItem(taytoCheese);
-            vendingMachine.setStatus(Status.VENDING_MODE);
-            System.out.println("\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
-        }
-        else {
-            vendingMachine = VendingMachineRead.loadData(VendingMachineRead.parseData());
-            System.out.println("\n\t- State has been loaded from file successfully -");
-        }
+        vendingMachine = new VendingMachine("Coca Cola", 10);
+        VendItem cocaCola = new VendItem("Coca Cola Zero 550ml", 1.35, 10);
+        VendItem fanta = new VendItem("Fanta Orange 550ml", 1.35, 10);
+        VendItem taytoCheese = new VendItem("Tayto Cheese and Onion", 0.70, 10);
+        vendingMachine.addNewItem(cocaCola);
+        vendingMachine.addNewItem(fanta);
+        vendingMachine.addNewItem(taytoCheese);
+        vendingMachine.setStatus(Status.VENDING_MODE);
+        System.out.println("\n\t- Machine state data could not be loaded -\n\t  New Vending Machine has been created");
     }
 
     /**
@@ -66,7 +63,7 @@ public class VendingMachineApp {
      * @param choice integer corresponding to the user's choice from the menu
      */
     private static void processChoice(int choice) {
-        if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 5 && choice != 4 && choice != 1) {
+        if(vendingMachine.getVmStatus() == Status.SERVICE_MODE && choice != 4 && choice != 1) {
             System.out.println("\t! Vending machine is in service mode !\n\tOnly item viewing permitted !\n");
             return;
         }
@@ -74,25 +71,17 @@ public class VendingMachineApp {
             case -1:
                 System.out.println("\n\t! Please enter the NUMBER value of the desired option only !");
                 break;
-                
             case 1:
                 listAll();
                 break;
-
             case 2:
                 insertCoins();
                 break;
-
             case 3:
                 purchaseItem();
                 break;
-
-            case 5:
-                EngineerMenu empMenu = new EngineerMenu();
-                break;
-
             default:
-                System.out.printf("\t! '%d' is not a valid option !\n\t   Please only enter one of the valid option numbers.\n\n",choice);
+                System.out.printf("\t! '%d' is not a valid option !\n\n",choice);
                 break;
         }
     }
@@ -128,13 +117,9 @@ public class VendingMachineApp {
         while(inputCoin != 0) {
             System.out.printf("\n\t- Current inserted value: £%.2f -\n", vendingMachine.getUserMoney());
 
-            if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
-                System.out.printf("\t- Currently inserted coins: %s -\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
-            }
-
             System.out.print("\n> Please enter coin, enter 0 to finish: ");
             
-            inputCoin = GetInput.checkIntInput();
+            inputCoin = GetInput.getIntInput();
             if(inputCoin == -1) {
                 System.out.println("\t! Please insert a valid coin. !\n");
                 continue;
@@ -162,12 +147,11 @@ public class VendingMachineApp {
      */
     protected static VendItem selectItem() {
         
-        //int chosenId = -1;
         VendItem chosenItem = null;
         
         while(chosenItem == null) {
 
-            if(!vendingMachine.getTotalCoins().containsAllCoins() && !engineerMode) {
+            if(vendingMachine.getTotalMoney() < 5.0) {
                 System.out.print("                      ! WARNING !\n" 
                 + "THIS MACHINE MAY NOT CONTAIN ENOUGH COINS TO PROVIDE CHANGE\n\n"
                 + "> Are you sure you wish to continue? Y/N: ");
@@ -182,13 +166,12 @@ public class VendingMachineApp {
             listAll();
 
             System.out.print("\n> Enter the number of the item you wish to select, enter 0 to cancel: ");
-            int chosenId = GetInput.checkIntInput();
+            int chosenId = GetInput.getIntInput();
             if(chosenId == 0) {
                 break;
             }
             if(chosenId == -1) {
-                System.err.println("\t! Please enter a valid number !\n");
-                //input.next();
+                System.out.println("\t! Please enter a valid number !\n");
                 continue;
             }
 
@@ -196,8 +179,7 @@ public class VendingMachineApp {
                 chosenItem = vendingMachine.findItem(chosenId);
                 return chosenItem;
             } catch (NullPointerException e) {
-                System.err.println("\t! Item not found. !\n");
-                //input.next();
+                System.out.println("\n\t! Item not found !\n");
                 continue;
             }
         }
@@ -247,19 +229,11 @@ public class VendingMachineApp {
     private static String getExtraDetails() {
         String extraDetails = "";
             if(vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-                extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatus());
+                extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatusString());
                 
-                extraDetails += "\t  - CUSTOMER OPERATIONS DISABLED - \n\n";
+                extraDetails += "\n\t- CUSTOMER OPERATIONS DISABLED - \n\n";
             }
-
-            extraDetails += String.format("\t- Current funds inserted: £%.2f -\n", vendingMachine.getUserMoney());
-            
-            if(vendingMachine.getInputCoins().getTotalBoxValue() > 0) {
-                extraDetails += String.format("\t- Currently inserted coins: %s -\n\n", MoneyBox.formatCoins(vendingMachine.getInputCoins().getInsertedCoins()));
-            }
-            else {
-                extraDetails += "\n";
-            }
+            extraDetails += String.format("\t- Current funds inserted: £%.2f -\n\n", vendingMachine.getUserMoney());
         return extraDetails;
     }
 }

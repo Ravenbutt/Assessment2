@@ -1,9 +1,10 @@
 package part02;
 
 /**
- * 
- * @author
- * @version
+ * Class to represent items which are vended through a vending machine
+ * with associated name, price and quantity available
+ * @author Andrew Ellis
+ * @version V1.0
  */
 public class VendItem implements Vendible {
     private int itemId;
