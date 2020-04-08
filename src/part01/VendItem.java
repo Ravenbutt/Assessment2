@@ -35,6 +35,7 @@ public class VendItem implements Vendible {
 
     /**
      * Overloaded constructor which allows specification of quantity
+     * 
      * @param name         holds the name of the VendItem instance
      * @param unitPrice    holds the price per unit
      * @param qtyAvailable specifies the quantity of the VendItem
@@ -55,6 +56,7 @@ public class VendItem implements Vendible {
 
     /**
      * Static method which returns the next ID number for each VendItem
+     * 
      * @return the nextId number after the previously allocated ID number
      */
     private static int nextIdNum() {
@@ -71,6 +73,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for itemId
+     * 
      * @return the VendItem instance's ItemId
      */
     public int getItemId() {
@@ -79,8 +82,10 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for unitPrice 
+     * 
      * NOTE: This should be getUnitPrice() as per naming
      * conventions but UML diagram specified it as getPrice()
+     * 
      * @return the unit price of the VendItem
      */
     public double getPrice() {
@@ -89,8 +94,10 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for qtyAvailable 
+     * 
      * NOTE: This should be getQtyAvailable() as per naming
      * conventions but UML diagram specified it as getQty()
+     * 
      * @return the current quantity available for the VendItem instance
      */
     public int getQty() {
@@ -100,14 +107,11 @@ public class VendItem implements Vendible {
     /**
      * Method to restock/set the qtyAvailable of the VendItem instance New value
      * must be above 0 and less than or equal to 10
+     * 
      * @param amount the value qtyAvailable should be set to
      * @return true if the item was restocked successfully, else false
      */
     public boolean restock(int amount) {
-        // TC1: restock(0)
-        // TC2: restock(15)
-        // TC3: restock(-1)
-        // TC4 restock("hi")
         // *Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
@@ -118,11 +122,10 @@ public class VendItem implements Vendible {
 
     /**
      * Method to decrement the VendItem instance by 1
+     * 
      * @return true if the item was decremented successfully, else false
      */
     public boolean decrement() {
-        // TC5 qty > 0, decrement
-        // TC6 qty = 0, decrement
         if (this.getQty() > 0) {
             this.qtyAvailable--;
             return true;
@@ -132,6 +135,7 @@ public class VendItem implements Vendible {
 
     /**
      * Method to get details about the VendItem instance
+     * 
      * @return String containing the details
      */
     public String getDetails() {
@@ -163,27 +167,11 @@ public class VendItem implements Vendible {
 
     /**
      * Method to get data pertaining to the VendItem as a String
+     * 
      * @return data about the VendItem instance
      */
     public String getData() {
         String res = String.format("%d,%s,%f,%d", itemId, name, unitPrice, qtyAvailable);
         return res;
-    }
-
-    /**
-     * Setter for itemId 
-     * NOTE: This method is used for loading the VendingMachine's state
-     * @param itemId the new itemId
-     */
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
-
-    /**
-     * Setter for name
-     * @param name the new name for the VendItem
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 }

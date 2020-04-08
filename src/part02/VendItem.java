@@ -16,10 +16,13 @@ public class VendItem implements Vendible {
 
     /**
      * Constructor for VendItem instance
+     * 
      * @param name      holds the name of the VendItem instance
      * @param unitPrice holds the price per unit
      */
     public VendItem(String name, double unitPrice) {
+
+        // name should be "UNASSIGNED" if null is passed in
         if (name == null) {
             name = "UNASSIGNED";
             unitPrice = 0.0;
@@ -34,19 +37,17 @@ public class VendItem implements Vendible {
 
     /**
      * Overloaded constructor which allows specification of quantity
+     * 
      * @param name         holds the name of the VendItem instance
      * @param unitPrice    holds the price per unit
      * @param qtyAvailable specifies the quantity of the VendItem
      *                     instance
      */
     public VendItem(String name, double unitPrice, int qtyAvailable) {
+
+        // Using this() to call the other constructor
         this(name, unitPrice);
-        if (name == null) {
-            qtyAvailable = 0;
-        }
-        if (qtyAvailable < 0) {
-            qtyAvailable = 0;
-        } else if (qtyAvailable > 10) {
+        if (name == null || qtyAvailable < 0 || qtyAvailable > 10) {
             qtyAvailable = 0;
         }
         this.qtyAvailable = qtyAvailable;
@@ -54,6 +55,7 @@ public class VendItem implements Vendible {
 
     /**
      * Static method which returns the next ID number for each VendItem
+     * 
      * @return the nextId number after the previously allocated ID number
      */
     private static int nextIdNum() {
@@ -62,6 +64,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for VendItem name
+     * 
      * @return the name of the VendItem instance
      */
     public String getName() {
@@ -70,6 +73,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for itemId
+     * 
      * @return the VendItem instance's ItemId
      */
     public int getItemId() {
@@ -78,8 +82,10 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for unitPrice 
+     * 
      * NOTE: This should be getUnitPrice() as per naming
      * conventions but UML diagram specified it as getPrice()
+     * 
      * @return the unit price of the VendItem
      */
     public double getPrice() {
@@ -88,8 +94,10 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for qtyAvailable 
+     * 
      * NOTE: This should be getQtyAvailable() as per naming
      * conventions but UML diagram specified it as getQty()
+     * 
      * @return the current quantity available for the VendItem instance
      */
     public int getQty() {
@@ -97,16 +105,13 @@ public class VendItem implements Vendible {
     }
 
     /**
-     * Method to restock/set the qtyAvailable of the VendItem instance New value
-     * must be above 0 and less than or equal to 10
+     * Method to restock/set the qtyAvailable of the VendItem instance 
+
      * @param amount the value qtyAvailable should be set to
+     *               Must be above 0 and less than or equal to 10
      * @return true if the item was restocked successfully, else false
      */
     public boolean restock(int amount) {
-        // TC1: restock(0)
-        // TC2: restock(15)
-        // TC3: restock(-1)
-        // TC4 restock("hi")
         // *Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
@@ -117,6 +122,7 @@ public class VendItem implements Vendible {
 
     /**
      * Method to decrement the VendItem instance by 1
+     * 
      * @return true if the item was decremented successfully, else false
      */
     public boolean decrement() {
@@ -131,6 +137,7 @@ public class VendItem implements Vendible {
 
     /**
      * Method to get details about the VendItem instance
+     * 
      * @return String containing the details
      */
     public String getDetails() {
@@ -162,6 +169,7 @@ public class VendItem implements Vendible {
 
     /**
      * Method to get data pertaining to the VendItem as a String
+     * 
      * @return data about the VendItem instance
      */
     public String getData() {
@@ -170,25 +178,32 @@ public class VendItem implements Vendible {
     }
 
     /**
-     * Setter for itemId 
-     * NOTE: This method is used for loading the VendingMachine's state
+     * Setter for itemId
+     * 
      * @param itemId the new itemId
      */
     public void setItemId(int itemId) {
+        if(itemId < 1) {
+            itemId = 1;
+        }
         this.itemId = itemId;
     }
 
     /**
      * Setter for name
+     * 
      * @param name the new name for the VendItem
      */
     public void setName(String name) {
+        if (name == null) {
+            name = "UNASSIGNED";
+        }
         this.name = name;
     }
 
     /**
-     * Static method to create a new VendItem from the input parameters, used for
-     * loading state
+     * Static method to create a new VendItem from the input parameters
+     * 
      * @param itemId       integer whose value is the itemId for the loaded VendItem
      * @param itemName     String whose value is the name for the loaded VendItem
      * @param itemCost     double whose value is the unitPrice for the loaded
