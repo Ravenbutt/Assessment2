@@ -12,7 +12,7 @@ public class GetInputTester {
     /**
      * Simple method to create a frame around the different test blocks
      * Just to make it easier to differentiate each type of test
-     * @param title String input to be displayed
+     * @param title input to be displayed
      */
     private static void displayTestFrame(String title) {
         String line = "-------------------------------------------------------------------------------------";
@@ -33,11 +33,13 @@ public class GetInputTester {
         System.out.print("UNIT_TEST_20 - Please enter a number: ");
         int number = GetInput.getIntInput();
         System.out.println("\nYour number was: " + number);
+
         //UNIT_TEST_22
         System.out.print("\nUNIT_TEST_22 - Please enter anything that isn't a number: ");
         int notNumber = GetInput.getIntInput();
         System.out.println("\nEXPECTED RESULT: If you didn't enter a number, the returned number should be -1");
         System.out.println("Actual returned number: " + notNumber);
+
         displayTestFrame("Finished testing getIntInput()");
     }
 
@@ -46,11 +48,13 @@ public class GetInputTester {
      */
     private static void testGetDoubleInput() {
         displayTestFrame("Testing getDoubleInput()");
+
         //UNIT_TEST_23
         //UNIT_TEST_24
         System.out.print("UNIT_TEST_23 - Please enter a floating point number: ");
         double number = GetInput.getDoubleInput();
         System.out.println("\nYour number was: " + number);
+
         //UNIT_TEST_25
         System.out.print("\nUNIT_TEST_25 - Please enter anything that isn't a number: ");
         double notNumber = GetInput.getDoubleInput();
@@ -83,6 +87,7 @@ public class GetInputTester {
         boolean answerFail = GetInput.getYesNo();
         System.out.println("\nEXPECTED RESULT: Should tell the user to only enter y/n and prompt again until they do");
         System.out.println("Your actual result was: " + answerFail);
+
         displayTestFrame("Finished testing getYesNo()");
     }
 

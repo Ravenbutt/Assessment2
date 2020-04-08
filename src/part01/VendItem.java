@@ -181,27 +181,9 @@ public class VendItem implements Vendible {
 
     /**
      * Setter for name
-     * @param name String containing the new name for the VendItem
+     * @param name the new name for the VendItem
      */
     public void setName(String name) {
         this.name = name;
     }
-
-    /**
-     * Static method to create a new VendItem from the input parameters, used for
-     * loading state
-     * @param itemId       integer whose value is the itemId for the loaded VendItem
-     * @param itemName     String whose value is the name for the loaded VendItem
-     * @param itemCost     double whose value is the unitPrice for the loaded
-     *                     VendItem
-     * @param qtyAvailable integer whose value is the qtyAvailable for the loaded
-     *                     VendItem
-     * @return the loaded VendItem
-     */
-    public static VendItem loadState(int itemId, String itemName, double itemCost, int qtyAvailable) {
-        VendItem loadedItem = new VendItem(itemName, itemCost, qtyAvailable);
-        loadedItem.setItemId(itemId);
-        return loadedItem;
-    }
-
 }

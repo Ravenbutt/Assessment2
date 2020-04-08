@@ -13,9 +13,10 @@ public class VendingMachine {
 
     /**
      * Constructor for VendingMachine object - builds a new instance from the parameters
+     * 
      * @param owner    the owner of the VendingMachine instance - input as String
-     * @param maxItems integer defining the max number of items the 
-     *                 VendingMachine instance can contain
+     * @param maxItems the max number of items the VendingMachine instance
+     *                 can contain
      */
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
@@ -25,13 +26,14 @@ public class VendingMachine {
         // Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
 
-        // Method call to store an initial amount of totalMoney in the machine
+        // Stores an initial amount of totalMoney in the machine
         this.totalMoney = 50.00;
     }
 
     /**
-     * Method to get all data pertaining to the VendingMachine instance
-     * @return String containing the VendingMachine data
+     * Method to get all information pertaining to the VendingMachine instance
+     * 
+     * @return the VendingMachine information
      */
     public String getSystemInfo() {
         String res = "\nOwner: " + owner + "\n";
@@ -66,9 +68,11 @@ public class VendingMachine {
     /**
      * Method used to facilitate the purchasing of VendItem(s) through the
      * VendingMachine instance
-     * @param choiceId - The ID number of the VendItem which the user wishes to purchase - input as int
-     * @return String - To feedback to the user regarding their purchase 
-     *                  (Whether it was successful or failed, etc)
+     * 
+     * @param choiceId - The ID number of the VendItem which the user wishes to 
+     *                   purchase
+     * @return feedback to the user regarding their purchase (Whether it 
+     *         was successful or failed, etc)
      */
     public String purchaseItem(int choiceId) {
 
@@ -136,10 +140,10 @@ public class VendingMachine {
     }
 
     /**
-     * Method to facilitate inserting coins into the system NOTE: Pound
-     * denominations are inserted like 1 for £1 and 2 for £2 rather than 100 and 200
-     * respectively This is detailed in the readme.txt along with my reasoning
-     * behind this
+     * Method to facilitate inserting coins into the system
+     * NOTE: refer to readme.txt for pound denominations; they are inserted as 1
+     * and 2 for £1 and £2 respectively.
+     * 
      * @param amount the amount which is to be inserted; input as integer
      * @return true if the coin could be inserted successfully else false
      */
@@ -151,8 +155,8 @@ public class VendingMachine {
         for (int acceptedCoin : ACCEPTED_COINS) {
             if (acceptedCoin == amount) {
 
-                // If dAmount is > 2 then it must be a penny denom and must be 
-                // divided by 100
+                // If dAmount is > 2 then it must be a penny denom (50p, 20p etc.) 
+                // and must be divided by 100
                 if (dAmount > 2) {
                     dAmount /= 100;
                 }
@@ -169,7 +173,8 @@ public class VendingMachine {
 
     /**
      * Method used to facilitate adding a new VendItem to the VendingMachine
-     * @param newItem VendItem to be added into the machine
+     * 
+     * @param newItem new VendItem to be added into the machine
      * @return true if the VendItem was added successfully else false
      */
     public boolean addNewItem(VendItem newItem) {
@@ -203,6 +208,7 @@ public class VendingMachine {
 
     /**
      * Method used to list details about all items contained in the machine
+     * 
      * @return array of Strings which detail each item
      */
     public String[] listItems() {
@@ -243,7 +249,8 @@ public class VendingMachine {
      * Method used to get the entire quantity of VendItem(s) contained in the
      * machine While itemCount variable stores the amount of VendItem(s), this
      * stores the sum of all their quantity
-     * @return integer containing the sum of the qtyAvailable of all VendItem(s) in 
+     * 
+     * @return the sum of the qtyAvailable of all VendItem(s) in 
      *         the machine
      */
     private int sumAllStockQty() {
@@ -262,8 +269,9 @@ public class VendingMachine {
 
     /**
      * Method for searching for a VendItem in the stock array based on it's itemID
-     * @param itemId integer for the ID of the VendItem to be found
-     * @return VendItem with the input ID if found
+     * 
+     * @param itemId the ID of the VendItem to be found
+     * @return VendItem with the input ID if found in stock
      * @throws NullPointerException thrown if VendItem with itemId could not be found
      */
     public VendItem findItem(int itemId) throws NullPointerException {
@@ -285,12 +293,13 @@ public class VendingMachine {
     }
 
     /**
-     * Method to set the status of the VendingMachine NOTE: This should be
-     * getVmStatus() as per naming conventions but UML diagram specified it as
-     * getStatus()
+     * Method to set the status of the VendingMachine 
+     * NOTE: This should be getVmStatus() as per naming conventions 
+     * but UML diagram specified it as getStatus()
+     * 
      * @param vStatus the new status of the VendingMachine of enum type Status, 
      *                either VENDING_MODE or SERVICE_MODE
-     * @return boolean true if the status was changed successfully else false
+     * @return true if the status was changed successfully else false
      */
     public boolean setStatus(Status vStatus) {
         int totalQty = sumAllStockQty();
@@ -307,6 +316,7 @@ public class VendingMachine {
 
     /**
      * Getter for status of VendingMachine
+     * 
      * @return Status enum giving the current status of the machine
      */
     public Status getVmStatus() {
@@ -315,7 +325,8 @@ public class VendingMachine {
 
     /**
      * Getter the owner of the machine
-     * @return String with the owner of the machcine
+     * 
+     * @return the owner of the machcine
      */
     public String getOwner() {
         return owner;
@@ -323,7 +334,8 @@ public class VendingMachine {
 
     /**
      * Getter for maxItems
-     * @return integer representing the maximum items the machine can contain
+     * 
+     * @return the maximum items the machine can contain
      */
     public int getMaxItems() {
         return maxItems;
@@ -331,15 +343,17 @@ public class VendingMachine {
 
     /**
      * Getter for itemCount
-     * @return integer representing the amount of VendItem(s) in the machine
+     * 
+     * @return the amount of VendItem(s) in the machine
      */
     public int getItemCount() {
         return itemCount;
     }
 
     /**
-     * Getter for totalMoney (as a double) Only really used for testing
-     * @return double representing the total money the machine contains
+     * Getter for totalMoney
+     *
+     * @return the value of total money the machine contains
      */
     public double getTotalMoney() {
         return totalMoney;
@@ -347,7 +361,8 @@ public class VendingMachine {
 
     /**
      * Getter for userMoney
-     * @return double containing userMoney
+     * 
+     * @return the value of user input money
      */
     public double getUserMoney() {
         return userMoney;
@@ -355,6 +370,7 @@ public class VendingMachine {
 
     /**
      * Getter used to get the stock array of VendItem(s)
+     * 
      * @return VendItem array containing each VendItem in the machine
      */
     public VendItem[] getStock() {

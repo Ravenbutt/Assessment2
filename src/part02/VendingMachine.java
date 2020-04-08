@@ -2,12 +2,8 @@ package part02;
 
 public class VendingMachine {
     private String owner;
-
-    
-    private int maxItems; // max amount of items the machine can hold
-    
-    
-    private int itemCount; // amount of items (VendItems) currently for sale
+    private int maxItems; // Max amount of items the machine can hold
+    private int itemCount; // Amount of items (VendItems) currently for sale
     private double totalMoney;
     private double userMoney;
     private int userMoneyInt;
@@ -18,11 +14,11 @@ public class VendingMachine {
     private MoneyBox totalCoins;
 
     /**
-     * Constructor for VendingMachine object - builds a new instance from the
-     * parameters
-     * @param owner    - The owner of the VendingMachine instance - input as String
-     * @param maxItems integer defining the max number of items the 
-     *                 VendingMachine instance can contain
+     * Constructor for VendingMachine object - builds a new instance from the parameters
+     * 
+     * @param owner    the owner of the VendingMachine instance - input as String
+     * @param maxItems the max number of items the VendingMachine instance
+     *                 can contain
      */
     public VendingMachine(String owner, int maxItems) {
         this.owner = owner;
@@ -55,9 +51,9 @@ public class VendingMachine {
     }
 
     /**
-     * Method to get all data pertaining to the VendingMachine instance
+     * Method to get all information pertaining to the VendingMachine instance
      * 
-     * @return String containing the VendingMachine data
+     * @return the VendingMachine information
      */
     public String getSystemInfo() {
         String res = "\nOwner: " + owner + "\n";
@@ -107,7 +103,8 @@ public class VendingMachine {
      * Private method which is used to work out the coins that are returned from a
      * purchase This also takes into account the coins that are in the machine; not
      * returning a coin if the machine doesn't contain it
-     * @return MoneyBox - With the values for each coin returned
+     * 
+     * @return MoneyBox containing the values for each coin returned
      */
     private MoneyBox chooseReturnedCoins() {
         MoneyBox returnedCoins = new MoneyBox();
@@ -146,10 +143,11 @@ public class VendingMachine {
     /**
      * Method used to facilitate the purchasing of VendItem(s) through the
      * VendingMachine instance
+     * 
      * @param choiceId the ID number of the VendItem which the user wishes to
-     *                 purchase - input as int
-     * @return String to feedback to the user regarding their purchase (Whether it
-     *                was successful or failed, etc)
+     *                 purchase
+     * @return feedback to the user regarding their purchase (Whether it
+     *         was successful or failed, etc)
      */
     public String purchaseItem(int choiceId) {
 
@@ -235,10 +233,10 @@ public class VendingMachine {
     }
 
     /**
-     * Method to facilitate inserting coins into the system NOTE: Pound
-     * denominations are inserted like 1 for £1 and 2 for £2 rather than 100 and 200
-     * respectively This is detailed in the readme.txt along with my reasoning
-     * behind this
+     * Method to facilitate inserting coins into the system
+     * NOTE: refer to readme.txt for pound denominations; they are inserted as 1
+     * and 2 for £1 and £2 respectively.
+     * 
      * @param amount the amount which is to be inserted; input as integer
      * @return true if the coin could be inserted successfully else false
      */
@@ -270,7 +268,8 @@ public class VendingMachine {
 
     /**
      * Method used to facilitate adding a new VendItem to the VendingMachine
-     * @param newItem VendItem to be added into the machine
+     * 
+     * @param newItem new VendItem to be added into the machine
      * @return true if the VendItem was added successfully else false
      */
     public boolean addNewItem(VendItem newItem) {
@@ -305,6 +304,7 @@ public class VendingMachine {
 
     /**
      * Method used to list details about all items contained in the machine
+     * 
      * @return array of Strings which detail each item
      */
     public String[] listItems() {
@@ -345,7 +345,8 @@ public class VendingMachine {
      * Method used to get the entire quantity of VendItem(s) contained in the
      * machine While itemCount variable stores the amount of VendItem(s), this
      * stores the sum of all their quantity
-     * @return integer containing the sum of the qtyAvailable of all VendItem(s) in
+     * 
+     * @return the sum of the qtyAvailable of all VendItem(s) in
      *         the machine
      */
     private int sumAllStockQty() {
@@ -365,7 +366,8 @@ public class VendingMachine {
 
     /**
      * Method for searching for a VendItem in the stock array based on it's itemID
-     * @param itemId integer for the ID of the VendItem to be found
+     * 
+     * @param itemId the ID of the VendItem to be found
      * @return VendItem with the input ID if found
      * @throws NullPointerException thrown if VendItem with itemId could not be
      *                              found
@@ -390,13 +392,13 @@ public class VendingMachine {
     }
 
     /**
-     * Method to set the status of the VendingMachine NOTE: This should be
-     * getVmStatus() as per naming conventions but UML diagram specified it as
-     * getStatus()
-     * @param vStatus the new status of the VendingMachine of enum type Status,
+     * Method to set the status of the VendingMachine 
+     * NOTE: This should be getVmStatus() as per naming conventions 
+     * but UML diagram specified it as getStatus()
+     * 
+     * @param vStatus the new status of the VendingMachine of enum type Status, 
      *                either VENDING_MODE or SERVICE_MODE
-     * @return boolean true if the status was changed successfully else
-     *         false
+     * @return true if the status was changed successfully else false
      */
     public boolean setStatus(Status vStatus) {
         int totalQty = sumAllStockQty();
@@ -413,6 +415,7 @@ public class VendingMachine {
 
     /**
      * Getter for status of VendingMachine
+     * 
      * @return Status enum giving the current status of the machine
      */
     public Status getVmStatus() {
@@ -421,7 +424,8 @@ public class VendingMachine {
 
     /**
      * Getter the owner of the machine
-     * @return String with the owner of the machcine
+     * 
+     * @return the owner of the machcine
      */
     public String getOwner() {
         return owner;
@@ -429,7 +433,8 @@ public class VendingMachine {
 
     /**
      * Setter to set the owner of the machine
-     * @param owner String containing name of the owner of the machine to be set
+     * 
+     * @param owner new owner of the machine
      */
     public void setOwner(String owner) {
         if (owner.length() == 0 || owner == null) {
@@ -440,7 +445,8 @@ public class VendingMachine {
 
     /**
      * Getter for maxItems
-     * @return integer representing the maximum items the machine can contain
+     * 
+     * @return the maximum items the machine can contain
      */
     public int getMaxItems() {
         return maxItems;
@@ -448,8 +454,8 @@ public class VendingMachine {
 
     /**
      * Setter for maxItems
-     * @param maxItems integer representing the new maximum items the machine can
-     *                 contain
+     * 
+     * @param maxItems the new maximum items the machine can contain
      */
     public void setMaxItems(int maxItems) {
         if (maxItems > 0) {
@@ -462,7 +468,8 @@ public class VendingMachine {
 
     /**
      * Getter for itemCount
-     * @return integer representing the amount of VendItem(s) in the machine
+     * 
+     * @return the amount of VendItem(s) in the machine
      */
     public int getItemCount() {
         return itemCount;
@@ -470,7 +477,8 @@ public class VendingMachine {
 
     /**
      * Setter for itemCount
-     * @param itemCount integer representing the new item count
+     * 
+     * @param itemCount the new item count
      */
     public void setItemCount(int itemCount) {
         if (itemCount < maxItems && itemCount >= 0) {
@@ -481,8 +489,9 @@ public class VendingMachine {
     }
 
     /**
-     * Getter for totalMoney (as a double) Only really used for testing
-     * @return double representing the total money the machine contains
+     * Getter for totalMoney 
+     *
+     * @return the value of total money the machine contains
      */
     public double getTotalMoney() {
         return totalMoney;
@@ -490,7 +499,8 @@ public class VendingMachine {
 
     /**
      * Setter for totalMoney
-     * @param totalMoney double with the value to set totalMoney to
+     * 
+     * @param totalMoney the value to set totalMoney to
      */
     public void setTotalMoney(double totalMoney) {
         if (totalMoney > 0.0) {
@@ -502,7 +512,8 @@ public class VendingMachine {
 
     /**
      * Getter for userMoney
-     * @return double containing userMoney
+     * 
+     * @return the value of user input money
      */
     public double getUserMoney() {
         return userMoney;
@@ -510,7 +521,8 @@ public class VendingMachine {
 
     /**
      * Setter for userMoney
-     * @param userMoney double storing the new value of userMoney
+     * 
+     * @param userMoney the new value of userMoney
      */
     public void setUserMoney(double userMoney) {
         if (userMoney > 0.0) {
@@ -522,6 +534,7 @@ public class VendingMachine {
 
     /**
      * Getter used to get the stock array of VendItem(s)
+     * 
      * @return VendItem array containing each VendItem in the machine
      */
     public VendItem[] getStock() {
@@ -530,16 +543,18 @@ public class VendingMachine {
 
     /**
      * Setter for the stock array which stores VendItem(s)
-     * @param stock array of type VendItem
+     * 
+     * @param stock array of VendItem objects
      */
     public void setStock(VendItem[] stock) {
         this.stock = stock;
     }
 
     /**
-     * Method to get all data pertainining to the VendingMachine instance Used when
-     * saving the machine state
-     * @return formatted String with all the VendingMachine's details
+     * Method to get all data pertainining to the VendingMachine instance 
+     * Used when saving the machine state
+     * 
+     * @return formatted String with all the VendingMachine's data
      */
     public String getData() {
         String res = String.format("%s,%d,%d,%f,%f,%s,%s,%s,", owner, maxItems, itemCount, totalMoney, userMoney,
@@ -554,6 +569,7 @@ public class VendingMachine {
 
     /**
      * Setter to set userMoneyInt
+     * 
      * @param userMoneyInt integer to be new value of userMoneyInt
      */
     public void setUserMoneyInt(int userMoneyInt) {
@@ -565,6 +581,7 @@ public class VendingMachine {
 
     /**
      * Getter for inputCoins
+     * 
      * @return MoneyBox with values that make up the user input coins
      */
     public MoneyBox getInputCoins() {
@@ -573,6 +590,7 @@ public class VendingMachine {
 
     /**
      * Setter for inputCoins containing user input coins
+     * 
      * @param inputCoins MoneyBox containing user input coins
      */
     public void setInputCoins(MoneyBox inputCoins) {
@@ -581,6 +599,7 @@ public class VendingMachine {
 
     /**
      * Getter for totalCoins
+     * 
      * @return MoneyBox with values that make up the total coins the machine
      *         contains
      */
@@ -590,6 +609,7 @@ public class VendingMachine {
 
     /**
      * Setter for totalCoins containing all coins in the machine
+     * 
      * @param totalCoins MoneyBox containing total coins contained in the machine
      */
     public void setTotalCoins(MoneyBox totalCoins) {

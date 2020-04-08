@@ -14,7 +14,7 @@ public enum Status {
 
     /**
      * Constructor for Status
-     * @param value integer value of the status
+     * @param value integer value of the Status
      */
     private Status(int value) {
         statIntVal = value;
@@ -22,7 +22,7 @@ public enum Status {
 
     /**
      * Method to get the String from statString which details the status
-     * @return String containing the status String
+     * @return the Status String
      */
     public String getStatusString() {
         return statString[statIntVal];

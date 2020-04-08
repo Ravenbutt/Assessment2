@@ -180,7 +180,7 @@ public class VendItem implements Vendible {
 
     /**
      * Setter for name
-     * @param name String containing the new name for the VendItem
+     * @param name the new name for the VendItem
      */
     public void setName(String name) {
         this.name = name;
