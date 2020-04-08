@@ -74,26 +74,25 @@ public class VendingMachineTester {
         System.out.println("> ACTUAL RESULT: <");
         displayStock();
         
+        //INTEGRATION_TEST_2
+        //Adding null item
+        System.out.println("\tAdding null item: " + testingMachine.addNewItem(null) + "\n");
         
         System.out.println("\n--- Testing adding VendItem instances to VendingMachine ---");
         System.out.println("\n> EXPECTED RESULT: ItemID=1,2,3 & 4 should return true, indicating they've been added successfully. Adding null item should return false. <");
         System.out.println("> ACTUAL RESULT: <");
-        //INTEGRATION_TEST_2
-        System.out.println("\tAdding item with ID: " + testItem1.getItemId() + " - Result: " + testingMachine.addNewItem(testItem1));
         //INTEGRATION_TEST_3
-        System.out.println("\tAdding item with ID: " + testItem2.getItemId() + " - Result: " + testingMachine.addNewItem(testItem2));
+        System.out.println("\tAdding item with ID: " + testItem1.getItemId() + " - Result: " + testingMachine.addNewItem(testItem1));
         //INTEGRATION_TEST_4
-        System.out.println("\tAdding item with ID: " + testItem3.getItemId() + " - Result: " + testingMachine.addNewItem(testItem3));
+        System.out.println("\tAdding item with ID: " + testItem2.getItemId() + " - Result: " + testingMachine.addNewItem(testItem2));
         //INTEGRATION_TEST_5
+        System.out.println("\tAdding item with ID: " + testItem3.getItemId() + " - Result: " + testingMachine.addNewItem(testItem3));
+        //INTEGRATION_TEST_6
         System.out.println("\tAdding item with ID: " + testItem5.getItemId() + " - Result: " + testingMachine.addNewItem(testItem5));
         
-        //INTEGRATION_TEST_6
-        //Adding item with quantity specified in constructor
-        System.out.println("\tAdding item with quantity specified with ID: " + testItem4.getItemId() + " - Result: " + testingMachine.addNewItem(testItem4) + " - Item Qty: " + testingMachine.findItem(4).getQty());
-
         //INTEGRATION_TEST_7
-        //Adding null item
-        System.out.println("\tAdding null item: " + testingMachine.addNewItem(null) + "\n");
+        //Adding item with quantity specified in constructor & last item in the machine
+        System.out.println("\tAdding item with quantity specified with ID; last item the machine can hold: " + testItem4.getItemId() + " - Result: " + testingMachine.addNewItem(testItem4) + " - Item Qty: " + testingMachine.findItem(4).getQty());
 
         //INTEGRATION_TEST_8
         System.out.println("--- ATTEMPTING TO ADD ITEM WHEN MaxItems HAS BEEN REACHED ---");

@@ -20,10 +20,8 @@ public class VendingMachine {
         this.owner = owner;
         this.maxItems = maxItems;
         this.setStatus(Status.SERVICE_MODE);
-
         //Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
-
         //Method call to store an initial amount of totalMoney in the machine
         this.totalMoney = 50.00;
     }
@@ -39,8 +37,8 @@ public class VendingMachine {
         res += String.format("Current total funds: £%.2f\n", totalMoney);
         res += String.format("Current user funds: £%.2f\n", userMoney);
         res += this.getVmStatus().getStatusString();
-        res += "\n\n       ITEM LIST\n";
-        res += "       +++++++++\n";
+        res += "\n\n\tITEM LIST\n";
+        res += "\t+++++++++\n";
         for (String itemDetail : this.listItems()) {
             res += itemDetail + "\n";
         }
@@ -65,13 +63,8 @@ public class VendingMachine {
      * @return String - To feedback to the user regarding their purchase (Whether it was successful or failed, etc)
      */
     public String purchaseItem(int choiceId) {
-
         VendItem itemToPurchase;
-
-        /**
-         * Calling findItem(id) method to search for the item in the stock list by the input ID
-         * Will catch NullPointerException if the item is not found
-         */
+        //Catches exception thrown by findItem() if choiceId not found in stock array
         try {
             itemToPurchase = findItem(choiceId);
         } catch (NullPointerException e) {
@@ -80,29 +73,21 @@ public class VendingMachine {
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "\n\t- This machine is in service mode -";
         }
-
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE
         if(this.sumAllStockQty() == 0) {
             this.setStatus(Status.SERVICE_MODE);
         }
-
-        /**
-         * Get the selected item's price and convert it into pennies
-         * Used Math.round() as precision errors were causing quite a problem
-         * Multiplying by 100, then rounding to nearest whole number, then casting to int solved this
-         */
+        //Gets selected item price and user money and converts to pennies
         int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
         int userMoneyInt = (int)Math.round((userMoney*100));
-
         if(userMoneyInt >= itemPriceInt) {
+            //res stores the result of the purchase to be returned by the method
+            String res = ""; 
             String deliver = itemToPurchase.deliver();
-            if(itemToPurchase.decrement()) {
+            if(itemToPurchase.decrement()) { 
                 totalMoney += itemToPurchase.getPrice();
                 userMoneyInt -= itemPriceInt;
-                userMoney = (double)userMoneyInt/100;
-
-                String res = "";
-                
+                userMoney = (double)userMoneyInt/100;              
                 if(userMoneyInt > 0) {
                     res += String.format("%s\nYour change is £%.2f.", deliver, userMoney);
                 }
@@ -110,6 +95,7 @@ public class VendingMachine {
                     res += String.format("%s\nYour transaction returned no change.", deliver);
                 }
                 res += "\nNow dispensing.";
+                //Gets the sum of all stock after each purchase and if it is 0 then sets SERVICE_MODE
                 if(this.sumAllStockQty() == 0) {
                     this.setStatus(Status.SERVICE_MODE);
                     res += "\n\n\t! Machine is out of stock. Switching to service mode. !";

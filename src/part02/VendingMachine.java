@@ -22,17 +22,13 @@ public class VendingMachine {
         this.owner = owner;
         this.maxItems = maxItems;
         this.setStatus(Status.SERVICE_MODE);
-
         //Initialising the stock array to contain VendItem(s) up to max of maxItem
         stock = new VendItem[maxItems];
-
         //Coins will be stored using a MoneyBox
         inputCoins = new MoneyBox();
         totalCoins = new MoneyBox();
-
         //Using MoneyBox's toDouble() method to calculate totalMoney from inserted coins
         totalMoney = totalCoins.toDouble();
-
         //Method call to store an initial amount of coins in the machine
         initTotalCoins();
     }
@@ -41,11 +37,9 @@ public class VendingMachine {
      * Private method to initially insert 10 of each coin into totalCoins
      */
     private void initTotalCoins() {
-        for(int coinValue=0;coinValue<=50;coinValue++) {
-            if(coinValue==2 || coinValue==1 || coinValue==50||coinValue==20||coinValue==10||coinValue==5) {
-                totalCoins.addCoin(coinValue, 10);
-                totalMoney = totalCoins.toDouble();
-            }
+        for (int coin : ACCEPTED_COINS) {
+            totalCoins.addCoin(coin, 10);
+            totalMoney = totalCoins.toDouble();
         }
     }
 
@@ -58,10 +52,18 @@ public class VendingMachine {
         res += "Max items: " + maxItems + "\n";
         res += "Current item count: " + itemCount + "\n";
         res += String.format("Current total funds: £%.2f\n", totalMoney);
+        //Only outputs total contained coins if there are any
+        if(totalCoins.getTotalBoxValue() != 0) {
+            res += String.format("Total contained coins: %s\n", MoneyBox.formatCoins(totalCoins.getInsertedCoins()));
+        }
         res += String.format("Current user funds: £%.2f\n", userMoney);
+        //Only outputs user contained coins if there are any
+        if(inputCoins.getTotalBoxValue() != 0) {
+            res += String.format("Current user inserted coins: %s\n", MoneyBox.formatCoins(inputCoins.getInsertedCoins()));
+        }
         res += this.getVmStatus().getStatusString();
-        res += "\n\n       ITEM LIST\n";
-        res += "       +++++++++\n";
+        res += "\n\n\tITEM LIST\n";
+        res += "\t+++++++++\n";
         for (String itemDetail : this.listItems()) {
             res += itemDetail + "\n";
         }
@@ -98,6 +100,7 @@ public class VendingMachine {
                     isPound = true;
                     acceptedCoin *= 100;
                 }
+                //Each iteration runs until acceptedCoin can no longer be taken from userMoneyInt
                 while(userMoneyInt >= acceptedCoin) {
                     userMoneyInt-=acceptedCoin;
                     if(isPound) {
@@ -110,7 +113,6 @@ public class VendingMachine {
                     }
                 }
             }
-            
         }
         //totalMoney is calculated from totalCoins
         totalMoney = totalCoins.toDouble();
@@ -123,14 +125,9 @@ public class VendingMachine {
      * @return String - To feedback to the user regarding their purchase (Whether it was successful or failed, etc)
      */
     public String purchaseItem(int choiceId) {
-
-        //userMoneyInt calculated using MoneyBox getTotalBoxValue()
-        //which calculates the total value (in pennies) of a MoneyBox
+        //userMoneyInt calculated based on inserted coins using MoneyBox
         userMoneyInt = inputCoins.getTotalBoxValue();
         VendItem itemToPurchase;
-        //res stores the result of the purchase to be returned by the method
-        String res = "";
-
         try {
             itemToPurchase = findItem(choiceId);
         } catch (NullPointerException e) {
@@ -139,16 +136,15 @@ public class VendingMachine {
         if(this.getVmStatus() == Status.SERVICE_MODE) {
             return "\n\t- This machine is in service mode -";
         }
-
         //Used to check if the total stock quantity (sum of all qtyAvailable) is 0 and if so sets to SERVICE_MODE
         if(this.sumAllStockQty() == 0) {
             this.setStatus(Status.SERVICE_MODE);
         }
-
         //Getting item price in pennies - Also, see DEFECT_3
         int itemPriceInt = (int)Math.round((itemToPurchase.getPrice()*100));
-
         if(userMoneyInt >= itemPriceInt) {
+            //res stores the result of the purchase to be returned by the method
+            String res = "";
             String deliver = itemToPurchase.deliver();
             if(itemToPurchase.decrement()) {
                 userMoneyInt -= itemPriceInt;
@@ -206,6 +202,7 @@ public class VendingMachine {
         }
         for (int acceptedCoin : ACCEPTED_COINS) {
             if(acceptedCoin == amount) {
+                //If dAmount is > 2 then it must be a penny denom and must be divided by 100
                 if(dAmount > 2) {
                     dAmount /= 100;
                 }
@@ -237,7 +234,7 @@ public class VendingMachine {
                 if(stock[j] == null) {
                     stock[j] = newItem;
                     itemCount += 1;
-                    
+                    //Sorting the stock each time a new item is added
                     this.sortStock();
                     return true;
                 }
@@ -263,7 +260,6 @@ public class VendingMachine {
         return items;
     }
 
-
         /**
      * Method to sort the stock array by the VendItem's itemID number; uses bubble sort
      * Used to make the findItem() and any other searching methods more efficient
@@ -281,12 +277,10 @@ public class VendingMachine {
                         swaps++;
                     }
                 }
-                
             }
             
         } while (swaps>0);
     }
-
 
     /**
      * Method used to get the entire quantity of VendItem(s) contained in the machine
@@ -306,7 +300,6 @@ public class VendingMachine {
         return totalQty;
     }
 
-    
     /**
      * Method for searching for a VendItem in the stock array based on it's itemID
      * @param itemId integer for the ID of the VendItem to be found
@@ -314,7 +307,6 @@ public class VendingMachine {
      * @throws NullPointerException thrown if VendItem with itemId could not be found
      */
     public VendItem findItem(int itemId) throws NullPointerException {
-
         VendItem target = null;
         for(int index = 0; index < stock.length; index++) {
             VendItem currItem = stock[index];
@@ -331,7 +323,6 @@ public class VendingMachine {
         }
 		return target;
     }
-
 
     /**
      * Method to set the status of the VendingMachine
@@ -358,7 +349,6 @@ public class VendingMachine {
         return this.vmStatus;
     }
 
-
     /**
      * Getter the owner of the machine
      * @return String with the owner of the machcine
@@ -366,7 +356,6 @@ public class VendingMachine {
     public String getOwner() {
         return owner;
     }
-
 
     /**
      * Setter to set the owner of the machine
@@ -379,7 +368,6 @@ public class VendingMachine {
         this.owner = owner; 
     }
 
-
     /**
      * Getter for maxItems
      * @return integer representing the maximum items the machine can contain
@@ -387,7 +375,6 @@ public class VendingMachine {
     public int getMaxItems() {
         return maxItems;
     }
-
 
     /**
      * Setter for maxItems
@@ -403,7 +390,6 @@ public class VendingMachine {
         
     }
 
-
     /**
      * Getter for itemCount
      * @return integer representing the amount of VendItem(s) in the machine
@@ -411,7 +397,6 @@ public class VendingMachine {
     public int getItemCount() {
         return itemCount;
     }
-
 
     /**
      * Setter for itemCount
@@ -426,7 +411,6 @@ public class VendingMachine {
         }
     }
 
-
     /**
      * Getter for totalMoney (as a double)
      * Only really used for testing
@@ -435,7 +419,6 @@ public class VendingMachine {
     public double getTotalMoney() {
         return totalMoney;
     }
-
 
     /**
      * Setter for totalMoney
@@ -458,7 +441,6 @@ public class VendingMachine {
         return userMoney;
     }
 
-
     /**
      * Setter for userMoney
      * @param userMoney double - value to set userMoney to
@@ -470,9 +452,7 @@ public class VendingMachine {
         else {
             this.userMoney = 0.0;
         }
-
     }
-
 
     /**
      * Getter used to get the stock array of VendItem(s) 
@@ -482,7 +462,6 @@ public class VendingMachine {
         return stock;
     }
 
-
     /**
      * Setter for the stock array which stores VendItem(s)
      * @param stock array of type VendItem
@@ -490,7 +469,6 @@ public class VendingMachine {
     public void setStock(VendItem[] stock) {
         this.stock = stock;
     }
-
 
     /**
      * Method to get all data pertainining to the VendingMachine instance
@@ -520,7 +498,6 @@ public class VendingMachine {
         this.userMoneyInt = userMoneyInt;
     }
 
-
     /**
      * Getter for inputCoins
      * @return MoneyBox with values that make up the user input coins
@@ -528,7 +505,6 @@ public class VendingMachine {
     public MoneyBox getInputCoins() {
         return inputCoins;
     }
-
 
     /**
      * Setter for inputCoins containing user input coins
@@ -538,7 +514,6 @@ public class VendingMachine {
         this.inputCoins = inputCoins;
     }
 
-
     /**
      * Getter for totalCoins
      * @return MoneyBox with values that make up the total coins the machine contains
@@ -546,7 +521,6 @@ public class VendingMachine {
     public MoneyBox getTotalCoins() {
         return totalCoins;
     }
-
 
     /**
      * Setter for totalCoins containing all coins in the machine

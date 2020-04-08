@@ -23,7 +23,6 @@ public class VendingMachineApp {
         else {
             System.out.println("\n\t- Could not save machine state -");
         }
-        
     }
 
     /**
