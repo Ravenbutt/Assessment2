@@ -1,8 +1,9 @@
 package part02;
 
 /**
- * Class to represent items which are vended through a vending machine
- * with associated name, price and quantity available
+ * Class to represent items which are vended through a vending machine with
+ * associated name, price and quantity available
+ * 
  * @author Andrew Ellis
  * @version V1.0
  */
@@ -15,16 +16,16 @@ public class VendItem implements Vendible {
 
     /**
      * Constructor for VendItem instance
-     * @param name String which holds the name of the VendItem instance
-     * @param unitPrice double which holds the price per unit
+     * @param name      holds the name of the VendItem instance
+     * @param unitPrice holds the price per unit
      */
     public VendItem(String name, double unitPrice) {
-        if(name == null) {
+        if (name == null) {
             name = "UNASSIGNED";
-            unitPrice=0.0;
+            unitPrice = 0.0;
         }
         this.name = name;
-        if(unitPrice < 0.0) {
+        if (unitPrice < 0.0) {
             unitPrice = 0.0;
         }
         this.unitPrice = unitPrice;
@@ -33,19 +34,19 @@ public class VendItem implements Vendible {
 
     /**
      * Overloaded constructor which allows specification of quantity
-     * @param name String which holds the name of the VendItem instance
-     * @param unitPrice double which holds the price per unit
-     * @param qtyAvailable integer which specifies the quantity of the VendItem instance
+     * @param name         holds the name of the VendItem instance
+     * @param unitPrice    holds the price per unit
+     * @param qtyAvailable specifies the quantity of the VendItem
+     *                     instance
      */
     public VendItem(String name, double unitPrice, int qtyAvailable) {
-        this(name,unitPrice);
-        if(name == null) {
+        this(name, unitPrice);
+        if (name == null) {
             qtyAvailable = 0;
         }
-        if(qtyAvailable < 0) {
+        if (qtyAvailable < 0) {
             qtyAvailable = 0;
-        }
-        else if(qtyAvailable > 10) {
+        } else if (qtyAvailable > 10) {
             qtyAvailable = 0;
         }
         this.qtyAvailable = qtyAvailable;
@@ -53,7 +54,7 @@ public class VendItem implements Vendible {
 
     /**
      * Static method which returns the next ID number for each VendItem
-     * @return returns the nextId number after the previously allocated ID number
+     * @return the nextId number after the previously allocated ID number
      */
     private static int nextIdNum() {
         return nextId++;
@@ -61,7 +62,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for VendItem name
-     * @return String with the name of the VendItem instance
+     * @return the name of the VendItem instance
      */
     public String getName() {
         return this.name;
@@ -69,42 +70,44 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for itemId
-     * @return integer corresponding to the VendItem instance's ItemId
+     * @return the VendItem instance's ItemId
      */
     public int getItemId() {
-        return this.itemId; 
+        return this.itemId;
     }
 
     /**
-     * Getter for unitPrice
-     * NOTE: This should be getUnitPrice() as per naming conventions but UML diagram specified it as getPrice()
-     * @return double value for the unit price of the VendItem
+     * Getter for unitPrice 
+     * NOTE: This should be getUnitPrice() as per naming
+     * conventions but UML diagram specified it as getPrice()
+     * @return the unit price of the VendItem
      */
     public double getPrice() {
         return this.unitPrice;
     }
 
     /**
-     * Getter for qtyAvailable
-     * NOTE: This should be getQtyAvailable() as per naming conventions but UML diagram specified it as getQty()
-     * @return returns the current quantity available for the VendItem instance
+     * Getter for qtyAvailable 
+     * NOTE: This should be getQtyAvailable() as per naming
+     * conventions but UML diagram specified it as getQty()
+     * @return the current quantity available for the VendItem instance
      */
     public int getQty() {
         return this.qtyAvailable;
     }
 
     /**
-     * Method to restock/set the qtyAvailable of the VendItem instance
-     * New value must be above 0 and less than or equal to 10
-     * @param amount integer which the qtyAvailable of the VendItem should be set to
-     * @return boolean - True if the item was restocked successfully, else false
+     * Method to restock/set the qtyAvailable of the VendItem instance New value
+     * must be above 0 and less than or equal to 10
+     * @param amount the value qtyAvailable should be set to
+     * @return true if the item was restocked successfully, else false
      */
     public boolean restock(int amount) {
         // TC1: restock(0)
         // TC2: restock(15)
         // TC3: restock(-1)
         // TC4 restock("hi")
-        //*Maybe set the stock here rather than adding to it
+        // *Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
             return true;
@@ -114,12 +117,12 @@ public class VendItem implements Vendible {
 
     /**
      * Method to decrement the VendItem instance by 1
-     * @return boolean - True if the item was decremented successfully, else false
+     * @return true if the item was decremented successfully, else false
      */
     public boolean decrement() {
         // TC5 qty > 0, decrement
         // TC6 qty = 0, decrement
-        if(this.getQty() > 0) {
+        if (this.getQty() > 0) {
             this.qtyAvailable--;
             return true;
         }
@@ -131,15 +134,13 @@ public class VendItem implements Vendible {
      * @return String containing the details
      */
     public String getDetails() {
-        String res = "\nItem ID: " + itemId + "\n";
-        res += "Item Name: " + name + "\n";
-        res += "Quantity Available: " + qtyAvailable + "\n";
-        res += String.format("Price: £%.2f", unitPrice) + "\n";
+        String res = String.format("%d. %s\n\tPrice: £%.2f\n\tQuantity Remaining: %d\n", this.getItemId(),
+                this.getName(), this.getPrice(), this.getQty());
         return res;
     }
 
     /**
-     * toString method
+     * Returns a String representation of the object
      */
     @Override
     public String toString() {
@@ -148,12 +149,12 @@ public class VendItem implements Vendible {
     }
 
     /**
-     * Method to output a String thanking the user for their purchase
-     * Implemented from interface Vendible
+     * Method to output a String thanking the user for their purchase Implemented
+     * from interface Vendible
      */
     @Override
     public String deliver() {
-        if(this.getQty() == 0) {
+        if (this.getQty() == 0) {
             return String.format("\n\t- Sorry for running out of %s -\n", this.getName());
         }
         return "Thanks for purchasing " + this.getName() + ".\n";
@@ -161,7 +162,7 @@ public class VendItem implements Vendible {
 
     /**
      * Method to get data pertaining to the VendItem as a String
-     * @return String with data about the VendItem instance
+     * @return data about the VendItem instance
      */
     public String getData() {
         String res = String.format("%d,%s,%f,%d", itemId, name, unitPrice, qtyAvailable);
@@ -169,9 +170,9 @@ public class VendItem implements Vendible {
     }
 
     /**
-     * Setter for itemId
+     * Setter for itemId 
      * NOTE: This method is used for loading the VendingMachine's state
-     * @param itemId integer for the new itemId
+     * @param itemId the new itemId
      */
     public void setItemId(int itemId) {
         this.itemId = itemId;
@@ -186,11 +187,14 @@ public class VendItem implements Vendible {
     }
 
     /**
-     * Static method to create a new VendItem from the input parameters, used for loading state
-     * @param itemId integer whose value is the itemId for the loaded VendItem
-     * @param itemName String whose value is the name for the loaded VendItem
-     * @param itemCost double whose value is the unitPrice for the loaded VendItem
-     * @param qtyAvailable integer whose value is the qtyAvailable for the loaded VendItem
+     * Static method to create a new VendItem from the input parameters, used for
+     * loading state
+     * @param itemId       integer whose value is the itemId for the loaded VendItem
+     * @param itemName     String whose value is the name for the loaded VendItem
+     * @param itemCost     double whose value is the unitPrice for the loaded
+     *                     VendItem
+     * @param qtyAvailable integer whose value is the qtyAvailable for the loaded
+     *                     VendItem
      * @return the loaded VendItem
      */
     public static VendItem loadState(int itemId, String itemName, double itemCost, int qtyAvailable) {

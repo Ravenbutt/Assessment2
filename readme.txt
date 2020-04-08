@@ -3,6 +3,11 @@ CSC1029 Assessment 2 ReadMe
 This file covers finer details such as how to access the hidden menu, reasoning behind choices etc.
 
 GENERAL POINTS
+
+- Regarding code format
+I have tried to maintain Java formatting conventions for code e.g. one line before comments,
+max of 100 chars for columns etc.
+
 - Regarding user input:
 Places where the user should enter input will be marked by '>'
 
