@@ -1,9 +1,11 @@
 package part01;
 
+
 /**
  * This class represents ...a console-based menu
+ * 
  * @author Paul Sage, Andrew Ellis
- * @version V1.2
+ * @version V1.1
  */
 public class Menu {
 	private String options[];	// array of strings representing user options
@@ -36,6 +38,7 @@ public class Menu {
 	 */
 	private void display() {
 		if (title != null && options !=null) {
+
 			// title and options are valid
 			// display title and underline with '+'
 			System.out.println("");
@@ -58,6 +61,7 @@ public class Menu {
 			System.out.println();
 		}
 		else {
+
 			// title and/or options are not valid
 			System.out.println("Menu not defined.");
 		}
@@ -80,6 +84,9 @@ public class Menu {
 		}
 	}
 
+	/**
+	 * Will set the extra details to be displayed in the menu
+	 */
 	public void setExtraDetails(String extraDetails) {
 		this.extraDetails = extraDetails;
 	}

@@ -1,9 +1,10 @@
 package part02;
 
+
 /**
  * This class represents ...a console-based menu
  * @author Paul Sage, Andrew Ellis
- * @version V1.2
+ * @version V1.1
  */
 public class Menu {
 	private String options[];	// array of strings representing user options

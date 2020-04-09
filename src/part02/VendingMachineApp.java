@@ -1,13 +1,14 @@
 package part02;
 
+
 /**
  * VendingMachineApp class which implements a system which can perform
  * operations on a VendingMachine instance and it's various components all
- * through a console-based interface NOTE: To enter the hidden/engineer menu,
- * input 5 on the main menu
+ * through a console-based interface 
+ * NOTE: To enter the hidden/engineer menu, input 5 on the main menu
  * 
  * @author Andrew Ellis
- * @version V1.5
+ * @version V1.2
  */
 public class VendingMachineApp {
 
@@ -60,6 +61,7 @@ public class VendingMachineApp {
     private static void initMenu() {
         String menuOptions[] = { "View All Items", "Insert Coins", "Purchase an Item", "Quit" };
         Menu vendMenu = new Menu("VendOS v1.0", menuOptions);
+        
         int choice = -1;
         do {
             vendMenu.setExtraDetails(getExtraDetails());
@@ -218,7 +220,6 @@ public class VendingMachineApp {
             }
         }
         return null;
-
     }
 
     /**
@@ -271,7 +272,7 @@ public class VendingMachineApp {
 
         // Displays if the machine is in service mode
         if (vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
-            extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatusString());
+            extraDetails += String.format("\t! %s !", vendingMachine.getVmStatus().getStatus());
 
             extraDetails += "\n\t- CUSTOMER OPERATIONS DISABLED - \n\n";
         }

@@ -1,6 +1,5 @@
 package part02;
 
-import java.util.Scanner;
 
 /**
  * Class which implements an engineer menu for use with the VendingMachineApp
@@ -46,7 +45,7 @@ public class EngineerMenu extends VendingMachineApp {
             String extraDetails = "";
             if (vendingMachine.getVmStatus() == Status.SERVICE_MODE) {
                 extraDetails += String.format("\t  %s\n\t- Customer operations disabled -\n\n",
-                        vendingMachine.getVmStatus().getStatusString());
+                        vendingMachine.getVmStatus().getStatus());
                 extraDetails += "";
             }
             engMenu.setExtraDetails(extraDetails);
@@ -236,11 +235,11 @@ public class EngineerMenu extends VendingMachineApp {
                 continue;
             } else if (choice - 1 == 0) {
                 vendingMachine.setStatus(Status.VENDING_MODE);
-                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatusString() + " -");
+                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             } else if (choice - 1 == 1) {
                 vendingMachine.setStatus(Status.SERVICE_MODE);
-                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatusString() + " -");
+                System.out.println("\n\t- Machine set to " + vendingMachine.getVmStatus().getStatus() + " -");
                 break;
             } else if (choice == 0) {
                 break;

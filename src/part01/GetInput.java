@@ -2,12 +2,14 @@ package part01;
 
 import java.util.Scanner;
 
+
 /**
  * Class which is used to get and check user inputs for validity Created in
  * order to facilitate code reuse and have DRY code, also consolidates user 
  * input into a seperate class
+ * 
  * @author Andrew Ellis
- * @version V1.1
+ * @version V1.0
  */
 public class GetInput {
     private static Scanner uInput = new Scanner(System.in);;

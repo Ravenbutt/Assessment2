@@ -1,7 +1,11 @@
 package part01;
 
+
 /**
  * Tester class for Status enum type
+ * 
+ * @author Andrew Ellis
+ * @version V1.0
  */
 public class StatusTester {
 
@@ -14,6 +18,7 @@ public class StatusTester {
     /**
      * Simple method to create a frame around the different test blocks
      * Just to make it easier to differentiate each type of test
+     * 
      * @param title String input to be displayed
      */
     private static void displayTestFrame(String title) {
@@ -30,10 +35,10 @@ public class StatusTester {
     private static void testStatus() {
         displayTestFrame("Testing using Status");
 
-        //UNIT_TEST_14
+        // UNIT_TEST_14
         System.out.println("UNIT_TEST_14 - Result of Status.SERVICE_MODE: " + Status.SERVICE_MODE);
 
-        //UNIT_TEST_15
+        // UNIT_TEST_15
         System.out.println("UNIT_TEST_15 - Result of Status.VENDING_MODE: " + Status.VENDING_MODE);
 
         displayTestFrame("Finished testing using Status");
@@ -43,15 +48,15 @@ public class StatusTester {
      * Method to test the getString() method
      */
     private static void testGetString() {
-        displayTestFrame("Testing getStatusString() method");
+        displayTestFrame("Testing getStatus() method");
 
-        //UNIT_TEST_16
-        System.out.println("UNIT_TEST_16 - Result of Status.SERVICE_MODE.getStatusString(): " + Status.SERVICE_MODE.getStatusString());
-        //UNIT_TEST_17
-
-        System.out.println("UNIT_TEST_17 - Result of Status.VENDING_MODE.getStatusString(): " + Status.VENDING_MODE.getStatusString());
+        // UNIT_TEST_16
+        System.out.println("UNIT_TEST_16 - Result of Status.SERVICE_MODE.getStatus(): " + Status.SERVICE_MODE.getStatus());
         
-        displayTestFrame("Finished testing getStatusString() method");
+        // UNIT_TEST_17
+        System.out.println("UNIT_TEST_17 - Result of Status.VENDING_MODE.getStatus(): " + Status.VENDING_MODE.getStatus());
+        
+        displayTestFrame("Finished testing getStatus() method");
     }
 
     /**
@@ -60,10 +65,10 @@ public class StatusTester {
     private static void testFromString() {
         displayTestFrame("Testing fromString() method");
         
-        //UNIT_TEST_18
+        // UNIT_TEST_18
         System.out.println("UNIT_TEST_18 - Result of Status.fromString(\"SERVICE_MODE\"): " + Status.fromString("SERVICE_MODE"));
         
-        //UNIT_TEST_19
+        // UNIT_TEST_19
         System.out.println("UNIT_TEST_19 - Result of Status.fromString(\"VENDING_MODE\"): " + Status.fromString("VENDING_MODE"));
         
         displayTestFrame("Finished testing fromString() method");

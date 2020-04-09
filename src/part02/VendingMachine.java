@@ -1,12 +1,19 @@
 package part02;
 
+
+/**
+ * A class to represent a vending machine
+ * 
+ * @author Andrew Ellis
+ * @version V1.1
+ */
 public class VendingMachine {
     private String owner;
     private int maxItems; // Max amount of items the machine can hold
     private int itemCount; // Amount of items (VendItems) currently for sale
     private double totalMoney;
     private double userMoney;
-    private int userMoneyInt;
+    private int userMoneyPence;
     private Status vmStatus;
     private VendItem[] stock;
     private static final int[] ACCEPTED_COINS = {2, 1, 50, 20, 10, 5};
@@ -73,7 +80,7 @@ public class VendingMachine {
             res += String.format("Current user inserted coins: %s\n",
                     MoneyBox.formatCoins(inputCoins.getInsertedCoins()));
         }
-        res += this.getVmStatus().getStatusString();
+        res += this.getVmStatus().getStatus();
 
         res += "\n\n\tITEM LIST\n";
         res += "\t+++++++++\n";
@@ -92,7 +99,7 @@ public class VendingMachine {
         this.totalMoney = 0.0;
         this.totalCoins.clear();
         this.userMoney = 0.0;
-        this.userMoneyInt = 0;
+        this.userMoneyPence = 0;
         this.inputCoins.clear();
 
         this.itemCount = 0;
@@ -120,9 +127,9 @@ public class VendingMachine {
                 }
 
                 // Each iteration runs until acceptedCoin can no longer be taken from
-                // userMoneyInt
-                while (userMoneyInt >= acceptedCoin) {
-                    userMoneyInt -= acceptedCoin;
+                // userMoneyPence
+                while (userMoneyPence >= acceptedCoin) {
+                    userMoneyPence -= acceptedCoin;
                     if (isPound) {
                         returnedCoins.addCoin(acceptedCoin / 100);
                         totalCoins.removeCoin(acceptedCoin / 100);
@@ -171,23 +178,23 @@ public class VendingMachine {
         }
 
         // Getting item price in pennies - Also, see DEFECT_3
-        int itemPriceInt = (int) Math.round((itemToPurchase.getPrice() * 100));
+        int itemPricePence = (int) Math.round((itemToPurchase.getPrice() * 100));
         
-        // userMoneyInt calculated based on inserted coins using MoneyBox
-        userMoneyInt = inputCoins.getTotalBoxValue();
+        // userMoneyPence calculated based on inserted coins using MoneyBox
+        userMoneyPence = inputCoins.getTotalBoxValue();
 
-        if (userMoneyInt >= itemPriceInt) {
+        if (userMoneyPence >= itemPricePence) {
 
             // res stores the result of the purchase to be returned by the method
             String res = "";
             String deliver = itemToPurchase.deliver();
             
             if (itemToPurchase.decrement()) {
-                userMoneyInt -= itemPriceInt;
-                userMoney = (double) userMoneyInt / 100;
+                userMoneyPence -= itemPricePence;
+                userMoney = (double) userMoneyPence / 100;
 
-                // Calculates the expected change by breaking down userMoneyInt
-                MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyInt);
+                // Calculates the expected change by breaking down userMoneyPence
+                MoneyBox expectedChange = MoneyBox.intToDenoms(userMoneyPence);
                 
                 // Gets the coins that the system can actually return
                 MoneyBox returnedCoins = chooseReturnedCoins();
@@ -373,7 +380,7 @@ public class VendingMachine {
      * @throws NullPointerException thrown if VendItem with itemId could not be
      *                              found
      */
-    public VendItem findItem(int itemId) throws NullPointerException {
+    public VendItem findItem(int itemId) {
         VendItem target = null;
         for (int index = 0; index < stock.length; index++) {
             VendItem currItem = stock[index];
@@ -570,15 +577,15 @@ public class VendingMachine {
     }
 
     /**
-     * Setter to set userMoneyInt
+     * Setter to set userMoneyPence
      * 
-     * @param userMoneyInt integer to be new value of userMoneyInt
+     * @param userMoneyPence integer to be new value of userMoneyPence
      */
-    public void setUserMoneyInt(int userMoneyInt) {
-        if (userMoneyInt < 0) {
-            userMoneyInt = 0;
+    public void setuserMoneyPence(int userMoneyPence) {
+        if (userMoneyPence < 0) {
+            userMoneyPence = 0;
         }
-        this.userMoneyInt = userMoneyInt;
+        this.userMoneyPence = userMoneyPence;
     }
 
     /**

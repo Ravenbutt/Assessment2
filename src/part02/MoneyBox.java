@@ -2,6 +2,7 @@ package part02;
 
 import java.util.ArrayList;
 
+
 /**
  * This class represents a 'coin pouch' or 'piggy bank' 
  * Can be used to store £2, £1, 50p, 20p, 10p and 5p coins

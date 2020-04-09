@@ -2,18 +2,21 @@ package part02;
 
 import java.util.Scanner;
 
+
 /**
  * Class which is used to get and check user inputs for validity Created in
  * order to facilitate code reuse and have DRY code, also consolidates user 
  * input into a seperate class
+ * 
  * @author Andrew Ellis
- * @version V1.1
+ * @version V1.0
  */
 public class GetInput {
     private static Scanner uInput = new Scanner(System.in);;
 
     /**
      * Method to get user input for an integer and ensures it is a valid integer
+     * 
      * @return the user input integer, else -1 if they did not enter an integer
      */
     public static int getIntInput() {
@@ -32,6 +35,7 @@ public class GetInput {
 
     /**
      * Method to get user input for a double and ensures it is a valid double 
+     * 
      * @return the user input double, else -1.0 if they did not enter an double
      */
     public static double getDoubleInput() {
@@ -50,6 +54,7 @@ public class GetInput {
 
     /**
      * Method to get user input for yes or no values input as 'Y' or 'N'
+     * 
      * @return true if user input 'Y', false if they input 'N'
      */
     public static boolean getYesNo() {
@@ -63,6 +68,8 @@ public class GetInput {
                 System.out.println("Please enter Y for yes or N for no.");
             }
 
+            // Converts character to uppercase so it can be entered either
+            // in uppercase or lowercase
             switch (Character.toUpperCase(choice)) {
                 case 'Y':
                     return true;
@@ -78,6 +85,7 @@ public class GetInput {
 
     /**
      * Method to get user input for a String
+     * 
      * @return the user input
      */
     public static String getString() {

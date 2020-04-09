@@ -5,7 +5,7 @@ package part02;
  * associated name, price and quantity available
  * 
  * @author Andrew Ellis
- * @version V1.0
+ * @version V1.1
  */
 public class VendItem implements Vendible {
     private int itemId;
@@ -27,7 +27,7 @@ public class VendItem implements Vendible {
             name = "UNASSIGNED";
             unitPrice = 0.0;
         }
-        this.name = name;
+        this.name = name.trim();
         if (unitPrice < 0.0) {
             unitPrice = 0.0;
         }
@@ -112,7 +112,6 @@ public class VendItem implements Vendible {
      * @return true if the item was restocked successfully, else false
      */
     public boolean restock(int amount) {
-        // *Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
             return true;
@@ -126,8 +125,6 @@ public class VendItem implements Vendible {
      * @return true if the item was decremented successfully, else false
      */
     public boolean decrement() {
-        // TC5 qty > 0, decrement
-        // TC6 qty = 0, decrement
         if (this.getQty() > 0) {
             this.qtyAvailable--;
             return true;

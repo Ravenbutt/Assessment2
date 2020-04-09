@@ -3,6 +3,7 @@ package part02;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+
 /**
  * Class to facilitate the export/writing of a VendingMachine instance to a csv
  * file

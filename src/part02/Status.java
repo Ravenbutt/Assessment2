@@ -1,7 +1,9 @@
 package part02;
 
+
 /**
  * An enumeration encompassing the different statuses a VendingMachine instance can have
+ * 
  * @author Andrew Ellis
  * @version V1.0
  */
@@ -14,6 +16,7 @@ public enum Status {
 
     /**
      * Constructor for Status
+     * 
      * @param value integer value of the Status
      */
     private Status(int value) {
@@ -22,14 +25,16 @@ public enum Status {
 
     /**
      * Method to get the String from statString which details the status
+     * 
      * @return the Status String
      */
-    public String getStatusString() {
+    public String getStatus() {
         return statString[statIntVal];
     }
 
     /**
      * Method to return the Status enum type based on the input String
+     * 
      * @param strStat Status value as a String
      * @return Status enum type
      */

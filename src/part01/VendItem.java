@@ -1,5 +1,6 @@
 package part01;
 
+
 /**
  * Class to represent items which are vended through a vending machine with
  * associated name, price and quantity available
@@ -25,7 +26,7 @@ public class VendItem implements Vendible {
             name = "UNASSIGNED";
             unitPrice = 0.0;
         }
-        this.name = name;
+        this.name = name.trim();
         if (unitPrice < 0.0) {
             unitPrice = 0.0;
         }
@@ -65,6 +66,7 @@ public class VendItem implements Vendible {
 
     /**
      * Getter for VendItem name
+     * 
      * @return the name of the VendItem instance
      */
     public String getName() {
@@ -112,7 +114,6 @@ public class VendItem implements Vendible {
      * @return true if the item was restocked successfully, else false
      */
     public boolean restock(int amount) {
-        // *Maybe set the stock here rather than adding to it
         if (amount > 0 && amount <= 10) {
             this.qtyAvailable = amount;
             return true;
@@ -163,15 +164,5 @@ public class VendItem implements Vendible {
             return String.format("\n\t- Sorry for running out of %s -\n", this.getName());
         }
         return "Thanks for purchasing " + this.getName() + ".\n";
-    }
-
-    /**
-     * Method to get data pertaining to the VendItem as a String
-     * 
-     * @return data about the VendItem instance
-     */
-    public String getData() {
-        String res = String.format("%d,%s,%f,%d", itemId, name, unitPrice, qtyAvailable);
-        return res;
     }
 }

@@ -1,12 +1,19 @@
 package part01;
 
+
+/**
+ * A class to represent a vending machine
+ * 
+ * @author Andrew Ellis
+ * @version V1.0
+ */
 public class VendingMachine {
     private String owner;
     private int maxItems; // max amount of items the machine can hold
     private int itemCount; // amount of items (VendItems) currently for sale
     private double totalMoney;
     private double userMoney;
-    private int userMoneyInt;
+    private int userMoneyPence;
     private Status vmStatus;
     private VendItem[] stock;
     private static final int[] ACCEPTED_COINS = {2, 1, 50, 20, 10, 5};
@@ -41,7 +48,7 @@ public class VendingMachine {
         res += "Current item count: " + itemCount + "\n";
         res += String.format("Current total funds: £%.2f\n", totalMoney);
         res += String.format("Current user funds: £%.2f\n", userMoney);
-        res += this.getVmStatus().getStatusString();
+        res += this.getVmStatus().getStatus();
 
         res += "\n\n\tITEM LIST\n";
         res += "\t+++++++++\n";
@@ -59,7 +66,7 @@ public class VendingMachine {
         
         this.totalMoney = 0.0;
         this.userMoney = 0.0;
-        this.userMoneyInt = 0;
+        this.userMoneyPence = 0;
 
         this.itemCount = 0;
         this.setStatus(Status.SERVICE_MODE);
@@ -97,10 +104,10 @@ public class VendingMachine {
         }
 
         // Gets selected item price and user money and converts to pennies
-        int itemPriceInt = (int) Math.round((itemToPurchase.getPrice() * 100));
-        int userMoneyInt = (int) Math.round((userMoney * 100));
+        int itemPricePence = (int) Math.round((itemToPurchase.getPrice() * 100));
+        userMoneyPence = (int) Math.round((userMoney * 100));
         
-        if (userMoneyInt >= itemPriceInt) {
+        if (userMoneyPence >= itemPricePence) {
 
             // res stores the result of the purchase to be returned by the method
             String res = "";
@@ -108,10 +115,12 @@ public class VendingMachine {
 
             if (itemToPurchase.decrement()) {
                 totalMoney += itemToPurchase.getPrice();
-                userMoneyInt -= itemPriceInt;
-                userMoney = (double) userMoneyInt / 100;
+                totalMoney -= userMoney;
+                userMoneyPence -= itemPricePence;
+                
+                userMoney = (double) userMoneyPence / 100;
 
-                if (userMoneyInt > 0) {
+                if (userMoneyPence > 0) {
                     res += String.format("%s\nYour change is £%.2f.", deliver, userMoney);
                 } else {
                     res += String.format("%s\nYour transaction returned no change.", deliver);
@@ -275,7 +284,7 @@ public class VendingMachine {
      * @return VendItem with the input ID if found in stock
      * @throws NullPointerException thrown if VendItem with itemId could not be found
      */
-    public VendItem findItem(int itemId) throws NullPointerException {
+    public VendItem findItem(int itemId) {
         VendItem target = null;
         for (int index = 0; index < stock.length; index++) {
             VendItem currItem = stock[index];
