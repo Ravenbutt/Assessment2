@@ -141,6 +141,7 @@ public class VendingMachine {
 
     /**
      * Method to facilitate inserting coins into the system
+     * 
      * NOTE: refer to readme.txt for pound denominations; they are inserted as 1
      * and 2 for £1 and £2 respectively.
      * 
@@ -294,6 +295,7 @@ public class VendingMachine {
 
     /**
      * Method to set the status of the VendingMachine 
+     * 
      * NOTE: This should be getVmStatus() as per naming conventions 
      * but UML diagram specified it as getStatus()
      * 

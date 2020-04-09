@@ -234,6 +234,7 @@ public class VendingMachine {
 
     /**
      * Method to facilitate inserting coins into the system
+     * 
      * NOTE: refer to readme.txt for pound denominations; they are inserted as 1
      * and 2 for £1 and £2 respectively.
      * 
@@ -393,6 +394,7 @@ public class VendingMachine {
 
     /**
      * Method to set the status of the VendingMachine 
+     * 
      * NOTE: This should be getVmStatus() as per naming conventions 
      * but UML diagram specified it as getStatus()
      * 
@@ -594,6 +596,12 @@ public class VendingMachine {
      * @param inputCoins MoneyBox containing user input coins
      */
     public void setInputCoins(MoneyBox inputCoins) {
+
+        // Checking if inputCoins value is 0; if so, to prevent negative 
+        // values, set inputCoins to MoneyBox with all counts at 0
+        if(inputCoins.getTotalBoxValue() < 0) {
+            inputCoins = MoneyBox.intToDenoms(0);
+        }
         this.inputCoins = inputCoins;
     }
 
@@ -613,6 +621,12 @@ public class VendingMachine {
      * @param totalCoins MoneyBox containing total coins contained in the machine
      */
     public void setTotalCoins(MoneyBox totalCoins) {
+
+        // Checking if totalCoins value is 0; if so, to prevent negative 
+        // values, set totalCoins to MoneyBox with all counts at 0
+        if(totalCoins.getTotalBoxValue() < 0) {
+            totalCoins = MoneyBox.intToDenoms(0);
+        }
         this.totalCoins = totalCoins;
     }
 }

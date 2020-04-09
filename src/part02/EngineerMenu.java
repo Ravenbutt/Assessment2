@@ -169,7 +169,6 @@ public class EngineerMenu extends VendingMachineApp {
 
             // Asks if the input details are correct
             System.out.printf("\n> Item named '%s' at £%.2f. Is this correct? Y/N: ", newName, newPrice);
-
             boolean choice = GetInput.getYesNo();
             if (choice) {
                 VendItem newItem = new VendItem(newName, newPrice);
