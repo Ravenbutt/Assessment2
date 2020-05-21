@@ -1,0 +1,100 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<Assessment2>",
+            "request": "launch",
+            "mainClass": "app.App",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-GetInputTester<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.GetInputTester",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MenuTester<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.MenuTester",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-StatusTester<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.StatusTester",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-VendItemTester<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.VendItemTester",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-VendingMachineApp<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.VendingMachineApp",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-VendingMachineTester<Assessment2>",
+            "request": "launch",
+            "mainClass": "part01.VendingMachineTester",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-VendingMachineApp<Assessment2>(1)",
+            "request": "launch",
+            "mainClass": "part02.VendingMachineApp",
+            "projectName": "Assessment2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-JukeBoxSystem",
+            "request": "launch",
+            "mainClass": "JukeBoxSystem"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-JukeBoxTester",
+            "request": "launch",
+            "mainClass": "JukeBoxTester"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MusicApp",
+            "request": "launch",
+            "mainClass": "part02.MusicApp"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MusicApp(1)",
+            "request": "launch",
+            "mainClass": "part03.MusicApp"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SetTest",
+            "request": "launch",
+            "mainClass": "week8.SetTest"
+        }
+    ]
+}

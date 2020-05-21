@@ -100,6 +100,7 @@ public class VendingMachineApp {
                 purchaseItem();
                 break;
             case 5:
+            
                 // NOTE: Entering 5 in the menu will access the hidden engineer menu
                 // Password is 'password'
                 EngineerMenu empMenu = new EngineerMenu();
